@@ -1,0 +1,76 @@
+<ion-menu side="start" menuId="first">
+  <ion-header>
+    <ion-toolbar color="dark blue">
+      <ion-title>
+        Menú<ion-icon style="padding-left: 75%;" name="arrow-back" (click)=close()></ion-icon>
+      </ion-title>
+       <ion-buttons end></ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item (click)=close()><ion-icon style="padding-right: 10%;" name="person"></ion-icon> Perfil</ion-item>
+      <ion-item (click)=setCaca()><ion-icon style="padding-right: 10%;" name="boat"></ion-icon> Puertos</ion-item>
+      <ion-item><ion-icon style="padding-right: 10%;" name="trending-up"></ion-icon> Estadísticas</ion-item>
+      <ion-item><ion-icon style="padding-right: 10%;" name="medkit"></ion-icon> Daños</ion-item>
+      <ion-item><ion-icon style="padding-right: 10%;" name="clipboard"></ion-icon> Notas</ion-item>
+      <ion-item><ion-icon style="padding-right: 10%;" name="share"></ion-icon> Compartir Info</ion-item>
+      <ion-item><ion-icon style="padding-right: 10%;" name="power"></ion-icon> Cerrar Sesión</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-router-outlet main></ion-router-outlet>
+
+<ion-header>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon (click)="openFirst()" name="menu"></ion-icon>
+        </ion-col>
+        <ion-col size="8">
+          <ion-title style="text-align: left;">Perfil</ion-title>
+        </ion-col>
+        <ion-col size="2">
+          <ion-img style="width:100%; height:100%;" src="assets/berrios-logo-oficial.png"></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="myView">
+  <div *ngIf="caca">
+    <h1>CACA</h1>
+  </div>
+  <ion-grid>
+    <ion-row style="margin-top:10%;">
+      <ion-col size="3">
+      </ion-col>
+      <ion-col size="6">
+      </ion-col>
+      <ion-col size="3">
+        <ion-img style="width:100%; height:100%;" src="assets/berrios-logo-oficial.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="3">
+      </ion-col>
+      <ion-col size="9">
+        <ion-card class="main-card">
+          <ion-card-header>
+            <ion-card-title style="text-align: right;" >
+              <ion-chip>
+                <ion-avatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                </ion-avatar>
+                <ion-label>Chip Avatar</ion-label>
+              </ion-chip>
+            </ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
