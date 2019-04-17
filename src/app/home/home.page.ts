@@ -6,9 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  userText: string;
-  passwordText: string;
-
   userText = 'user';
   passwordText = 'password';
+
 }
