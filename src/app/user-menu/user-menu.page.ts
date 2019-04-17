@@ -7,9 +7,8 @@ import { MenuController } from '@ionic/angular';
   styleUrls: ['./user-menu.page.scss'],
 })
 export class UserMenuPage implements OnInit {
-  caca: true;
+  caca = true;
   constructor(private menu: MenuController) { }
-
 
   openFirst() {
     this.menu.enable(true, 'first');
@@ -29,7 +28,7 @@ export class UserMenuPage implements OnInit {
     this.menu.close();
   }
 
-  setCaca(){
+  setCaca() {
     this.caca = !this.caca;
   }
 
