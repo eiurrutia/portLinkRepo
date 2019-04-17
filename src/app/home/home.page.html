@@ -1,0 +1,75 @@
+  <ion-content class="myView">
+    <ion-grid>
+      <ion-row class="first-row">
+      </ion-row>
+      <ion-row>
+        <ion-card class="main-card">
+          <ion-card-header>
+            <ion-card-subtitle class="subtitle-card">
+              <ion-row class="subtitle-card">
+                <ion-col size="2">
+                </ion-col>
+                <ion-col size="8">
+                  <ion-img style="width:100%; height:100%;" src="assets/berrios-logo-oficial.png"></ion-img>
+                </ion-col>
+                <ion-col size="2">
+                </ion-col>
+              </ion-row>
+            </ion-card-subtitle>
+            <ion-card-title >
+              <ion-row>
+                <ion-col size="1" style="padding-right: 0; text-align: right;">
+                  <h2 class="style-title-red">
+                    C
+                  </h2>
+                </ion-col>
+                <ion-col size="11" style="padding-left: 0; text-align: left;">
+                  <h2 class="style-title">
+                    ontroldePuerto
+                  </h2>
+                </ion-col>
+              </ion-row>
+            </ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-row>
+      <ion-row style="margin-top:22%;">
+      </ion-row>
+      <ion-row>
+        <ion-card class="main-card">
+          <ion-card-header style="margin-top: 0;">
+            <ion-card-title >
+              <h3 class="style-login">
+                LogIn
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="style-user-password-content">
+            <form (ngSubmit)='someAction()'>
+              <ion-item class="background-color-item">
+                <ion-label stacked>Usuario   :</ion-label>
+                <ion-input name="some-input" type="text" value="user" [(ngModel)]="userText"></ion-input>
+              </ion-item>
+              <ion-item class="background-color-item">
+                <ion-label stacked>Contraseña:</ion-label>
+                <ion-input name="some-input" type="text" value="*******" [(ngModel)]="passwordText"></ion-input>
+              </ion-item>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-row>
+      <ion-row>
+        <ion-col size="8">
+        </ion-col>
+        <ion-col size="2" style="padding-top: 0;">
+          <ion-fab>
+            <ion-fab-button [disabled]="!userText" color="dark" size="big">
+              <ion-icon name="arrow-dropright"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </ion-col>
+        <ion-col size="2">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "portLink",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
