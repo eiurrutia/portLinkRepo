@@ -9,4 +9,6 @@ export class HomePage {
   userText: string;
   passwordText: string;
 
+  userText = 'user';
+  passwordText = 'password';
 }
