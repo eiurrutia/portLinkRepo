@@ -9,8 +9,8 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item (click)=close()><ion-icon style="padding-right: 10%;" name="person"></ion-icon> Perfil</ion-item>
-      <ion-item (click)=setCaca()><ion-icon style="padding-right: 10%;" name="boat"></ion-icon> Puertos</ion-item>
+      <ion-item (click)=activateProfile()><ion-icon style="padding-right: 10%;" name="person"></ion-icon> Perfil</ion-item>
+      <ion-item (click)=activatePorts()><ion-icon style="padding-right: 10%;" name="boat"></ion-icon> Puertos</ion-item>
       <ion-item><ion-icon style="padding-right: 10%;" name="trending-up"></ion-icon> Estadísticas</ion-item>
       <ion-item><ion-icon style="padding-right: 10%;" name="medkit"></ion-icon> Daños</ion-item>
       <ion-item><ion-icon style="padding-right: 10%;" name="clipboard"></ion-icon> Notas</ion-item>
@@ -41,7 +41,7 @@
 </ion-header>
 
 <ion-content class="myView">
-  <div *ngIf="caca">
+  <div *ngIf="profile_active">
     <app-user-profile></app-user-profile>
   </div>
 

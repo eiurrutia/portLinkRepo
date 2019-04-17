@@ -7,7 +7,9 @@ import { MenuController } from '@ionic/angular';
   styleUrls: ['./user-menu.page.scss'],
 })
 export class UserMenuPage implements OnInit {
-  caca = true;
+  menu_title = 'Perfil';
+  profile_active = true;
+  ports_active = false;
   constructor(private menu: MenuController) { }
 
   openFirst() {
@@ -28,9 +30,21 @@ export class UserMenuPage implements OnInit {
     this.menu.close();
   }
 
-  setCaca() {
-    this.caca = !this.caca;
+  activateProfile() {
+    this.ports_active = false;
+    this.menu_title = 'Perfil';
+    this.profile_active = true;
+    this.close();
   }
+
+  activatePorts() {
+    this.profile_active = false;
+    this.menu_title = 'Puertos';
+    this.ports_active = true;
+    this.close();
+  }
+
+
 
   ngOnInit() {
   }
