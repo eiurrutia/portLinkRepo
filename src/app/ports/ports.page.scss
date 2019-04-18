@@ -1,0 +1,23 @@
+
+.verticalLine {
+  width:1%;
+  height:100%;
+  background:gray;
+  margin-top: 0;
+  position: absolute;
+  margin-left: 90%;
+}
+
+.background-color-item {
+  z-index: 1000;
+  --background: rgba(237, 237, 237, 0.8);
+}
+
+.background-color-actived {
+  z-index: 1000;
+  --background: rgba(138, 138, 138, 0.8);
+}
+
+.list-md {
+  background: transparent;
+}

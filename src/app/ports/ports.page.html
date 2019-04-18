@@ -1,9 +1,37 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>ports</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content>
-
-</ion-content>
+<ion-row style="margin-top:20%;">
+  <ion-col size="6" style="padding-right: 0;">
+    <ion-list>
+      <ion-item button (click)=selectOption()
+      class="background-color-item"
+      [ngClass]="{'background-color-actived': selected_option==1}">
+        <ion-label>Puertos Actuales</ion-label>
+        <ion-icon style="color: #3a6a10;" name="alarm"></ion-icon>
+        <div class="verticalLine"></div>
+      </ion-item>
+      <ion-item button (click)=selectOption()
+      class="background-color-item"
+      [ngClass]="{'background-color-actived': selected_option==3}">
+        <ion-label>Historial </ion-label><!-- un buscador para esot -->
+        <ion-icon style="color: #1f4a5c;" name="paper"></ion-icon>
+        <div class="verticalLine"></div>
+      </ion-item>
+    </ion-list>
+  </ion-col>
+  <ion-col size="6" style="padding-left: 0;">
+    <ion-list>
+      <ion-item class="background-color-item"
+      [ngClass]="{'background-color-actived': selected_option==2}"
+      (click)=selectOption()>
+        <ion-label>Nuevo Puerto</ion-label>
+        <ion-icon style="color: #e4ffc2;" name="add-circle-outline"></ion-icon>
+      </ion-item>
+      <ion-item class="background-color-item"
+      [ngClass]="{'background-color-actived': selected_option==4}"
+      (click)=selectOption()>
+        <ion-label>Estadísticas</ion-label>
+        <ion-icon style="color: #273134" name="stats"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-col>
+</ion-row>
