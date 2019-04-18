@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { UserMenuPage } from './user-menu.page';
 import { UserProfilePage } from '../user-profile/user-profile.page';
-import { PortsPage } from '../prots/ports.page';
+import { PortsPage } from '../ports/ports.page';
 
 const routes: Routes = [
   {
