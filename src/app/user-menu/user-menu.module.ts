@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { UserMenuPage } from './user-menu.page';
 import { UserProfilePage } from '../user-profile/user-profile.page';
+import { PortsPage } from '../prots/ports.page';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [UserMenuPage,
-                UserProfilePage]
+                UserProfilePage,
+                PortsPage]
 })
 export class UserMenuPageModule {}
