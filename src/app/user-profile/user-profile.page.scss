@@ -1,13 +1,14 @@
 .main-card {
   background: rgba(237, 237, 237, 0.8);
   border-radius: 50px;
-  width: 95%;
-  height: 100%;
+  width: 100%;
+  height: 70%;
   margin-top: 25%;
   margin-right: 10%;
+  --color: black;
 }
 
-.custom-avatar {
-  height: 100%;
-  width: 100%;
+.info-col {
+  padding-top: 5% !important;
+  padding-left: 5% !important;
 }
