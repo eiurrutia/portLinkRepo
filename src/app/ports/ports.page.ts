@@ -17,8 +17,8 @@ export class PortsPage implements OnInit {
   ngOnInit() {
   }
 
-  selectOption() {
-    console.log('click on: ');
+  selectOption(textValue: string) {
+    this.selected_option = textValue;
   }
 
 
