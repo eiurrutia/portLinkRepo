@@ -1,4 +1,4 @@
-<ion-menu side="start" menuId="first">
+<ion-menu side="start" menuId="first" content-id="content">
   <ion-header>
     <ion-toolbar color="dark blue">
       <ion-title>
@@ -20,8 +20,6 @@
   </ion-content>
 </ion-menu>
 
-<ion-router-outlet main></ion-router-outlet>
-
 <ion-header>
   <ion-toolbar>
     <ion-grid>
@@ -40,18 +38,18 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="myView">
-  <div *ngIf="profile_active">
+<ion-content class="myView" id="content">
+  <div class="variable-component" *ngIf="profile_active">
     <app-user-profile></app-user-profile>
   </div>
-  <div *ngIf="ports_active">
+  <div class="variable-component" *ngIf="ports_active">
     <app-ports></app-ports>
   </div>
-  <div *ngIf="stats_active">
+  <div class="variable-component" *ngIf="stats_active">
   </div>
-  <div *ngIf="damages_active">
+  <div class="variable-component" *ngIf="damages_active">
   </div>
-  <div *ngIf="notes_active">
+  <div class="variable-component" *ngIf="notes_active">
   </div>
 
 </ion-content>
