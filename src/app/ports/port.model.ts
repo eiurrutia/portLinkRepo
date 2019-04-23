@@ -2,6 +2,7 @@ export class Port {
     id: number;
     shipName: string;
     initalDate: any; // Date
+    modelsQuantityInPacking: number;
     unitsToCollect: number;
     collectedUnits: number; // Date
     totalDriversConsidered: number;
@@ -29,7 +30,7 @@ export class Port {
     totalTurns: number;
     averageOfUnitsPerTurn: number;
     averageTimePerTurn: number;
-    damages: boolean;
+    damages: number;
     // State in frontend
     showDetail: boolean;
 }
