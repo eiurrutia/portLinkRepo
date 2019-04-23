@@ -53,7 +53,7 @@
 
             <!-- *ngFor Item -->
             <ion-row *ngIf="activeItemsList">
-              <ion-list style="width: 100%; border-radius: 20%;">
+              <ion-list style="width: 100%; border-radius: 40px;">
                 <ion-item  *ngFor="let item of portsArray" class="item item-text-wrap">
                   <ion-grid>
                   <ion-row style="width: 100%;">
@@ -69,51 +69,51 @@
                     </ion-col>
                   </ion-row>
                   <ion-row>
-                    <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
+                    <ion-progress-bar color="primary" value="{{ item.advancedPercentage }}"></ion-progress-bar>
                   </ion-row>
                   <!-- Detail -->
                   <div *ngIf="item.showDetail">
-                    <ion-row class="rows-details-items">
-                      <ion-col size="6">
+                    <ion-row class="rows-details-items" style="padding-top: 5%;">
+                      <ion-col size="6" no-padding>
                           Total Retiradas:<br>
                           <p style="color: green; font-size: 150%; text-align: center">{{ item.collectedUnits }}</p>
                       </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="6" no-padding>
                           Total Faltantes:<br>
                            <p style="color: red; font-size: 150%; text-align: center">{{ item.unitsToCollect }}</p>
                       </ion-col>
                     </ion-row>
                     <ion-row class="rows-details-items">
-                      <ion-col size="6">
-                        <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.littleUnitsQuantity }}<br></div>
-                        <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.mediumUnitsQuantity }}<br></div>
-                        <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.bigUnitsQuantity }}<br></div>
-                        <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.extraBigUnitsQuantity }}<br></div>
+                      <ion-col size="6" no-padding>
+                        <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.collectedLittleUnits }}<br></div>
+                        <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.collectedMediumUnits }}<br></div>
+                        <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.collectedBigUnits }}<br></div>
+                        <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.collectedExtraBigUnits }}<br></div>
                       </ion-col>
-                      <ion-col size="6">
-                        -Pequeñas: 20<br>
-                        -Medianas: 5<br>
-                        -Grandes: 20<br>
-                        -Extra G.: 20<br>
+                      <ion-col size="6" no-padding>
+                        <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.toCollectLittleUnits }} ({{ item.littleUnitsQuantity }})<br></div>
+                        <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.toCollectMediumUnits }} ({{ item.mediumUnitsQuantity }})<br></div>
+                        <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.toCollectBigUnits }} ({{ item.bigUnitsQuantity }})<br></div>
+                        <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.toCollectExtraBigUnits }} ({{ item.extraBigUnitsQuantity }})<br></div>
                       </ion-col>
                     </ion-row>
                     <ion-row class="rows-details-items">
-                      <ion-col size="6">
+                      <ion-col size="6" no-padding>
                         Marcas:<br>
                         -Mazda<br>
                       </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="6" no-padding>
                           Modelos:<br>
                           -BT 50<br>
                           -Ram 25<br>
                       </ion-col>
                     </ion-row>
                     <ion-row class="rows-details-items">
-                      <ion-col size="6">
+                      <ion-col size="6" no-padding>
                           Conductores considerados: 5<br>
-                          Daños: 4<br>
+                          Daños: {{ item.damages }}<br>
                       </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="6" no-padding>
                           Vueltas Estimadas: 65<br>
                           Vueltas Realizadas: 34<br>
                       </ion-col>

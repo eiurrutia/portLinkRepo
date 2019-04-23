@@ -10,10 +10,18 @@ export class Port {
     ownDriversConsidered: number;
     turnsEstimated: number;
     turnsMade: number;
-    extraBigUnitsQuantity: number;
-    bigUnitsQuantity: number;
-    mediumUnitsQuantity: number;
-    littleUnitsQuantity: number;
+    extraBigUnitsQuantity: number; // Total
+    bigUnitsQuantity: number; // Total
+    mediumUnitsQuantity: number; // Total
+    littleUnitsQuantity: number; // Total
+    collectedExtraBigUnits: number; // Collected
+    collectedBigUnits: number; // Collected
+    collectedMediumUnits: number; // Collected
+    collectedLittleUnits: number; // Collected
+    toCollectExtraBigUnits: number; // To Collect
+    toCollectBigUnits: number; // To Collect
+    toCollectMediumUnits: number; // To Collect
+    toCollectLittleUnits: number; // To Collect
     models: any; // I need a list with models
     brands: any;
     port: string;
@@ -31,6 +39,7 @@ export class Port {
     averageOfUnitsPerTurn: number;
     averageTimePerTurn: number;
     damages: number;
+    advancedPercentage: number;
     // State in frontend
     showDetail: boolean;
 }
