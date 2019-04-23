@@ -67,28 +67,81 @@
             <!-- Row for actives ports list -->
             <ion-row *ngIf="activeItemsList">
               <ion-list style="width: 100%; border-radius: 20%;">
-                <ion-item>
+                <!--Pleiades -->
+                <ion-item class="item item-text-wrap">
+                  <ion-grid>
                   <ion-row style="width: 100%;">
                     <ion-col size="8">
-                      <ion-label>
                         Pleades Leader
-                      </ion-label>
                     </ion-col>
                     <ion-col size="3" style="text-align: right;">
-                      <ion-label>
                         285
-                      </ion-label>
                     </ion-col>
                     <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      <ion-icon *ngIf="!pleiadesDetail" (click)=changePleiadesDetail() style="padding-top: 3%;" name="add"></ion-icon>
+                      <ion-icon *ngIf="pleiadesDetail" (click)=changePleiadesDetail() style="padding-top: 3%;" name="remove"></ion-icon>
                     </ion-col>
                   </ion-row>
+                  <ion-row>
+                    <ion-progress-bar color="primary" value="0.5"></ion-progress-bar>
+                  </ion-row>
+
+                  <div *ngIf="pleiadesDetail">
+                    <ion-row class="rows-details-items">
+                      <ion-col size="6">
+                          Total Retiradas:<br>
+                          <p style="color: green; font-size: 150%; text-align: center">5</p>
+                      </ion-col>
+                      <ion-col size="6">
+                          Total Faltantes:<br>
+                           <p style="color: red; font-size: 150%; text-align: center">280</p>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="rows-details-items">
+                      <ion-col size="6">
+                        -Pequeñas: 20<br>
+                        -Medianas: 5<br>
+                        -Grandes: 20<br>
+                        -Extra G.: 20<br>
+                      </ion-col>
+                      <ion-col size="6">
+                        -Pequeñas: 20<br>
+                        -Medianas: 5<br>
+                        -Grandes: 20<br>
+                        -Extra G.: 20<br>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="rows-details-items">
+                      <ion-col size="6">
+                        Marcas:<br>
+                        -Mazda<br>
+                      </ion-col>
+                      <ion-col size="6">
+                          Modelos:<br>
+                          -BT 50<br>
+                          -Ram 25<br>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="rows-details-items">
+                      <ion-col size="6">
+                          Conductores considerados: 5<br>
+                          Daños: 4<br>
+                      </ion-col>
+                      <ion-col size="6">
+                          Vueltas Estimadas: 65<br>
+                          Vueltas Realizadas: 34<br>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                  </ion-grid>
                 </ion-item>
+                <!-- /Pleiades -->
+
                 <ion-item>
                   <ion-row style="width: 100%;">
                     <ion-col size="8">
                       <ion-label>
-                        Morning Caltpso
+                        Morning Calypso
                       </ion-label>
                     </ion-col>
                     <ion-col size="3" style="text-align: right;">

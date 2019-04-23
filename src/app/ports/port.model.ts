@@ -13,6 +13,8 @@ export class Port {
     bigUnitsQuantity: number;
     mediumUnitsQuantity: number;
     littleUnitsQuantity: number;
+    models: any; // I need a list with models
+    brands: any;
     port: string;
     destination: string;
     observation: string;
@@ -28,4 +30,6 @@ export class Port {
     averageOfUnitsPerTurn: number;
     averageTimePerTurn: number;
     damages: boolean;
+    // State in frontend
+    showDetail: boolean;
 }

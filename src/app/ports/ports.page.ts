@@ -14,11 +14,16 @@ export class PortsPage implements OnInit {
   // 2 --> "Nuevo Puerto"
   // 3 --> "Historial"
   // 4 --> "Estadísticas"
+
+  // to try
+  pleiadesDetail: boolean;
   constructor() { }
 
   ngOnInit() {
     this.activeItemsList = true;
     this.recentItemsList = false;
+
+    this.pleiadesDetail = false;
   }
 
   selectOption(textValue: string) {
@@ -33,5 +38,8 @@ export class PortsPage implements OnInit {
     this.recentItemsList = !this.recentItemsList;
   }
 
+  changePleiadesDetail() {
+    this.pleiadesDetail = !this.pleiadesDetail;
+  }
 
 }
