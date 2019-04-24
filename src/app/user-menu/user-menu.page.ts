@@ -8,8 +8,8 @@ import { MenuController } from '@ionic/angular';
 })
 export class UserMenuPage implements OnInit {
   menu_title = 'Perfil';
-  profile_active = true;
-  ports_active = false;
+  profile_active = false;
+  ports_active = true;
   stats_active = false;
   damages_active = false;
   notes_active = false;

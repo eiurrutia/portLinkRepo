@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PortsPage } from './ports.page';
+import { PortsNewPage } from '../ports-new/ports-new.page';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PortsPage]
+  declarations: [PortsPage,
+                PortsNewPage]
 })
 export class PortsPageModule {}
