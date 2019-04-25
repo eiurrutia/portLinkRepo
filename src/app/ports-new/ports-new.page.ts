@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as XLSX from 'ts-xlsx';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from '@ionic-native/file/ngx';
+
 
 @Component({
   selector: 'app-ports-new',
@@ -11,13 +16,14 @@ export class PortsNewPage implements OnInit {
   userForm: FormGroup;
   todo = {};
   arrayBuffer: any;
-  file: File;
+  file: any;
 
-  incomingfile(event) {
-    this.file = event.target.files[0];
-  }
+  constructor(private fileChooser: FileChooser,
+              private filePath: FilePath,
+              private fileOpener: FileOpener,
+              private fileee: File) { }
 
-  Upload() {
+  Upload2(fileXLSX: any) {
         const fileReader = new FileReader();
           fileReader.onload = (e) => {
               this.arrayBuffer = fileReader.result;
@@ -32,11 +38,24 @@ export class PortsNewPage implements OnInit {
               const worksheet = workbook.Sheets[first_sheet_name];
               console.log(XLSX.utils.sheet_to_json(worksheet, {raw: true}));
             };
-          fileReader.readAsArrayBuffer(this.file);
+          fileReader.readAsArrayBuffer(fileXLSX);
   }
 
-
-  constructor() { }
+  toOpen2() {
+      this.fileChooser.open().then(file => {
+        this.filePath.resolveNativePath(file).then(resolvedFilePath => {
+          (<any>window).resolveLocalFileSystemURL(resolvedFilePath, (res) => {
+            res.file((resFile) => {
+              this.Upload2(resFile);
+            });
+          });
+        }).catch(err => {
+          alert(JSON.stringify(err));
+        });
+      }).catch(err => {
+        alert(JSON.stringify(err));
+      });
+  }
 
   ngOnInit() {
   }
