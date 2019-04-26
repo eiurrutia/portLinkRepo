@@ -1,26 +1,46 @@
 
-<form (ngSubmit)="logForm()">
+<form (ngSubmit)="logForm()" class="main-form">
+  <ion-item>
+    <ion-label>Packing</ion-label>
+    <ion-toggle [(ngModel)]="packingToggle" name="thereIsPacking"></ion-toggle>
+  </ion-item>
       <ion-item>
-        <ion-label>Nombre Barco</ion-label>
+        <ion-button style="margin-right: 5%;"><ion-icon name="attach"></ion-icon></ion-button>{{ stringFile }}
         <ion-input type="text" [(ngModel)]="todo.title" name="title"></ion-input>
       </ion-item>
       <ion-item>
+        <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
+      </ion-item>
+      <ion-item class="preview" *ngIf=displayPreviewTable>
+        <ion-content scrollX="true" scrollY="false">
+        <ion-grid class="forecast_container">
+            <ion-row nowrap>
+                <ion-col *ngFor="let header of headers" style="width: 120%;" no-padding nowrap>
+                  <ion-row class="header-row" style="text-align: center" nowrap>
+                    {{ header }}
+                  </ion-row>
+                  <ion-row class="info-row" style="text-align: center" *ngFor="let model of previewObjects" nowrap>
+                    {{ model[header] }}
+                  </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        </ion-content>
+      </ion-item>
+      <ion-item>
         <ion-label>Cantidad de unidades</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
+        <ion-input type="number" [(ngModel)]="todo.title" name="title"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Description</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
+        <ion-label>d4</ion-label>
+        <ion-textarea [(ngModel)]="todo.description" name="d4"></ion-textarea>
       </ion-item>
       <ion-item>
-        <ion-label>Description</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
-      </ion-item>
-      <ion-item>
-        <ion-label>Description</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
+        <ion-label>d5</ion-label>
+        <ion-textarea [(ngModel)]="todo.description" name="d5"></ion-textarea>
       </ion-item>
       <button ion-button type="submit" block>Add Todo</button>
-      <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+      <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
       <button type="button" class="btn btn-info" (click)="Upload()" >Upload</button>
+      <button type="button" class="btn btn-info" (click)="toOpen2()" >CARGAR NUEVOO</button>
 </form>

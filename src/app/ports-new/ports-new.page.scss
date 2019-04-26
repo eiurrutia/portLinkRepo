@@ -1,0 +1,31 @@
+.main-form {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.forecast_container{
+  overflow-x: scroll!important;
+  // overflow-y: hidden;
+  //word-wrap: break-word;
+  height: auto;
+  font-size:0.8em;
+  font-weight:700;
+}
+
+.preview {
+  --min-height: 90px;
+}
+
+.header-row {
+  background-color: #a2a4ab;
+  color: white;
+  padding-right: 10px;
+}
+
+.info-row {
+  background-color: greenyellow;
+  color: black;
+  padding-right: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
