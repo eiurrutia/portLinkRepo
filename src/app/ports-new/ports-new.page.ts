@@ -24,6 +24,7 @@ export class PortsNewPage implements OnInit {
   displayPreviewTable: boolean;
   headers: string[];
   previewObjects: any; // The first 3 elements to see the format.
+  diccToDefineHeaders = {};
 
   constructor(private fileChooser: FileChooser,
               private filePath: FilePath,
@@ -117,6 +118,7 @@ toOpen() {
     this.headers = Object.keys(this.packingDicc[0]);
     for (const key of Object.keys(this.packingDicc[0])) {
       console.log(key);
+      this.diccToDefineHeaders[key] = '';
     }
 
     console.log(this.previewObjects);
@@ -127,6 +129,24 @@ toOpen() {
     this.packingToggle = true;
     this.displayPreviewTable = false;
     this.stringFile = 'No hay archivo seleccionado';
+  }
+
+  onChange(selectedValue: any, header: string) {
+    console.log(selectedValue);
+    console.log(header);
+    this.detectRepeat(selectedValue, header);
+    console.log(this.diccToDefineHeaders);
+  }
+
+  detectRepeat(selectedValue: string, header: string) {
+    for (const key of Object.keys(this.diccToDefineHeaders)) {
+      if (this.diccToDefineHeaders[key] === selectedValue &&
+      key !== header) {
+        console.log('Está repetido!');
+        this.diccToDefineHeaders[key] = '';
+      }
+
+    }
   }
 
   logForm() {
