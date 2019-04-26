@@ -5,8 +5,7 @@
     <ion-toggle [(ngModel)]="packingToggle" name="thereIsPacking"></ion-toggle>
   </ion-item>
       <ion-item>
-        <ion-button style="margin-right: 5%;"><ion-icon name="attach"></ion-icon></ion-button>{{ stringFile }}
-        <ion-input type="text" [(ngModel)]="todo.title" name="title"></ion-input>
+        <ion-button (click)="toOpen2()" style="margin-right: 5%;"><ion-icon name="attach"></ion-icon></ion-button>{{ stringFile }}
       </ion-item>
       <ion-item>
         <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
@@ -39,8 +38,7 @@
         </ion-content>
       </ion-item>
       <ion-item>
-        <ion-label>Cantidad de unidades</ion-label>
-        <ion-input type="number" [(ngModel)]="todo.title" name="title"></ion-input>
+        <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
       </ion-item>
       <ion-item>
         <ion-label>d4</ion-label>

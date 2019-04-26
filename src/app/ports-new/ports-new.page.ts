@@ -25,6 +25,7 @@ export class PortsNewPage implements OnInit {
   headers: string[];
   previewObjects: any; // The first 3 elements to see the format.
   diccToDefineHeaders = {};
+  packingQuantity: number;
 
   constructor(private fileChooser: FileChooser,
               private filePath: FilePath,
@@ -66,6 +67,7 @@ toOpen() {
               const first_sheet_name = workbook.SheetNames[0];
               const worksheet = workbook.Sheets[first_sheet_name];
               this.packingDicc = XLSX.utils.sheet_to_json(worksheet, {raw: true});
+              this.packingQuantity = this.packingDicc.length;
               this.previewObjects = this.packingDicc.slice(0, 3); // Get First three elements
               console.log(this.packingDicc);
 
@@ -89,6 +91,7 @@ toOpen() {
               const first_sheet_name = workbook.SheetNames[0];
               const worksheet = workbook.Sheets[first_sheet_name];
               this.packingDicc = XLSX.utils.sheet_to_json(worksheet, {raw: true});
+              this.packingQuantity = this.packingDicc.length;
               this.previewObjects = this.packingDicc.slice(0, 3); // Get First three elements
               console.log(this.packingDicc);
 
@@ -102,6 +105,8 @@ toOpen() {
       this.fileChooser.open().then(file => {
         this.filePath.resolveNativePath(file).then(resolvedFilePath => {
           (<any>window).resolveLocalFileSystemURL(resolvedFilePath, (res) => {
+            console.log(res.name);
+            this.stringFile = res.name;
             res.file((resFile) => {
               this.Upload2(resFile);
             });
