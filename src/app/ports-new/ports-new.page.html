@@ -15,7 +15,7 @@
         <ion-content scrollX="true" scrollY="false">
         <ion-grid class="forecast_container">
             <ion-row nowrap>
-                <ion-col *ngFor="let header of headers" style="width: 120%;" no-padding nowrap>
+                <ion-col class="preview-col" *ngFor="let header of headers" no-padding nowrap>
                   <ion-row class="header-row" style="text-align: center" nowrap>
                     {{ header }}
                   </ion-row>

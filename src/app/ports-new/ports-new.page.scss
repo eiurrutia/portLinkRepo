@@ -16,16 +16,28 @@
   --min-height: 90px;
 }
 
+.preview-col {
+  width: 120%;
+  border-left-width: thin;
+  border-left-color: black;
+  border-left-style: solid;
+  border-right-width: thin;
+  border-right-color: black;
+  border-right-style: solid;
+}
+
 .header-row {
   background-color: #a2a4ab;
   color: white;
   padding-right: 10px;
+  padding-left: 5px;
 }
 
 .info-row {
   background-color: greenyellow;
   color: black;
   padding-right: 10px;
+  padding-left: 5px;
   overflow: hidden;
   white-space: nowrap;
 }
