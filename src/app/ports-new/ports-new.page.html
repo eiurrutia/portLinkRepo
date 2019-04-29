@@ -10,40 +10,56 @@
       <ion-item>
         <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
       </ion-item>
-      <ion-item class="preview" *ngIf=displayPreviewTable>
-        <ion-content scrollX="true" scrollY="false">
-        <ion-grid class="forecast_container">
-            <ion-row nowrap>
-                <ion-col class="preview-col" *ngFor="let header of headers" no-padding nowrap>
-                  <ion-row class="header-row" nowrap>
-                    {{ header }}
-                  </ion-row>
-                  <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
-                    {{ model[header] }}
-                  </ion-row>
-                  <ion-row>
-                    <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
-                    value="vin" placeholder="Modelo" [(ngModel)]="diccToDefineHeaders[header]"
-                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onChange($event, header)">
-                      <ion-select-option value="vin">VIN</ion-select-option>
-                      <ion-select-option value="modelo">Modelo</ion-select-option>
-                      <ion-select-option value="color">Color</ion-select-option>
-                      <ion-select-option value="nave">Nave</ion-select-option>
-                      <ion-select-option value="">-</ion-select-option>
-                    </ion-select>
-                  </ion-row>
-                </ion-col>
+      <ion-list *ngIf=displayPreviewTable>
+        <ion-item class="preview" *ngIf=displayPreviewTable>
+          <ion-content scrollX="true" scrollY="false">
+          <ion-grid class="forecast_container">
+              <ion-row nowrap>
+                  <ion-col class="preview-col" *ngFor="let header of headers" no-padding nowrap>
+                    <ion-row class="header-row" nowrap>
+                      {{ header }}
+                    </ion-row>
+                    <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
+                      {{ model[header] }}
+                    </ion-row>
+                    <ion-row>
+                      <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
+                      value="" placeholder="Modelo" [(ngModel)]="diccToDefineHeaders[header]"
+                      [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSelect($event, header)">
+                        <ion-select-option value="vin">VIN</ion-select-option>
+                        <ion-select-option value="modelo">Modelo</ion-select-option>
+                        <ion-select-option value="color">Color</ion-select-option>
+                        <ion-select-option value="nave">Nave</ion-select-option>
+                        <ion-select-option value="">-</ion-select-option>
+                      </ion-select>
+                    </ion-row>
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+          </ion-content>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
+        </ion-item>
+        <ion-item class="models-items" *ngFor="let model of differentsModelsCount | keyvalue">
+          <ion-grid>
+            <ion-row>
+              <ion-label style="width: 85%;"><span *ngIf="differentsModelsSizes[model.key] == ''" class="model-without-size">*</span>{{ model.key }}</ion-label>
+              {{ model.value }}
             </ion-row>
-        </ion-grid>
-        </ion-content>
-      </ion-item>
-      <ion-item>
-        <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
-      </ion-item>
-      <ion-item>
-        <ion-label>d4</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="d4"></ion-textarea>
-      </ion-item>
+            <ion-row>
+              <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
+              value="" placeholder="Tamaño" [(ngModel)]="differentsModelsSizes[model.key]"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSize($event, model.key)">
+                <ion-select-option value="pequeno">Pequeño</ion-select-option>
+                <ion-select-option value="mediano">Mediano</ion-select-option>
+                <ion-select-option value="grande">Grande</ion-select-option>
+                <ion-select-option value="extraGrande">Extra Grande</ion-select-option>
+              </ion-select>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
       <ion-item>
         <ion-label>d5</ion-label>
         <ion-textarea [(ngModel)]="todo.description" name="d5"></ion-textarea>
