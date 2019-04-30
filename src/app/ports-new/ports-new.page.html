@@ -39,6 +39,9 @@
           </ion-content>
         </ion-item>
         <ion-item>
+          <ion-label>Nombre Barco</ion-label> {{ shipName }}
+        </ion-item>
+        <ion-item>
           <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
         </ion-item>
         <ion-item class="models-items" *ngFor="let model of differentsModelsCount | keyvalue">
@@ -48,7 +51,7 @@
               {{ model.value }}
             </ion-row>
             <ion-row>
-              <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
+              <ion-select class="custom-select-size" [interfaceOptions]="customPopoverOptions" interface="popover"
               value="" placeholder="Tamaño" [(ngModel)]="differentsModelsSizes[model.key]"
               [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSize($event, model.key)">
                 <ion-select-option value="pequeno">Pequeño</ion-select-option>
@@ -59,11 +62,33 @@
             </ion-row>
           </ion-grid>
         </ion-item>
+        <ion-item>
+          <ion-grid>
+            <ion-row style="float: right;">
+              <ion-icon (click)="editDigitsMode = !editDigitsMode" name="create"></ion-icon>
+            </ion-row>
+            <ion-row *ngIf="repeatedElement">
+              <ion-label style="color: red;">*Existen elementos repetidos con esa cantidad de dígitos</ion-label>
+            </ion-row>
+            <ion-row>
+              <ion-label>Formato VIN: </ion-label> {{ vinExample }}
+            </ion-row>
+            <ion-row>
+              <ion-label *ngIf="digitsToConsider==0" class="vin-digits-text">Todos los dígitos.</ion-label>
+              <ion-label *ngIf="digitsToConsider!=0" class="vin-digits-text">{{ digitsToConsider }} últimos dígitos.</ion-label>
+            </ion-row>
+            <ion-row *ngIf="editDigitsMode">
+              <ion-col size="7">
+                <ion-label class="vin-digits-text">Número de dígitos: </ion-label>
+              </ion-col>
+              <ion-col size="5">
+                <ion-input type="number" min="0" [(ngModel)]="digitsToConsider" name="vin-number" (ngModelChange)="numberDigitsChange($event)"></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
       </ion-list>
-      <ion-item>
-        <ion-label>d5</ion-label>
-        <ion-textarea [(ngModel)]="todo.description" name="d5"></ion-textarea>
-      </ion-item>
+
       <button ion-button type="submit" block>Add Todo</button>
       <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
       <button type="button" class="btn btn-info" (click)="Upload()" >Upload</button>
