@@ -32,6 +32,7 @@ export class PortsNewPage implements OnInit {
   shipName: string;
   vinExample: string;
   editDigitsMode = false;
+  editShipNameMode = false;
   digitsToConsider = 0; // When is zero, all digits are considered.
   repeatedElement = false; // If exist repeated elements.
 
