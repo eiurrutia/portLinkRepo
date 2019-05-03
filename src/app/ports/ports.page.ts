@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+
 import { Port } from './port.model';
 
 @Component({
@@ -20,7 +22,14 @@ export class PortsPage implements OnInit {
   // to try
   pleiadesDetail: boolean;
   portsArray: Port[];
-  constructor() { }
+
+  @Output() sendCount: EventEmitter <boolean> = new EventEmitter<boolean>();
+
+  public sendRecord() {
+    this.presentAlertConfirm();
+  }
+
+  constructor(public alertController: AlertController) { }
 
   ngOnInit() {
     this.activeItemsList = true;
@@ -115,9 +124,29 @@ export class PortsPage implements OnInit {
     this.pleiadesDetail = !this.pleiadesDetail;
   }
 
-  @Output() sendCount : EventEmitter <boolean> = new EventEmitter<boolean>();
-  public sendRecord() {
-    this.sendCount.emit(true);
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Crear Nuevo Puerto',
+      message: 'Quieres crear un nuevo puerto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.sendCount.emit(true);
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 
