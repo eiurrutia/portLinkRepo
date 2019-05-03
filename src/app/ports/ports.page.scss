@@ -35,6 +35,33 @@
   --color: black;
 }
 
+.title-header {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.title-card {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 50px;
+  width: 100%;
+  margin-top: 5%;
+  margin-right: 0;
+  margin-left: 0;
+  --color: black;
+}
+
+.title-icon {
+  color: #3a6a10;
+  width: 80%;
+  height: 80%;
+}
+
+.icon-title-col {
+  display: flex!important;
+  align-content: center!important;
+  align-items: center!important;
+}
+
 .increase-icon {
   height: 120%;
   width: 120%;

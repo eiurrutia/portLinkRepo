@@ -1,7 +1,7 @@
 <ion-grid>
 
-<ion-row style="margin-top:15%;">
-
+<!--<ion-row style="margin-top:15%;">-->
+  <!--
   <ion-col size="6" style="padding-right: 0;">
     <ion-list>
       <ion-item (click)="selectOption('1')"
@@ -22,290 +22,314 @@
         <ion-icon style="color: #e4ffc2;" name="add-circle-outline"></ion-icon>
       </ion-item>
     </ion-list>
-  </ion-col>
+  </ion-col>-->
   <!--<h1>Puertos Actuales <ion-icon style="color: #3a6a10;" name="alarm"></ion-icon></h1>-->
-</ion-row>
+
+<!--</ion-row>-->
 
 <!-- CUREENTS PORTS -->
 <div *ngIf="selected_option=='1'">
-  <ion-row>
+  <ion-row style="margin-top:15%;">
       <ion-col size="1">
       </ion-col>
 
       <ion-col size="10">
-        <ion-card class="main-card">
-          <ion-card-content>
-
-            <!-- Row for actives ports titles -->
-            <ion-row>
-              <ion-col size="1">
-              </ion-col>
-              <ion-col size="11">
-                <ion-row (click)=changeActiveListValue()>
-                  <ion-col size="2" style="padding-right: 0; padding-top: 0">
-                    <ion-icon class="increase-icon" style="color: #17ff0f; padding-top: 1%;" name="wifi"></ion-icon>
-                  </ion-col>
-                  <ion-col size="10" style="padding-left: 0;">
-                    <ion-label style="padding-left: 10%;"> Activos (3): </ion-label>
-                    <ion-icon *ngIf="activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
-                    <ion-icon *ngIf="!activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
-                  </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-
-            <!-- *ngFor Item -->
-            <ion-row *ngIf="activeItemsList">
-              <ion-list style="width: 100%; border-radius: 40px;">
-                <ion-item  *ngFor="let item of portsArray" class="item item-text-wrap">
-                  <ion-grid>
-                  <ion-row style="width: 100%;" (click)="item.showDetail = !item.showDetail">
-                    <ion-col size="8">
-                        {{ item.shipName }}
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                        {{ item.modelsQuantityInPacking }}
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon *ngIf="!item.showDetail" style="padding-top: 3%;" name="add"></ion-icon>
-                      <ion-icon *ngIf="item.showDetail" style="padding-top: 3%;" name="remove"></ion-icon>
-                    </ion-col>
-                  </ion-row>
+        <ion-row>
+          <ion-card class="title-card">
+            <ion-card-header class="title-header">
+              <ion-card-title>
+                <ion-grid>
                   <ion-row>
-                    <ion-progress-bar color="primary" value="{{ item.advancedPercentage }}"></ion-progress-bar>
+                    <ion-col size="1"></ion-col>
+                    <ion-col size="6">
+                      Puertos<br>Actuales
+                    </ion-col>
+                    <ion-col size="4" no-padding class="icon-title-col">
+                      <ion-icon class="title-icon" name="alarm"></ion-icon>
+                    </ion-col>
+                    <ion-col size="1"></ion-col>
                   </ion-row>
-                  <!-- Detail -->
-                  <div *ngIf="item.showDetail">
-                    <ion-row class="rows-details-items" style="padding-top: 5%;">
-                      <ion-col size="6" no-padding>
-                          Total Retiradas:<br>
-                          <p style="color: green; font-size: 150%; text-align: center">{{ item.collectedUnits }}</p>
-                      </ion-col>
-                      <ion-col size="6" no-padding>
-                          Total Faltantes:<br>
-                           <p style="color: red; font-size: 150%; text-align: center">{{ item.unitsToCollect }}</p>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row class="rows-details-items">
-                      <ion-col size="6" no-padding>
-                        <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.collectedLittleUnits }}<br></div>
-                        <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.collectedMediumUnits }}<br></div>
-                        <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.collectedBigUnits }}<br></div>
-                        <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.collectedExtraBigUnits }}<br></div>
-                      </ion-col>
-                      <ion-col size="6" no-padding>
-                        <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.toCollectLittleUnits }} ({{ item.littleUnitsQuantity }})<br></div>
-                        <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.toCollectMediumUnits }} ({{ item.mediumUnitsQuantity }})<br></div>
-                        <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.toCollectBigUnits }} ({{ item.bigUnitsQuantity }})<br></div>
-                        <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.toCollectExtraBigUnits }} ({{ item.extraBigUnitsQuantity }})<br></div>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row class="rows-details-items">
-                      <ion-col size="6" no-padding>
-                        Marcas:<br>
-                        -Mazda<br>
-                      </ion-col>
-                      <ion-col size="6" no-padding>
-                          Modelos:<br>
-                          -BT 50<br>
-                          -Ram 25<br>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row class="rows-details-items">
-                      <ion-col size="6" no-padding>
-                          Conductores considerados: 5<br>
-                          Daños: {{ item.damages }}<br>
-                      </ion-col>
-                      <ion-col size="6" no-padding>
-                          Vueltas Estimadas: 65<br>
-                          Vueltas Realizadas: 34<br>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                  </ion-grid>
-                </ion-item>
-              </ion-list>
-            </ion-row>
+                </ion-grid>
 
-            <!-- Row for recents ports title -->
-            <ion-row>
-              <ion-col size="1">
-              </ion-col>
-              <ion-col size="11">
-                <ion-row (click)=changeRecentListValue()>
-                  <ion-col size="2" style="padding-right: 0; padding-top: 0">
-                    <ion-icon class="increase-icon" style="color: black; padding-top: 1%;" name="paper"></ion-icon>
-                  </ion-col>
-                  <ion-col size="10" style="padding-left: 0;">
-                    <ion-label style="padding-left: 10%;"> Recientes (5): </ion-label>
-                    <ion-icon *ngIf="recentItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
-                    <ion-icon *ngIf="!recentItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
-                  </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-row>
+        <ion-row>
+          <ion-card class="main-card">
+            <ion-card-content>
 
-            <!-- Row for recents ports list -->
-            <ion-row *ngIf="recentItemsList">
-              <ion-list style="width: 100%; border-radius: 10%;">
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Pleades Leader
-                      </ion-label>
+              <!-- Row for actives ports titles -->
+              <ion-row>
+                <ion-col size="1">
+                </ion-col>
+                <ion-col size="11">
+                  <ion-row (click)=changeActiveListValue()>
+                    <ion-col size="2" style="padding-right: 0; padding-top: 0">
+                      <ion-icon class="increase-icon" style="color: #17ff0f; padding-top: 1%;" name="wifi"></ion-icon>
                     </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        285
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                    <ion-col size="10" style="padding-left: 0;">
+                      <ion-label style="padding-left: 10%;"> Activos (3): </ion-label>
+                      <ion-icon *ngIf="activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
+                      <ion-icon *ngIf="!activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
                     </ion-col>
                   </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-item>
-                  <ion-row style="width: 100%;">
-                    <ion-col size="8">
-                      <ion-label>
-                        Morning Caltpso
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="3" style="text-align: right;">
-                      <ion-label>
-                        88
-                      </ion-label>
-                    </ion-col>
-                    <ion-col size="1" style="text-align: right;">
-                      <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-              </ion-list>
-            </ion-row>
+                </ion-col>
+              </ion-row>
 
-          </ion-card-content>
-        </ion-card>
+              <!-- *ngFor Item -->
+              <ion-row *ngIf="activeItemsList">
+                <ion-list style="width: 100%; border-radius: 40px;">
+                  <ion-item  *ngFor="let item of portsArray" class="item item-text-wrap">
+                    <ion-grid>
+                    <ion-row style="width: 100%;" (click)="item.showDetail = !item.showDetail">
+                      <ion-col size="8">
+                          {{ item.shipName }}
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                          {{ item.modelsQuantityInPacking }}
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon *ngIf="!item.showDetail" style="padding-top: 3%;" name="add"></ion-icon>
+                        <ion-icon *ngIf="item.showDetail" style="padding-top: 3%;" name="remove"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-progress-bar color="primary" value="{{ item.advancedPercentage }}"></ion-progress-bar>
+                    </ion-row>
+                    <!-- Detail -->
+                    <div *ngIf="item.showDetail">
+                      <ion-row class="rows-details-items" style="padding-top: 5%;">
+                        <ion-col size="6" no-padding>
+                            Total Retiradas:<br>
+                            <p style="color: green; font-size: 150%; text-align: center">{{ item.collectedUnits }}</p>
+                        </ion-col>
+                        <ion-col size="6" no-padding>
+                            Total Faltantes:<br>
+                             <p style="color: red; font-size: 150%; text-align: center">{{ item.unitsToCollect }}</p>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items">
+                        <ion-col size="6" no-padding>
+                          <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.collectedLittleUnits }}<br></div>
+                          <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.collectedMediumUnits }}<br></div>
+                          <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.collectedBigUnits }}<br></div>
+                          <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.collectedExtraBigUnits }}<br></div>
+                        </ion-col>
+                        <ion-col size="6" no-padding>
+                          <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.toCollectLittleUnits }} ({{ item.littleUnitsQuantity }})<br></div>
+                          <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.toCollectMediumUnits }} ({{ item.mediumUnitsQuantity }})<br></div>
+                          <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.toCollectBigUnits }} ({{ item.bigUnitsQuantity }})<br></div>
+                          <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.toCollectExtraBigUnits }} ({{ item.extraBigUnitsQuantity }})<br></div>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items">
+                        <ion-col size="6" no-padding>
+                          Marcas:<br>
+                          -Mazda<br>
+                        </ion-col>
+                        <ion-col size="6" no-padding>
+                            Modelos:<br>
+                            -BT 50<br>
+                            -Ram 25<br>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items">
+                        <ion-col size="6" no-padding>
+                            Conductores considerados: 5<br>
+                            Daños: {{ item.damages }}<br>
+                        </ion-col>
+                        <ion-col size="6" no-padding>
+                            Vueltas Estimadas: 65<br>
+                            Vueltas Realizadas: 34<br>
+                        </ion-col>
+                      </ion-row>
+                    </div>
+                    </ion-grid>
+                  </ion-item>
+                </ion-list>
+              </ion-row>
+
+              <!-- Row for recents ports title -->
+              <ion-row>
+                <ion-col size="1">
+                </ion-col>
+                <ion-col size="11">
+                  <ion-row (click)=changeRecentListValue()>
+                    <ion-col size="2" style="padding-right: 0; padding-top: 0">
+                      <ion-icon class="increase-icon" style="color: black; padding-top: 1%;" name="paper"></ion-icon>
+                    </ion-col>
+                    <ion-col size="10" style="padding-left: 0;">
+                      <ion-label style="padding-left: 10%;"> Recientes (5): </ion-label>
+                      <ion-icon *ngIf="recentItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
+                      <ion-icon *ngIf="!recentItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+
+              <!-- Row for recents ports list -->
+              <ion-row *ngIf="recentItemsList">
+                <ion-list style="width: 100%; border-radius: 10%;">
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Pleades Leader
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          285
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                  <ion-item>
+                    <ion-row style="width: 100%;">
+                      <ion-col size="8">
+                        <ion-label>
+                          Morning Caltpso
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="3" style="text-align: right;">
+                        <ion-label>
+                          88
+                        </ion-label>
+                      </ion-col>
+                      <ion-col size="1" style="text-align: right;">
+                        <ion-icon style="padding-top: 3%;" name="add"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                </ion-list>
+              </ion-row>
+
+            </ion-card-content>
+          </ion-card>
+        </ion-row>
       </ion-col>
       <ion-col size="1">
       </ion-col>
