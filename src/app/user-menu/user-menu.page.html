@@ -1,8 +1,8 @@
 <ion-menu side="start" menuId="first" content-id="content">
   <ion-header>
-    <ion-toolbar color="dark blue">
+    <ion-toolbar color="dark blue" (click)=close()>
       <ion-title>
-        Menú<ion-icon style="padding-left: 75%;" name="arrow-back" (click)=close()></ion-icon>
+        Menú<ion-icon style="padding-left: 75%;" name="arrow-back"></ion-icon>
       </ion-title>
        <ion-buttons end></ion-buttons>
     </ion-toolbar>
@@ -14,7 +14,8 @@
       <ion-item (click)=activateStats()><ion-icon style="padding-right: 10%;" name="trending-up"></ion-icon> Estadísticas</ion-item>
       <ion-item (click)=activateDamages()><ion-icon style="padding-right: 10%;" name="medkit"></ion-icon> Daños</ion-item>
       <ion-item (click)=activateNotes()><ion-icon style="padding-right: 10%;" name="clipboard"></ion-icon> Notas</ion-item>
-      <ion-item><ion-icon style="padding-right: 10%;" name="share"></ion-icon> Compartir Info</ion-item>
+      <ion-item style="margin-bottom: 30%;"><ion-icon style="padding-right: 10%;" name="share"></ion-icon> Compartir Info</ion-item>
+      <ion-item (click)=activateNew() routerLink="ports/new-port"><ion-icon style="padding-right: 10%;" name="add-circle-outline"></ion-icon> Nuevo Puerto</ion-item>
       <ion-item><ion-icon style="padding-right: 10%;" name="power"></ion-icon> Cerrar Sesión</ion-item>
     </ion-list>
   </ion-content>
@@ -43,13 +44,16 @@
     <app-user-profile></app-user-profile>
   </div>
   <div class="variable-component" *ngIf="ports_active">
-    <app-ports></app-ports>
+    <app-ports (sendCount)="customFunc($event)"></app-ports>
   </div>
   <div class="variable-component" *ngIf="stats_active">
   </div>
   <div class="variable-component" *ngIf="damages_active">
   </div>
   <div class="variable-component" *ngIf="notes_active">
+  </div>
+  <div class="variable-component" *ngIf="edit_active">
+    <ion-router-outlet id="content" main></ion-router-outlet>
   </div>
   <!--<div class="variable-component">
     <ion-router-outlet id="content" main></ion-router-outlet>

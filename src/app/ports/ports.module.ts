@@ -6,12 +6,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PortsPage } from './ports.page';
-import { PortsNewPage } from '../ports-new/ports-new.page';
+import { PortsNewPage } from './ports-new/ports-new.page';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: PortsPage
+    children: [
+      {
+        path: 'new-port',
+        component: PortsNewPage,
+        data: {preload: true}
+      }
+    ]
   }
 ];
 
@@ -22,7 +29,10 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PortsPage],
+  declarations: [
+    PortsPage,
+    PortsNewPage
+  ],
   exports: [PortsPage]
 })
 export class PortsPageModule {}

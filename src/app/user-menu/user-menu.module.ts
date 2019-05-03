@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserMenuPage } from './user-menu.page';
 import { UserProfilePage } from '../user-profile/user-profile.page';
 import { PortsPage } from '../ports/ports.page';
-import { PortsNewPage } from '../ports-new/ports-new.page';
+import { PortsNewPage } from '../ports/ports-new/ports-new.page';
 
 import { AppRoutingPreloaderService } from '../app-routing-preloader.service';
 
@@ -22,13 +22,11 @@ const routes: Routes = [
     children: [
       {
         path: 'user-profile',
-        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule',
-        data: {preload: true}
+        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
       },
       {
         path: 'ports',
-        loadChildren: '../ports/ports.module#PortsPageModule',
-        data: {preload: true}
+        loadChildren: '../ports/ports.module#PortsPageModule'
       }
     ]
   }

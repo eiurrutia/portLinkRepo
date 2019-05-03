@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Port } from './port.model';
 
 @Component({
@@ -7,6 +7,7 @@ import { Port } from './port.model';
   styleUrls: ['./ports.page.scss'],
 })
 export class PortsPage implements OnInit {
+
   public selected_option = '1';
   public text: any;
   activeItemsList: boolean;
@@ -113,5 +114,11 @@ export class PortsPage implements OnInit {
   changePleiadesDetail() {
     this.pleiadesDetail = !this.pleiadesDetail;
   }
+
+  @Output() sendCount : EventEmitter <boolean> = new EventEmitter<boolean>();
+  public sendRecord() {
+    this.sendCount.emit(true);
+  }
+
 
 }

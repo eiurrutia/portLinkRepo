@@ -1,0 +1,120 @@
+<ion-grid>
+  <ion-row style="margin-top: 20%;">
+    <ion-col size="0.1">
+    </ion-col>
+    <ion-col size="11">
+      <form (ngSubmit)="logForm()" class="main-form">
+        <ion-item>
+          <ion-label>Packing</ion-label>
+          <ion-toggle [(ngModel)]="packingToggle" name="thereIsPacking"></ion-toggle>
+        </ion-item>
+            <ion-item>
+              <ion-button (click)="toOpen2()" style="margin-right: 5%;"><ion-icon name="attach"></ion-icon></ion-button>{{ stringFile }}
+            </ion-item>
+            <ion-item>
+              <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
+            </ion-item>
+            <ion-list *ngIf=displayPreviewTable>
+              <ion-item class="preview" *ngIf=displayPreviewTable>
+                <ion-content scrollX="true" scrollY="false">
+                <ion-grid class="forecast_container">
+                    <ion-row nowrap>
+                        <ion-col class="preview-col" *ngFor="let header of headers" no-padding nowrap>
+                          <ion-row class="header-row" nowrap>
+                            {{ header }}
+                          </ion-row>
+                          <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
+                            {{ model[header] }}
+                          </ion-row>
+                          <ion-row>
+                            <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
+                            value="" placeholder="Modelo" [(ngModel)]="diccToDefineHeaders[header]"
+                            [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSelect($event, header)">
+                              <ion-select-option value="vin">VIN</ion-select-option>
+                              <ion-select-option value="modelo">Modelo</ion-select-option>
+                              <ion-select-option value="color">Color</ion-select-option>
+                              <ion-select-option value="nave">Nave</ion-select-option>
+                              <ion-select-option value="">-</ion-select-option>
+                            </ion-select>
+                          </ion-row>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                </ion-content>
+              </ion-item>
+              <ion-item>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="10">
+                      <ion-label>Nombre Barco</ion-label>
+                    </ion-col>
+                    <ion-col size="2">
+                      <ion-icon style="float: right;" (click)="editShipNameMode = !editShipNameMode" name="create"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="!editShipNameMode" style="padding-left: 30%;">
+                     {{ shipName }}
+                  </ion-row>
+                  <ion-row *ngIf="editShipNameMode" style="padding-left: 30%;">
+                     <ion-input type="text" [(ngModel)]="shipName" name="vin-number"></ion-input>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
+              </ion-item>
+              <ion-item class="models-items" *ngFor="let model of differentsModelsCount | keyvalue">
+                <ion-grid>
+                  <ion-row>
+                    <ion-label style="width: 85%;"><span *ngIf="differentsModelsSizes[model.key] == ''" class="model-without-size">*</span>{{ model.key }}</ion-label>
+                    {{ model.value }}
+                  </ion-row>
+                  <ion-row>
+                    <ion-select class="custom-select-size" [interfaceOptions]="customPopoverOptions" interface="popover"
+                    value="" placeholder="Tamaño" [(ngModel)]="differentsModelsSizes[model.key]"
+                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSize($event, model.key)">
+                      <ion-select-option value="pequeno">Pequeño</ion-select-option>
+                      <ion-select-option value="mediano">Mediano</ion-select-option>
+                      <ion-select-option value="grande">Grande</ion-select-option>
+                      <ion-select-option value="extraGrande">Extra Grande</ion-select-option>
+                    </ion-select>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid>
+                  <ion-row style="float: right;">
+                    <ion-icon (click)="editDigitsMode = !editDigitsMode" name="create"></ion-icon>
+                  </ion-row>
+                  <ion-row *ngIf="repeatedElement">
+                    <ion-label style="color: red;">*Existen elementos repetidos con esa cantidad de dígitos</ion-label>
+                  </ion-row>
+                  <ion-row>
+                    <ion-label>Formato VIN: </ion-label> {{ vinExample }}
+                  </ion-row>
+                  <ion-row>
+                    <ion-label *ngIf="digitsToConsider==0" class="vin-digits-text">Todos los dígitos.</ion-label>
+                    <ion-label *ngIf="digitsToConsider!=0" class="vin-digits-text">{{ digitsToConsider }} últimos dígitos.</ion-label>
+                  </ion-row>
+                  <ion-row *ngIf="editDigitsMode">
+                    <ion-col size="7">
+                      <ion-label class="vin-digits-text">Número de dígitos: </ion-label>
+                    </ion-col>
+                    <ion-col size="5">
+                      <ion-input type="number" min="0" [(ngModel)]="digitsToConsider" name="vin-number" (ngModelChange)="numberDigitsChange($event)"></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+
+            <button ion-button type="submit" block>Add Todo</button>
+            <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
+            <button type="button" class="btn btn-info" (click)="Upload()" >Upload</button>
+            <button type="button" class="btn btn-info" (click)="toOpen2()" >CARGAR NUEVOO</button>
+      </form>
+    </ion-col>
+    <ion-col size="0.1">
+    </ion-col>
+  </ion-row>
+</ion-grid>

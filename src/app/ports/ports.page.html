@@ -306,7 +306,7 @@
   </ion-row>
   <ion-row>
     <ion-fab style="bottom: 10%; right: 10%;" vertical="bottom" horizontal="end" edge>
-      <ion-fab-button size="big" href="/user-menu/user-profile" style="--background: seagreen;">
+      <ion-fab-button size="big" (click)="sendRecord()" routerLink="ports/new-port" style="--background: seagreen;">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
