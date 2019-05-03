@@ -14,6 +14,9 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 
+import { PortsPageModule } from './ports/ports.module';
+import { UserProfilePageModule } from './user-profile/user-profile.module';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +24,9 @@ import { File } from '@ionic-native/file/ngx';
   imports: [BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(), AppRoutingModule],
+    IonicModule.forRoot(), AppRoutingModule,
+    PortsPageModule,
+    UserProfilePageModule],
   providers: [
     StatusBar,
     SplashScreen,

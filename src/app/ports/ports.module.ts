@@ -22,7 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PortsPage,
-                PortsNewPage]
+  declarations: [PortsPage],
+  exports: [PortsPage]
 })
 export class PortsPageModule {}

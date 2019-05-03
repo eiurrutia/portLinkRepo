@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadingStrategy } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -10,10 +10,23 @@ import { UserProfilePage } from '../user-profile/user-profile.page';
 import { PortsPage } from '../ports/ports.page';
 import { PortsNewPage } from '../ports-new/ports-new.page';
 
+import { PortsPageModule } from '../ports/ports.module';
+import { UserProfilePageModule } from '../user-profile/user-profile.module';
+
 const routes: Routes = [
   {
     path: '',
-    component: UserMenuPage
+    component: UserMenuPage,
+    children: [
+      {
+        path: 'user-profile',
+        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
+      },
+      {
+        path: 'ports',
+        loadChildren: '../ports/ports.module#PortsPageModule'
+      }
+    ]
   }
 ];
 
@@ -22,11 +35,12 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    PortsPageModule,
+    UserProfilePageModule
   ],
-  declarations: [UserMenuPage,
-                UserProfilePage,
-                PortsPage,
-                PortsNewPage]
+  declarations: [
+    UserMenuPage
+  ]
 })
 export class UserMenuPageModule {}

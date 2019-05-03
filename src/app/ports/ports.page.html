@@ -1,5 +1,7 @@
+<ion-grid>
 
 <ion-row style="margin-top:15%;">
+
   <ion-col size="6" style="padding-right: 0;">
     <ion-list>
       <ion-item (click)="selectOption('1')"
@@ -21,6 +23,7 @@
       </ion-item>
     </ion-list>
   </ion-col>
+  <!--<h1>Puertos Actuales <ion-icon style="color: #3a6a10;" name="alarm"></ion-icon></h1>-->
 </ion-row>
 
 <!-- CUREENTS PORTS -->
@@ -310,7 +313,9 @@
 
 </div>
 
-<!-- NEW PORTS -->
+<!-- NEW PORTS-->
 <div class="variable-component" *ngIf="selected_option=='2'">
-  <app-ports-new></app-ports-new>
+  <!--<app-ports-new></app-ports-new>-->
 </div>
+
+</ion-grid>

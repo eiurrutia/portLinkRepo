@@ -45,7 +45,7 @@
             </ion-card-title>
           </ion-card-header>
           <ion-card-content class="style-user-password-content">
-            <form (ngSubmit)='someAction()'>
+            <form>
               <ion-item class="background-color-item">
                 <ion-label stacked>Usuario   :</ion-label>
                 <ion-input name="user" type="text" value="user" [(ngModel)]="userText"></ion-input>
@@ -63,7 +63,7 @@
         </ion-col>
         <ion-col size="2" style="padding-top: 0;">
           <ion-fab>
-            <ion-fab-button [disabled]="!userText" color="dark" size="big" href="/user-menu">
+            <ion-fab-button [disabled]="!userText" color="dark" size="big" href="/user-menu/user-profile">
               <ion-icon name="arrow-dropright"></ion-icon>
             </ion-fab-button>
           </ion-fab>

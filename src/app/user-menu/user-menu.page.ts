@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { PortsNewPage } from '../ports-new/ports-new.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -13,7 +15,10 @@ export class UserMenuPage implements OnInit {
   stats_active = false;
   damages_active = false;
   notes_active = false;
-  constructor(private menu: MenuController) { }
+
+  selectedPath = '';
+
+  constructor(private menu: MenuController) {}
 
   openFirst() {
     this.menu.enable(true, 'first');
