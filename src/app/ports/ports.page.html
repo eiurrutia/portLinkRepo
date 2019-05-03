@@ -1,39 +1,9 @@
 <ion-grid>
-
-<!--<ion-row style="margin-top:15%;">-->
-  <!--
-  <ion-col size="6" style="padding-right: 0;">
-    <ion-list>
-      <ion-item (click)="selectOption('1')"
-      class="background-color-item"
-      [ngClass]="{'background-color-actived': selected_option==1}">
-        <ion-label>Puertos Actuales</ion-label>
-        <ion-icon style="color: #3a6a10;" name="alarm"></ion-icon>
-        <div class="verticalLine"></div>
-      </ion-item>
-    </ion-list>
-  </ion-col>
-  <ion-col size="6" style="padding-left: 0;">
-    <ion-list>
-      <ion-item class="background-color-item"
-      [ngClass]="{'background-color-actived': selected_option==2}"
-      (click)="selectOption('2')">
-        <ion-label>Nuevo Puerto</ion-label>
-        <ion-icon style="color: #e4ffc2;" name="add-circle-outline"></ion-icon>
-      </ion-item>
-    </ion-list>
-  </ion-col>-->
-  <!--<h1>Puertos Actuales <ion-icon style="color: #3a6a10;" name="alarm"></ion-icon></h1>-->
-
-<!--</ion-row>-->
-
-<!-- CUREENTS PORTS -->
-<div *ngIf="selected_option=='1'">
   <ion-row style="margin-top:15%;">
-      <ion-col size="1">
+      <ion-col size="0.5">
       </ion-col>
 
-      <ion-col size="10">
+      <ion-col size="11">
         <ion-row>
           <ion-card class="title-card">
             <ion-card-header class="title-header">
@@ -331,15 +301,14 @@
           </ion-card>
         </ion-row>
       </ion-col>
-      <ion-col size="1">
+      <ion-col size="0.5">
       </ion-col>
   </ion-row>
-
-</div>
-
-<!-- NEW PORTS-->
-<div class="variable-component" *ngIf="selected_option=='2'">
-  <!--<app-ports-new></app-ports-new>-->
-</div>
-
+  <ion-row>
+    <ion-fab style="bottom: 10%; right: 10%;" vertical="bottom" horizontal="end" edge>
+      <ion-fab-button size="big" href="/user-menu/user-profile" style="--background: seagreen;">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-row>
 </ion-grid>
