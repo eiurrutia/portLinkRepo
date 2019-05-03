@@ -14,17 +14,20 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 
+import { AppRoutingPreloaderService } from './app-routing-preloader.service';
+
 import { PortsPageModule } from './ports/ports.module';
 import { UserProfilePageModule } from './user-profile/user-profile.module';
 
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [AppComponent],
   imports: [BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(), AppRoutingModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
     PortsPageModule,
     UserProfilePageModule],
   providers: [
@@ -34,7 +37,8 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     FileChooser,
     FilePath,
     FileOpener,
-    File
+    File,
+    AppRoutingPreloaderService
   ],
   bootstrap: [AppComponent]
 })

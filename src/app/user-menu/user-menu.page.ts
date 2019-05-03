@@ -20,6 +20,7 @@ export class UserMenuPage implements OnInit {
 
   constructor(private menu: MenuController) {}
 
+
   openFirst() {
     this.menu.enable(true, 'first');
     this.menu.open('first');

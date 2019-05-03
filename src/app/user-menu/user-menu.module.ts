@@ -10,6 +10,8 @@ import { UserProfilePage } from '../user-profile/user-profile.page';
 import { PortsPage } from '../ports/ports.page';
 import { PortsNewPage } from '../ports-new/ports-new.page';
 
+import { AppRoutingPreloaderService } from '../app-routing-preloader.service';
+
 import { PortsPageModule } from '../ports/ports.module';
 import { UserProfilePageModule } from '../user-profile/user-profile.module';
 
@@ -20,11 +22,13 @@ const routes: Routes = [
     children: [
       {
         path: 'user-profile',
-        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
+        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule',
+        data: {preload: true}
       },
       {
         path: 'ports',
-        loadChildren: '../ports/ports.module#PortsPageModule'
+        loadChildren: '../ports/ports.module#PortsPageModule',
+        data: {preload: true}
       }
     ]
   }
@@ -41,6 +45,9 @@ const routes: Routes = [
   ],
   declarations: [
     UserMenuPage
+  ],
+  exports: [
+    RouterModule
   ]
 })
 export class UserMenuPageModule {}
