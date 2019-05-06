@@ -8,13 +8,26 @@ import { NavParams, ModalController } from '@ionic/angular';
 })
 export class NewPortModalPage implements OnInit {
 
-  passedId = null;
+  finalPacking = null;
+  previewObjects = [];
+  headers: any;
 
   constructor(private navParams: NavParams,
               private modalController: ModalController) { }
 
   ngOnInit() {
-    this.passedId = this.navParams.get('custom_id');
+    this.finalPacking = this.navParams.get('custom_packing');
+    this.generatePreviewObjects();
+  }
+
+  generatePreviewObjects() {
+    this.previewObjects = [];
+    this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[0]]);
+    this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[1]]);
+    this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[2]]);
+    console.log('previewObjects');
+    console.log(this.previewObjects);
+    this.headers = ['vin', 'modelo', 'color'];
   }
 
   closeModal() {

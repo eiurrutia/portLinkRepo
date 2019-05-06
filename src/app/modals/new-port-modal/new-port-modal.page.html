@@ -5,7 +5,24 @@
 </ion-header>
 
 <ion-content padding>
-  My Id is: {{ passedId }}
+  <ion-list>
+    <ion-item class="preview">
+      <ion-content scrollX="true" scrollY="false">
+      <ion-grid class="forecast_container">
+          <ion-row nowrap>
+              <ion-col class="preview-col" *ngFor="let key of headers" no-padding nowrap>
+                <ion-row class="header-row" nowrap>
+                  {{ key }}
+                </ion-row>
+                <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
+                  {{ model[key] }}
+                </ion-row>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+      </ion-content>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
 <ion-footer>

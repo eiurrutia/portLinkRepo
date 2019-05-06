@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import * as XLSX from 'ts-xlsx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
+
+import { NewPortModalPage } from '../../modals/new-port-modal/new-port-modal.page';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class PortsNewPage implements OnInit {
   stringFile: string;
   packingDicc: any;
   packingDiccId = {};
+  finalPackingDicc: any;
   displayPreviewTable: boolean;
   headers: string[];
   previewObjects: any; // The first 3 elements to see the format.
@@ -43,14 +46,15 @@ export class PortsNewPage implements OnInit {
               private filePath: FilePath,
               private fileOpener: FileOpener,
               private fileee: File,
-              private toastController: ToastController) { }
+              private toastController: ToastController,
+              private modalController: ModalController) { }
 
   incomingfile(event) {
     this.file = event.target.files[0];
   }
 
-// To upload XLXS from browser on desktop
-toOpen() {
+  // To upload XLXS from browser on desktop
+  toOpen() {
     this.fileChooser.open().then(file => {
       this.filePath.resolveNativePath(file).then(resolvedFilePath => {
         this.stringFile = file;
@@ -283,6 +287,32 @@ toOpen() {
     }
     console.log(this.packingDiccId);
     console.log(Object.keys(this.packingDiccId).length);
+  }
+
+  // To generate preview array for the packingDicc
+  generateFinalArray() {
+    this.finalPackingDicc = {};
+    for (const key of Object.keys(this.packingDiccId)) {
+      this.finalPackingDicc[this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']]] = {};
+      this.finalPackingDicc[this.packingDiccId[key]
+      [this.diccToDefineHeadersInverse['vin']]]['vin'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']];
+      this.finalPackingDicc[this.packingDiccId[key]
+      [this.diccToDefineHeadersInverse['vin']]]['modelo'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']];
+      this.finalPackingDicc[this.packingDiccId[key]
+      [this.diccToDefineHeadersInverse['vin']]]['color'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['color']];
+    }
+  }
+
+  // Modal to confirm new port format
+  async openModal() {
+    this.generateFinalArray();
+    const modal = await this.modalController.create({
+      component: NewPortModalPage,
+      componentProps: {
+        custom_packing: this.finalPackingDicc
+      }
+    });
+    modal.present();
   }
 
 }
