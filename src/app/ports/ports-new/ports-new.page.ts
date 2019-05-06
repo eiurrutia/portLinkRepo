@@ -31,6 +31,7 @@ export class PortsNewPage implements OnInit {
   previewObjects: any; // The first 3 elements to see the format.
   diccToDefineHeaders = {};
   diccToDefineHeadersInverse = {};
+  allHeadersPresent = false;
   packingQuantity: number;
   shipName: string;
   vinExample: string;
@@ -152,6 +153,7 @@ export class PortsNewPage implements OnInit {
     for (const key of Object.keys(this.packingDicc[0])) {
       this.autoDetectHeader(key);
     }
+    this.allHeadersPresent = this.detectAllHeaders();
     console.log(this.diccToDefineHeaders);
     console.log(this.diccToDefineHeadersInverse);
     this.shipName = this.packingDicc[0][this.diccToDefineHeadersInverse['nave']];
@@ -173,7 +175,11 @@ export class PortsNewPage implements OnInit {
     this.detectRepeat(selectedValue, header);
     this.diccToDefineHeadersInverse[selectedValue] = header;
     if (selectedValue === 'nave') {this.shipName = this.packingDicc[0][header];
-    } else if (selectedValue === 'vin') {this.vinExample = this.packingDicc[0][header]; }
+    } else if (selectedValue === 'vin') {
+      this.vinExample = this.packingDicc[0][header];
+      this.convertPackingListToPackingDiccId();
+    }
+    this.allHeadersPresent = this.detectAllHeaders();
     console.log(this.diccToDefineHeaders);
     console.log(this.diccToDefineHeadersInverse);
   }
@@ -186,6 +192,14 @@ export class PortsNewPage implements OnInit {
         this.diccToDefineHeaders[key] = '';
       }
     }
+  }
+
+  // Detect if all header are already
+  detectAllHeaders(): boolean {
+    const values = Object.values(this.diccToDefineHeaders);
+    if (values.includes('vin') && values.includes('modelo') &&
+    values.includes('color') && values.includes('nave')) {console.log('retorno true'); return true; }
+    return false;
   }
 
   // Suggest header from packing-headers name
@@ -285,21 +299,18 @@ export class PortsNewPage implements OnInit {
 
       }
     }
-    console.log(this.packingDiccId);
-    console.log(Object.keys(this.packingDiccId).length);
   }
 
   // To generate preview array for the packingDicc
   generateFinalArray() {
     this.finalPackingDicc = {};
     for (const key of Object.keys(this.packingDiccId)) {
-      this.finalPackingDicc[this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']]] = {};
-      this.finalPackingDicc[this.packingDiccId[key]
-      [this.diccToDefineHeadersInverse['vin']]]['vin'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']];
-      this.finalPackingDicc[this.packingDiccId[key]
-      [this.diccToDefineHeadersInverse['vin']]]['modelo'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']];
-      this.finalPackingDicc[this.packingDiccId[key]
-      [this.diccToDefineHeadersInverse['vin']]]['color'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['color']];
+      this.finalPackingDicc[key] = {};
+      this.finalPackingDicc[key]['vin'] = key;
+      this.finalPackingDicc[key]['modelo'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']];
+      this.finalPackingDicc[key]['color'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['color']];
+      this.finalPackingDicc[key]['tamaño'] =
+        this.differentsModelsSizes[this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']]];
     }
   }
 

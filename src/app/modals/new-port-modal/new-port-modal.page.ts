@@ -27,7 +27,7 @@ export class NewPortModalPage implements OnInit {
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[2]]);
     console.log('previewObjects');
     console.log(this.previewObjects);
-    this.headers = ['vin', 'modelo', 'color'];
+    this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
   closeModal() {

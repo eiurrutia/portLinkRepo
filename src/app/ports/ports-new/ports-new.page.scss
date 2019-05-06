@@ -1,6 +1,8 @@
 .main-form {
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 20%;
+	overflow-y: scroll!important;
 }
 
 .forecast_container{
@@ -13,7 +15,7 @@
 }
 
 .preview {
-  --min-height: 90px;
+  --min-height: 130px;
 }
 
 .preview-col {
@@ -45,6 +47,8 @@
 .custom-select{
   width: 100%;
   max-width: inherit;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .models-items {
