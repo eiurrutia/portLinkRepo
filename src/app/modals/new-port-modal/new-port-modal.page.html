@@ -26,7 +26,16 @@
       </ion-content>
     </ion-item>
     <ion-item>
-      Nombre Puerto: {{ shipName }}
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">
+            Nombre Puerto:
+          </ion-col>
+          <ion-col style="text-align: right;" size="7">
+            {{ shipName }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-item>
     <ion-item>
       <ion-grid>

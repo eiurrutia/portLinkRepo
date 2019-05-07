@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController } from '@ionic/angular';
+import { NavParams, ModalController, NavController } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-new-port-modal',
@@ -20,7 +21,8 @@ export class NewPortModalPage implements OnInit {
   headerSizeDicc: any;
 
   constructor(private navParams: NavParams,
-              private modalController: ModalController) { }
+              private modalController: ModalController,
+              private navController: NavController) { }
 
   ngOnInit() {
     this.shipName = this.navParams.get('custom_portName');
@@ -41,6 +43,7 @@ export class NewPortModalPage implements OnInit {
 
   closeModal() {
     this.modalController.dismiss();
+    this.navController.navigateRoot('user-menu/drivers/drivers-selection');
   }
 
   countPerSize() {
