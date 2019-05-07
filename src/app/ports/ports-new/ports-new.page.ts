@@ -195,7 +195,7 @@ export class PortsNewPage implements OnInit {
   detectAllHeaders(): boolean {
     const values = Object.values(this.diccToDefineHeaders);
     if (values.includes('vin') && values.includes('modelo') &&
-    values.includes('color') && values.includes('nave')) {console.log('retorno true'); return true; }
+    values.includes('color') && values.includes('nave')) {return true; }
     return false;
   }
 
@@ -339,7 +339,10 @@ export class PortsNewPage implements OnInit {
       const modal = await this.modalController.create({
         component: NewPortModalPage,
         componentProps: {
-          custom_packing: this.finalPackingDicc
+          custom_portName: this.shipName,
+          custom_packing: this.finalPackingDicc,
+          custom_modelsCount: this.differentsModelsCount,
+          custom_modelsSize: this.differentsModelsSizes
         }
       });
       modal.present();

@@ -9,15 +9,26 @@ import { NavParams, ModalController } from '@ionic/angular';
 export class NewPortModalPage implements OnInit {
 
   finalPacking = null;
+  modelsCount = null;
+  modelsSize = null;
   previewObjects = [];
   headers: any;
+  shipName: string;
+
+  totalCount: number;
+  countPerSizeDicc = {};
+  headerSizeDicc: any;
 
   constructor(private navParams: NavParams,
               private modalController: ModalController) { }
 
   ngOnInit() {
+    this.shipName = this.navParams.get('custom_portName');
     this.finalPacking = this.navParams.get('custom_packing');
+    this.modelsCount = this.navParams.get('custom_modelsCount');
+    this.modelsSize = this.navParams.get('custom_modelsSize');
     this.generatePreviewObjects();
+    this.countPerSize();
   }
 
   generatePreviewObjects() {
@@ -25,13 +36,33 @@ export class NewPortModalPage implements OnInit {
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[0]]);
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[1]]);
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[2]]);
-    console.log('previewObjects');
-    console.log(this.previewObjects);
     this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
   closeModal() {
     this.modalController.dismiss();
+  }
+
+  countPerSize() {
+    this.totalCount = 0;
+    if (Object.values(this.modelsSize).includes('pequeno')) {
+      this.countPerSizeDicc['pequeno'] = 0;
+    }
+    if (Object.values(this.modelsSize).includes('mediano')) {
+      this.countPerSizeDicc['mediano'] = 0;
+    }
+    if (Object.values(this.modelsSize).includes('grande')) {
+          this.countPerSizeDicc['grande'] = 0;
+    }
+    if (Object.values(this.modelsSize).includes('extraGrande')) {
+      this.countPerSizeDicc['extraGrande'] = 0;
+    }
+    for (const model of Object.keys(this.modelsCount)) {
+      this.countPerSizeDicc[this.modelsSize[model]] += this.modelsCount[model];
+      this.totalCount += this.modelsCount[model];
+    }
+    console.log(this.countPerSizeDicc);
+    this.headerSizeDicc = Object.keys(this.countPerSizeDicc);
   }
 
 }

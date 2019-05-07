@@ -6,6 +6,9 @@
 
 <ion-content padding>
   <ion-list>
+    <ion-item>
+      Packing
+    </ion-item>
     <ion-item class="preview">
       <ion-content scrollX="true" scrollY="false">
       <ion-grid class="forecast_container">
@@ -21,6 +24,44 @@
           </ion-row>
       </ion-grid>
       </ion-content>
+    </ion-item>
+    <ion-item>
+      Nombre Puerto: {{ shipName }}
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Total Unidades:
+          </ion-col>
+          <ion-col style="text-align: right;" size="6">
+            {{ totalCount }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let size of headerSizeDicc">
+          <ion-col size="1">
+          </ion-col>
+          <ion-col *ngIf="size=='pequeno'" size="6">
+            Pequeños:
+          </ion-col>
+          <ion-col *ngIf="size=='mediano'" size="6">
+            Medianos:
+          </ion-col>
+          <ion-col *ngIf="size=='grande'" size="6">
+            Grandes:
+          </ion-col>
+          <ion-col *ngIf="size=='extraGrande'" size="6">
+            Extra Grandes:
+          </ion-col>
+          <ion-col size="1">
+          </ion-col>
+          <ion-col style="text-align: right;" size="3">
+            {{ countPerSizeDicc[size] }}
+          </ion-col>
+          <ion-col size="1">
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-item>
   </ion-list>
 </ion-content>
