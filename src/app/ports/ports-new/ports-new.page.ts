@@ -21,6 +21,8 @@ export class PortsNewPage implements OnInit {
   arrayBuffer: any;
   file: any;
 
+  today: any;
+
   packingToggle: boolean;
   stringFile: string;
   packingDicc: any;
@@ -168,6 +170,7 @@ export class PortsNewPage implements OnInit {
     this.packingToggle = true;
     this.displayPreviewTable = false;
     this.stringFile = 'No hay archivo seleccionado';
+    this.today = new Date().toLocaleDateString();
   }
 
   onChangeSelect(selectedValue: any, header: string) {
@@ -339,7 +342,7 @@ export class PortsNewPage implements OnInit {
       const modal = await this.modalController.create({
         component: NewPortModalPage,
         componentProps: {
-          custom_portName: this.shipName,
+          custom_portName: this.shipName.concat(' ' + this.today),
           custom_packing: this.finalPackingDicc,
           custom_modelsCount: this.differentsModelsCount,
           custom_modelsSize: this.differentsModelsSizes
