@@ -17,9 +17,6 @@ const routes: Routes = [
     loadChildren: './ports/ports.module#PortsPageModule',
     data: {preload: true}
   }
-  // { path: 'user-profile', loadChildren: './user-profile/user-profile.module#UserProfilePageModule' },
-  // { path: 'ports', loadChildren: './ports/ports.module#PortsPageModule' },
-  // { path: 'ports-new', loadChildren: './ports-new/ports-new.module#PortsNewPageModule' },
 ];
 
 @NgModule({
