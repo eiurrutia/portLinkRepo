@@ -333,7 +333,7 @@ export class PortsNewPage implements OnInit {
   }
 
   // Modal to confirm new port format
-  async openModal() {
+  async confirmNewPortModal() {
     if (!this.checkPendingInfo()) {
       this.generateFinalArray();
       const modal = await this.modalController.create({

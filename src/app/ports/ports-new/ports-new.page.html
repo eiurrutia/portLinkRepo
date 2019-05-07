@@ -105,7 +105,12 @@
       </ion-grid>
     </ion-item>
     <ion-item>
-      <button ion-button type="submit" block (click)="openModal()">Abrir MODAL</button>
+      <ion-grid>
+        <ion-row style="float: center;">
+          <ion-button shape="round" expand="full" color="success" size="large"
+            fill="outline" (click)="confirmNewPortModal()">Confirmar Puerto</ion-button>
+        </ion-row>
+      </ion-grid>
     </ion-item>
   </ion-list>
   <button ion-button type="submit" block>Add Todo</button>
