@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ToastController, ModalController } from '@ionic/angular';
+import { ToastController, ModalController, AlertController } from '@ionic/angular';
 import * as XLSX from 'ts-xlsx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
@@ -39,6 +39,7 @@ export class PortsNewPage implements OnInit {
   editShipNameMode = false;
   digitsToConsider = 0; // When is zero, all digits are considered.
   repeatedElement = false; // If exist repeated elements.
+  pendingInfo: string;
 
   differentsModelsCount = {};
   differentsModelsSizes = {};
@@ -48,7 +49,8 @@ export class PortsNewPage implements OnInit {
               private fileOpener: FileOpener,
               private fileee: File,
               private toastController: ToastController,
-              private modalController: ModalController) { }
+              private modalController: ModalController,
+              private alertController: AlertController) { }
 
   incomingfile(event) {
     this.file = event.target.files[0];
@@ -282,9 +284,7 @@ export class PortsNewPage implements OnInit {
           this.repeatedElement = true;
           break;
         }
-
       }
-
     } else {
       for (const element of this.packingDicc) {
         const newVin =
@@ -296,7 +296,6 @@ export class PortsNewPage implements OnInit {
           this.repeatedElement = true;
           break;
         }
-
       }
     }
   }
@@ -314,16 +313,44 @@ export class PortsNewPage implements OnInit {
     }
   }
 
+  // Check if there is pending info
+  checkPendingInfo(): boolean {
+    this.pendingInfo = '';
+    if (this.repeatedElement) {
+      this.pendingInfo = this.pendingInfo.concat('·Dígitos insuficientes, Vin repetidos. <br>');
+    }
+    if (!this.detectAllHeaders()) {
+      this.pendingInfo = this.pendingInfo.concat('·Faltan columnas por asignar entre VIN, Modelo, Color y Nave. <br>');
+    }
+    if (Object.values(this.differentsModelsSizes).includes('')) {
+      this.pendingInfo = this.pendingInfo.concat('·Falta asignar tamaño a modelos. <br>');
+    }
+    if (this.pendingInfo === '') {return false;
+    } else { this.pendingInfoAlert(); return true; }
+  }
+
+  async pendingInfoAlert() {
+    const alert = await this.alertController.create({
+      header: 'Falta Información',
+      subHeader: 'Falta que resuelvas los campos en rojo para continuar con la creación del puerto.',
+      message: this.pendingInfo,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
   // Modal to confirm new port format
   async openModal() {
-    this.generateFinalArray();
-    const modal = await this.modalController.create({
-      component: NewPortModalPage,
-      componentProps: {
-        custom_packing: this.finalPackingDicc
-      }
-    });
-    modal.present();
+    if (!this.checkPendingInfo()) {
+      this.generateFinalArray();
+      const modal = await this.modalController.create({
+        component: NewPortModalPage,
+        componentProps: {
+          custom_packing: this.finalPackingDicc
+        }
+      });
+      modal.present();
+    }
   }
 
 }
