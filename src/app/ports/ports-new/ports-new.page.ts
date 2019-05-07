@@ -128,7 +128,6 @@ export class PortsNewPage implements OnInit {
       this.fileChooser.open().then(file => {
         this.filePath.resolveNativePath(file).then(resolvedFilePath => {
           (<any>window).resolveLocalFileSystemURL(resolvedFilePath, (res) => {
-            console.log(res.name);
             this.stringFile = res.name;
             res.file((resFile) => {
               this.Upload2(resFile);
@@ -156,8 +155,6 @@ export class PortsNewPage implements OnInit {
       this.autoDetectHeader(key);
     }
     this.allHeadersPresent = this.detectAllHeaders();
-    console.log(this.diccToDefineHeaders);
-    console.log(this.diccToDefineHeadersInverse);
     this.shipName = this.packingDicc[0][this.diccToDefineHeadersInverse['nave']];
     this.vinExample = this.packingDicc[0][this.diccToDefineHeadersInverse['vin']];
     this.detectDifferentsModels();
@@ -182,8 +179,6 @@ export class PortsNewPage implements OnInit {
       this.convertPackingListToPackingDiccId();
     }
     this.allHeadersPresent = this.detectAllHeaders();
-    console.log(this.diccToDefineHeaders);
-    console.log(this.diccToDefineHeadersInverse);
   }
 
   // Detect if selected header can be repeated. Autocorrect
@@ -251,13 +246,11 @@ export class PortsNewPage implements OnInit {
           this.differentsModelsSizes[element[modelKey]] = '';
         }
       }
-      console.log(this.differentsModelsCount);
     }
   }
 
   onChangeSize(selectedValue: any, model: string) {
     this.differentsModelsSizes[model] = selectedValue;
-    console.log(this.differentsModelsSizes);
   }
 
   numberDigitsChange(selectedValue: any) {
@@ -317,7 +310,7 @@ export class PortsNewPage implements OnInit {
   checkPendingInfo(): boolean {
     this.pendingInfo = '';
     if (this.repeatedElement) {
-      this.pendingInfo = this.pendingInfo.concat('·Dígitos insuficientes, Vin repetidos. <br>');
+      this.pendingInfo = this.pendingInfo.concat('·Dígitos insuficientes, existen VIN repetidos. <br>');
     }
     if (!this.detectAllHeaders()) {
       this.pendingInfo = this.pendingInfo.concat('·Faltan columnas por asignar entre VIN, Modelo, Color y Nave. <br>');
