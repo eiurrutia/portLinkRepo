@@ -1,8 +1,30 @@
-<ion-grid>
-  <ion-row style="margin-top: 15%;">
-    Caca
-  </ion-row>
-  <ion-row style="margin-top: 15%;">
-    PEO DRIVERS
-  </ion-row>
-</ion-grid>
+
+<ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="segment" value="drivers"
+  style="margin-top: 25%; background: ghostwhite;">
+  <ion-segment-button value="drivers">
+    <ion-label>Conductores</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="thirds">
+    <ion-label>Terceros</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged($event)" style="margin-top: 5%;">
+  <ion-slide style="overflow-y: scroll!important;" value="slide1">
+    <ion-list class="main-form" style="margin-top: 30%;">
+      <h1>Slide 1</h1>
+      <ion-item>
+        Selección de Conductores
+      </ion-item>
+      <ion-item *ngFor="let driver of activeDriversDiccKeys">
+        <ion-label> {{driver}} </ion-label>
+        <ion-toggle [(ngModel)]="activeDriversDicc[driver]"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </ion-slide>
+  <ion-slide value="slide2">
+    <h1>Slide 2</h1>
+  </ion-slide>
+  <ion-slide value="slide3">
+    <h1>Slide 3</h1>
+  </ion-slide>
+</ion-slides>
