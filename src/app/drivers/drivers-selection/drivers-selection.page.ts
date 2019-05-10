@@ -32,10 +32,15 @@ export class DriversSelectionPage implements OnInit {
   segment = 'drivers';
   firstMove = true;
 
+  activeDriversCount = 0;
+  activeThirdsCount = 5;
+
   constructor() { }
 
   ngOnInit() {
+    this.countActiveDrivers();
     this.activeDriversDiccKeys = Object.keys(this.activeDriversDicc);
+
   }
 
   segmentChanged(ev: any) {
@@ -59,6 +64,13 @@ export class DriversSelectionPage implements OnInit {
     if (this.segment === 'drivers') {
       this.segment = 'thirds';
     } else { this.segment = 'drivers'; }
+  }
+
+  countActiveDrivers() {
+    this.activeDriversCount = 0;
+    for (const value of Object.values(this.activeDriversDicc)) {
+      if (value) {this.activeDriversCount += 1; }
+    }
   }
 
 }

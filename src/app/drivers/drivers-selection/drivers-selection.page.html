@@ -3,8 +3,8 @@
   style="margin-top: 25%; background: ghostwhite;">
   <ion-segment-button value="drivers">
     <ion-label>Conductores
-      <ion-badge *ngIf="segment=='drivers'" color="primary">11</ion-badge>
-      <ion-badge *ngIf="segment!='drivers'"color="medium">11</ion-badge>
+      <ion-badge *ngIf="segment=='drivers'" color="primary">{{ activeDriversCount }}</ion-badge>
+      <ion-badge *ngIf="segment!='drivers'"color="medium">{{ activeDriversCount }}</ion-badge>
     </ion-label>
   </ion-segment-button>
   <ion-segment-button value="thirds">
@@ -23,7 +23,8 @@
       </ion-item>
       <ion-item *ngFor="let driver of activeDriversDiccKeys">
         <ion-label> {{driver}} </ion-label>
-        <ion-toggle [(ngModel)]="activeDriversDicc[driver]"></ion-toggle>
+        <ion-toggle [(ngModel)]="activeDriversDicc[driver]"
+          (ionChange)="countActiveDrivers()"></ion-toggle>
       </ion-item>
     </ion-list>
   </ion-slide>
