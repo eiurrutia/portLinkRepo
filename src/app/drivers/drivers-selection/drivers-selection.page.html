@@ -2,10 +2,16 @@
 <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="segment" value="drivers"
   style="margin-top: 25%; background: ghostwhite;">
   <ion-segment-button value="drivers">
-    <ion-label>Conductores</ion-label>
+    <ion-label>Conductores
+      <ion-badge *ngIf="segment=='drivers'" color="primary">11</ion-badge>
+      <ion-badge *ngIf="segment!='drivers'"color="medium">11</ion-badge>
+    </ion-label>
   </ion-segment-button>
   <ion-segment-button value="thirds">
-    <ion-label>Terceros</ion-label>
+    <ion-label>Terceros
+      <ion-badge *ngIf="segment=='thirds'" color="primary">11</ion-badge>
+      <ion-badge *ngIf="segment!='thirds'" color="medium">11</ion-badge>
+    </ion-label>
   </ion-segment-button>
 </ion-segment>
 <ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged($event)" style="margin-top: 5%;">
