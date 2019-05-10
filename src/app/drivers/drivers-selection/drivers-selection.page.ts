@@ -12,7 +12,8 @@ export class DriversSelectionPage implements OnInit {
 
   slideOpts = {
     initialSlide: 0,
-    speed: 100
+    speed: 100,
+    width: 375
   };
   activeDriversDicc = {'Manuel Sáez': true,
                        'Juan Marchant': false,
