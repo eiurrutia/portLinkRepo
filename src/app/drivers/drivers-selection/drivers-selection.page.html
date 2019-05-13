@@ -49,7 +49,8 @@
           </ion-row>
           <ion-row *ngIf="thirdsDicc[third] > 1">
             <div *ngFor="let item of createArray(thirdsDicc[third]); let i = index">
-              <ion-input type=text placeholder="Nombre Conductor {{ i }}"></ion-input>
+              <ion-input type=text placeholder="Nombre Conductor {{ i + 1 }}"
+                        [(ngModel)]="nameThirdsDicc[third][i + 1]"></ion-input>
             </div>
           </ion-row>
         </ion-grid>

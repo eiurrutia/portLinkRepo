@@ -8,7 +8,7 @@ import { IonSlides } from '@ionic/angular';
 })
 export class DriversSelectionPage implements OnInit {
 
-   @ViewChild(IonSlides) slides: IonSlides;
+  @ViewChild(IonSlides) slides: IonSlides;
 
   slideOpts = {
     initialSlide: 0,
@@ -29,12 +29,18 @@ export class DriversSelectionPage implements OnInit {
                        'Francisco Bravo': true,
                        'Miguel Bravo': false};
 
- thirdsDicc = {'Ocare': 0,
+  thirdsDicc = {'Ocare': 0,
                 'Patricio Lizama': 0,
                 'Sergio Soto': 0};
 
   activeDriversDiccKeys: any;
   thirdsDiccKeys: any;
+
+  nameThirdsDicc = {'Ocare': {1: ''},
+                    'Patricio Lizama': {1: ''},
+                    'Sergio Soto': {1: ''}
+                     };
+
   segment = 'drivers';
   firstMove = true;
 
@@ -89,7 +95,10 @@ export class DriversSelectionPage implements OnInit {
   }
 
   changeNumber(third: string, num: number) {
-    if (this.thirdsDicc[third] + num >= 0) { this.thirdsDicc[third] += num; }
+    if (this.thirdsDicc[third] + num >= 0) {
+      this.thirdsDicc[third] += num;
+      this.nameThirdsDicc[third][this.thirdsDicc[third]] = '';
+    }
     this.countActiveThirds();
   }
 
