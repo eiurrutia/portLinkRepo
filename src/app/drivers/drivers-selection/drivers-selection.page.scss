@@ -1,13 +1,18 @@
 .main-form {
   margin-left: 5%;
   margin-right: 5%;
-  margin-top: 20%;
 	overflow-y: scroll!important;
   width: -webkit-fill-available;
+  height: -webkit-fill-available;
 }
 
  .custom-slide {
    overflow-y: scroll!important;
    width: 375px !important;
-   height: 80% !important;
+   height: 460px !important;
+ }
+
+ .third-without-name {
+   font-size: large;
+   color: red;
  }

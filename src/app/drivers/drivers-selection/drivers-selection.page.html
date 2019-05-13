@@ -14,10 +14,10 @@
     </ion-label>
   </ion-segment-button>
 </ion-segment>
-<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged($event)" style="margin-top: 2%; overflow-y: scroll!important">
+<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged($event)" style="margin-top: 35%; overflow-y: scroll!important; position: absolute;">
   <!-- Drivers Slide -->
   <ion-slide class="custom-slide" value="slide1">
-    <ion-list class="main-form" style="margin-top: 70%;">
+    <ion-list class="main-form">
       <ion-item>
         Selección de Conductores
       </ion-item>
@@ -31,7 +31,7 @@
 
   <!-- Thirds Slide -->
   <ion-slide class="custom-slide" value="slide2">
-    <ion-list class="main-form" style="margin-top: 30%;">
+    <ion-list class="main-form">
       <ion-item>
         Selección de Terceros
       </ion-item>
@@ -47,10 +47,13 @@
               <ion-button (click)="changeNumber(third, 1)" shape="round" color="light">+</ion-button>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="thirdsDicc[third] > 1">
+          <ion-row *ngIf="thirdsDicc[third] > 1" align-items-center>
             <div *ngFor="let item of createArray(thirdsDicc[third]); let i = index">
-              <ion-input type=text placeholder="Nombre Conductor {{ i + 1 }}"
-                        [(ngModel)]="nameThirdsDicc[third][i + 1]"></ion-input>
+              <ion-row>
+                <span *ngIf="nameThirdsDicc[third][i + 1] == ''" class="third-without-name">*</span>
+                <ion-input type=text placeholder="Nombre Conductor {{ i + 1 }}"
+                          [(ngModel)]="nameThirdsDicc[third][i + 1]"></ion-input>
+              </ion-row>
             </div>
           </ion-row>
         </ion-grid>
@@ -59,8 +62,8 @@
   </ion-slide>
 </ion-slides>
 
-<ion-fab style="bottom: 10%; right: 10%;" vertical="bottom" horizontal="end" edge>
-  <ion-fab-button size="big" (click)="sendRecord()" routerLink="ports/new-port" style="--background: seagreen;">
+<ion-fab style="bottom: 4%; right: 2%;" vertical="bottom" horizontal="end" edge>
+  <ion-fab-button size="big" (click)="checkAllWithName()" style="--background: seagreen;">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>

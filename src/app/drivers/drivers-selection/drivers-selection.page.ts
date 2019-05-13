@@ -13,7 +13,8 @@ export class DriversSelectionPage implements OnInit {
   slideOpts = {
     initialSlide: 0,
     speed: 100,
-    width: 375
+    width: 375,
+    height: 460
   };
   activeDriversDicc = {'Manuel Sáez': true,
                        'Juan Marchant': false,
@@ -106,4 +107,16 @@ export class DriversSelectionPage implements OnInit {
     return Array(n);
   }
 
+  checkAllWithName(): boolean {
+    for (const third of Object.keys(this.thirdsDicc)) {
+      for (const value of Object.keys(this.nameThirdsDicc[third])) {
+        if (value <= this.thirdsDicc[third] && this.nameThirdsDicc[third][value] === '') {
+          console.log('retorno false');
+          return false;
+        }
+      }
+    }
+    console.log('retorno true');
+    return true;
+  }
 }
