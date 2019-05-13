@@ -29,18 +29,25 @@ export class DriversSelectionPage implements OnInit {
                        'Francisco Bravo': true,
                        'Miguel Bravo': false};
 
+ thirdsDicc = {'Ocare': 0,
+                'Patricio Lizama': 0,
+                'Sergio Soto': 0};
+
   activeDriversDiccKeys: any;
+  thirdsDiccKeys: any;
   segment = 'drivers';
   firstMove = true;
 
   activeDriversCount = 0;
-  activeThirdsCount = 5;
+  activeThirdsCount = 0;
 
   constructor() { }
 
   ngOnInit() {
     this.countActiveDrivers();
+    this.countActiveThirds();
     this.activeDriversDiccKeys = Object.keys(this.activeDriversDicc);
+    this.thirdsDiccKeys = Object.keys(this.thirdsDicc);
 
   }
 
@@ -72,6 +79,22 @@ export class DriversSelectionPage implements OnInit {
     for (const value of Object.values(this.activeDriversDicc)) {
       if (value) {this.activeDriversCount += 1; }
     }
+  }
+
+  countActiveThirds() {
+    this.activeThirdsCount = 0;
+    for (const value of Object.values(this.thirdsDicc)) {
+      this.activeThirdsCount += value;
+    }
+  }
+
+  changeNumber(third: string, num: number) {
+    if (this.thirdsDicc[third] + num >= 0) { this.thirdsDicc[third] += num; }
+    this.countActiveThirds();
+  }
+
+  createArray(n: number): any[] {
+    return Array(n);
   }
 
 }
