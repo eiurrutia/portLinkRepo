@@ -51,7 +51,7 @@
           </ion-col>
         </ion-row>
         <ion-row *ngIf="!editShipNameMode" style="padding-left: 30%;">
-           {{ shipName }} {{today | date:'dd-MM-yy'}}
+           {{ shipName }} {{ today }}
         </ion-row>
         <ion-row *ngIf="editShipNameMode" style="padding-left: 30%;">
            <ion-input type="text" [(ngModel)]="shipName" name="vin-number"></ion-input>
