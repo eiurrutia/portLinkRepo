@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-drivers-selection',
@@ -14,7 +14,7 @@ export class DriversSelectionPage implements OnInit {
     initialSlide: 0,
     speed: 100,
     width: 375,
-    height: 460
+    height: 440
   };
   activeDriversDicc = {'Manuel Sáez': true,
                        'Juan Marchant': false,
@@ -48,7 +48,7 @@ export class DriversSelectionPage implements OnInit {
   activeDriversCount = 0;
   activeThirdsCount = 0;
 
-  constructor() { }
+  constructor(private alertController: AlertController) { }
 
   ngOnInit() {
     this.countActiveDrivers();
@@ -110,13 +110,41 @@ export class DriversSelectionPage implements OnInit {
   checkAllWithName(): boolean {
     for (const third of Object.keys(this.thirdsDicc)) {
       for (const value of Object.keys(this.nameThirdsDicc[third])) {
-        if (value <= this.thirdsDicc[third] && this.nameThirdsDicc[third][value] === '') {
+        if (value <= this.thirdsDicc[third] &&
+           this.thirdsDicc[third] > 1 &&
+           this.nameThirdsDicc[third][value] === '') {
           console.log('retorno false');
           return false;
         }
       }
     }
     console.log('retorno true');
+    this.presentAlertConfirm();
     return true;
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Continuar',
+      message: 'Quieres crear realizar este puerto con ' + (this.activeDriversCount +
+          this.activeThirdsCount).toString() + ' conductores en total?' ,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
