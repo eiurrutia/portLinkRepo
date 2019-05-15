@@ -11,11 +11,6 @@ const routes: Routes = [
     path: 'user-menu',
     loadChildren: './user-menu/user-menu.module#UserMenuPageModule',
     data: {preload: true}
-  },
-  {
-    path: 'ports',
-    loadChildren: './ports/ports.module#PortsPageModule',
-    data: {preload: true}
   }
 ];
 
