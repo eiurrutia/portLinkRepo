@@ -9,7 +9,8 @@ import { NewPortModalPage } from './new-port-modal.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'new-port',
+    outlet: 'modal',
     component: NewPortModalPage
   }
 ];
@@ -22,6 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [NewPortModalPage],
-  exports: [NewPortModalPage]
+  entryComponents: [NewPortModalPage]
 })
 export class NewPortModalPageModule {}

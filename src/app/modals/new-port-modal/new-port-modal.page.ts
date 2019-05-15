@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,26 +9,27 @@ import { RouterModule } from '@angular/router';
 })
 export class NewPortModalPage implements OnInit {
 
-  finalPacking = null;
-  modelsCount = null;
-  modelsSize = null;
+  finalPacking;
+  modelsCount;
+  modelsSize;
+  shipName;
   previewObjects = [];
   headers: any;
-  shipName: string;
+
 
   totalCount: number;
   countPerSizeDicc = {};
   headerSizeDicc: any;
 
-  constructor(private navParams: NavParams,
-              private modalController: ModalController,
+  constructor(private modalController: ModalController,
               private navController: NavController) { }
 
   ngOnInit() {
-    this.shipName = this.navParams.get('custom_portName');
-    this.finalPacking = this.navParams.get('custom_packing');
-    this.modelsCount = this.navParams.get('custom_modelsCount');
-    this.modelsSize = this.navParams.get('custom_modelsSize');
+    console.log('sigue funcionando');
+    console.log(this.finalPacking);
+    console.log(this.modelsCount);
+    console.log(this.modelsSize);
+    console.log(this.shipName);
     this.generatePreviewObjects();
     this.countPerSize();
   }
@@ -41,8 +42,14 @@ export class NewPortModalPage implements OnInit {
     this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
-  closeModal() {
-    this.modalController.dismiss();
+  async closeModal() {
+    const modal = await this.modalController.getTop();
+    modal.dismiss();
+  }
+
+  async confirmModal() {
+    const modal = await this.modalController.getTop();
+    modal.dismiss();
     this.navController.navigateRoot('user-menu/drivers/drivers-selection');
   }
 
