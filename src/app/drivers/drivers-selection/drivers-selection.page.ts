@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides, AlertController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { IonSlides, AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-drivers-selection',
@@ -9,6 +9,7 @@ import { IonSlides, AlertController } from '@ionic/angular';
 export class DriversSelectionPage implements OnInit {
 
   @ViewChild(IonSlides) slides: IonSlides;
+  @Output() sendCount: EventEmitter <boolean> = new EventEmitter<boolean>();
 
   slideOpts = {
     initialSlide: 0,
@@ -48,7 +49,8 @@ export class DriversSelectionPage implements OnInit {
   activeDriversCount = 0;
   activeThirdsCount = 0;
 
-  constructor(private alertController: AlertController) { }
+  constructor(private alertController: AlertController,
+              private navController: NavController) { }
 
   ngOnInit() {
     this.countActiveDrivers();
@@ -113,12 +115,11 @@ export class DriversSelectionPage implements OnInit {
         if (value <= this.thirdsDicc[third] &&
            this.thirdsDicc[third] > 1 &&
            this.nameThirdsDicc[third][value] === '') {
-          console.log('retorno false');
+          this.presentAlertDriversWithoutName();
           return false;
         }
       }
     }
-    console.log('retorno true');
     this.presentAlertConfirm();
     return true;
   }
@@ -139,6 +140,8 @@ export class DriversSelectionPage implements OnInit {
         }, {
           text: 'Aceptar',
           handler: () => {
+            this.sendCount.emit(true);
+            this.navController.navigateRoot('/user-menu/ports');
             console.log('Confirm Okay');
           }
         }
@@ -147,4 +150,22 @@ export class DriversSelectionPage implements OnInit {
 
     await alert.present();
   }
+
+  async presentAlertDriversWithoutName() {
+    const alert = await this.alertController.create({
+      header: 'Nombres Faltantes',
+      message: 'Faltan nombres por agregar al listado de terceros!',
+      buttons: [
+         {
+          text: 'Ok',
+          handler: () => {
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 }
