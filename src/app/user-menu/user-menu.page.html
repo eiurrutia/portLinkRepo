@@ -1,6 +1,6 @@
 <ion-menu side="start" menuId="first" content-id="content">
   <ion-header>
-    <ion-toolbar color="dark blue" (click)=close()>
+    <ion-toolbar color="dark blue" (click)=closeMenu()>
       <ion-title>
         Menú<ion-icon style="padding-left: 75%;" name="arrow-back"></ion-icon>
       </ion-title>
@@ -9,13 +9,13 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item (click)=activateProfile()><ion-icon style="padding-right: 10%;" name="person"></ion-icon> Perfil</ion-item>
-      <ion-item (click)=activatePorts()><ion-icon style="padding-right: 10%;" name="boat"></ion-icon> Puertos</ion-item>
+      <ion-item (click)=activateProfile() routerLink="/user-menu//user-profile"><ion-icon style="padding-right: 10%;" name="person"></ion-icon> Perfil</ion-item>
+      <ion-item (click)=activatePorts() routerLink="/user-menu/ports"><ion-icon style="padding-right: 10%;" name="boat"></ion-icon> Puertos</ion-item>
       <ion-item (click)=activateStats()><ion-icon style="padding-right: 10%;" name="trending-up"></ion-icon> Estadísticas</ion-item>
       <ion-item (click)=activateDamages()><ion-icon style="padding-right: 10%;" name="medkit"></ion-icon> Daños</ion-item>
       <ion-item (click)=activateNotes()><ion-icon style="padding-right: 10%;" name="clipboard"></ion-icon> Notas</ion-item>
       <ion-item style="margin-bottom: 55%;"><ion-icon style="padding-right: 10%;" name="share"></ion-icon> Compartir Info</ion-item>
-      <ion-item (click)=activateNew() routerLink="ports/new-port"><ion-icon style="padding-right: 10%;" name="add-circle-outline"></ion-icon> Nuevo Puerto</ion-item>
+      <ion-item (click)=activateNew() routerLink="/user-menu/ports/new-port"><ion-icon style="padding-right: 10%;" name="add-circle-outline"></ion-icon> Nuevo Puerto</ion-item>
       <ion-item><ion-icon style="padding-right: 10%;" name="power"></ion-icon> Cerrar Sesión</ion-item>
     </ion-list>
   </ion-content>
@@ -39,8 +39,11 @@
   </ion-toolbar>
 </ion-header>
 
+
+
 <ion-content class="myView" id="content">
-  <div class="variable-component" *ngIf="profile_active">
+  <ion-router-outlet id="content" main></ion-router-outlet>
+  <!--<div class="variable-component" *ngIf="profile_active">
     <app-user-profile></app-user-profile>
   </div>
   <div class="variable-component" *ngIf="ports_active">
@@ -52,10 +55,11 @@
   </div>
   <div class="variable-component" *ngIf="notes_active">
   </div>
-  <div class="variable-component" *ngIf="edit_active">
-    <ion-router-outlet id="content" main></ion-router-outlet>
-  </div>
-  <!--<div class="variable-component">
-    <ion-router-outlet id="content" main></ion-router-outlet>
+  <div class="variable-component" *ngIf="edit_active">-->
+    <!--<router-outlet id="content" (sendCount)="customFunc2($event)" main></router-outlet>-->
+    <!--<app-ports-new></app-ports-new>
+  </div>--><!--
+  <div class="variable-component">
+
   </div>-->
 </ion-content>

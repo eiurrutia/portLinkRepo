@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { PortsNewPage } from '../ports/ports-new/ports-new.page';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -10,16 +10,11 @@ import { Router } from '@angular/router';
 })
 export class UserMenuPage implements OnInit {
   menu_title = 'Perfil';
-  profile_active = true;
-  ports_active = false;
-  stats_active = false;
-  damages_active = false;
-  notes_active = false;
-  edit_active = false;
-
   selectedPath = '';
 
-  constructor(private menu: MenuController) {}
+  constructor(private menu: MenuController,
+              private activatedRoute: ActivatedRoute,
+              private navController: NavController) {}
 
 
   openFirst() {
@@ -36,81 +31,53 @@ export class UserMenuPage implements OnInit {
     this.menu.open('custom');
   }
 
-  close() {
+  closeMenu() {
     this.menu.close();
   }
 
   activateProfile() {
-    this.ports_active = false;
-    this.stats_active = false;
-    this.damages_active = false;
-    this.notes_active = false;
-    this.edit_active = false;
     this.menu_title = 'Perfil';
-    this.profile_active = true;
-    this.close();
+    this.closeMenu();
   }
 
   activatePorts() {
-    this.profile_active = false;
-    this.stats_active = false;
-    this.damages_active = false;
-    this.notes_active = false;
-    this.edit_active = false;
     this.menu_title = 'Puertos';
-    this.ports_active = true;
-    this.close();
+    this.closeMenu();
   }
 
   activateStats() {
-    this.profile_active = false;
-    this.ports_active = false;
-    this.damages_active = false;
-    this.notes_active = false;
-    this.edit_active = false;
     this.menu_title = 'Estadísticas';
-    this.stats_active = true;
-    this.close();
+    this.closeMenu();
   }
 
   activateDamages() {
-    this.profile_active = false;
-    this.ports_active = false;
-    this.stats_active = false;
-    this.notes_active = false;
-    this.edit_active = false;
     this.menu_title = 'Daños';
-    this.damages_active = true;
-    this.close();
+    this.closeMenu();
   }
 
   activateNotes() {
-    this.profile_active = false;
-    this.ports_active = false;
-    this.stats_active = false;
-    this.damages_active = false;
-    this.edit_active = false;
     this.menu_title = 'Notas';
-    this.notes_active = true;
-    this.close();
+    this.closeMenu();
   }
 
   activateNew() {
-    this.notes_active = false;
-    this.profile_active = false;
-    this.ports_active = false;
-    this.stats_active = false;
-    this.damages_active = false;
     this.menu_title = 'Nuevo Puerto';
-    this.edit_active = true;
-    this.close();
+    this.closeMenu();
   }
 
-  customFunc(data) {
-    if (data) {this.activateNew(); }
-  }
+  // customFunc(data) {
+    // if (data) {this.activateNew(); }
+  //  console.log('se llamo a data y se imprime', data);
+  //  if (data === 'perro') {
+  //    this.activatePorts();
+  //    console.log('cacac');
+  //  }
+  // }
+
 
   ngOnInit() {
+    // console.log(this.activatedRoute.snapshot.pathFromRoot);
+    // console.log(this.navController.router.routerState.snapshot.url);
   }
 
 }
