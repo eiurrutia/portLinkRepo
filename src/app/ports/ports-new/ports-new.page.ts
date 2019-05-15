@@ -342,10 +342,10 @@ export class PortsNewPage implements OnInit {
       const modal = await this.modalController.create({
         component: NewPortModalPage,
         componentProps: {
-          custom_portName: this.shipName.concat(' ' + this.today),
-          custom_packing: this.finalPackingDicc,
-          custom_modelsCount: this.differentsModelsCount,
-          custom_modelsSize: this.differentsModelsSizes
+          shipName: this.shipName.concat(' ' + this.today),
+          finalPacking: this.finalPackingDicc,
+          modelsCount: this.differentsModelsCount,
+          modelsSize: this.differentsModelsSizes
         }
       });
       modal.present();
