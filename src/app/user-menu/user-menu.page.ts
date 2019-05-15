@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 import { PortsNewPage } from '../ports/ports-new/ports-new.page';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -14,7 +14,14 @@ export class UserMenuPage implements OnInit {
 
   constructor(private menu: MenuController,
               private activatedRoute: ActivatedRoute,
-              private navController: NavController) {}
+              private router: Router,
+              private navController: NavController) {
+                router.events.subscribe((val) => {
+                  // see also
+                  if (val instanceof NavigationEnd) {
+                    this.setTitle(val.url); }
+                });
+              }
 
 
   openFirst() {
@@ -35,34 +42,15 @@ export class UserMenuPage implements OnInit {
     this.menu.close();
   }
 
-  activateProfile() {
-    this.menu_title = 'Perfil';
-    this.closeMenu();
-  }
-
-  activatePorts() {
-    this.menu_title = 'Puertos';
-    this.closeMenu();
-  }
-
-  activateStats() {
-    this.menu_title = 'Estadísticas';
-    this.closeMenu();
-  }
-
-  activateDamages() {
-    this.menu_title = 'Daños';
-    this.closeMenu();
-  }
-
-  activateNotes() {
-    this.menu_title = 'Notas';
-    this.closeMenu();
-  }
-
-  activateNew() {
-    this.menu_title = 'Nuevo Puerto';
-    this.closeMenu();
+  setTitle(url: string) {
+    if (url.includes('ports')) {
+      if (url.includes('new')) { this.menu_title = 'Nuevo Puerto';
+      } else {this.menu_title = 'Puertos'; }
+    } else if (url.includes('drivers')) {
+      this.menu_title = 'Conductores';
+    } else if (url.includes('profile')) {
+      this.menu_title = 'Perfil';
+    }
   }
 
   // customFunc(data) {
