@@ -1,24 +1,18 @@
-<ion-list style="overflow-y: scroll!important;">
-  <ion-item>
-    <ion-searchbar value="Ionic"></ion-searchbar>
-  </ion-item>
-  <ion-item>
+<ion-list class="main-list">
+  <ion-item class="search-bar-item">
     <ion-searchbar animated
+              show-cancel-button=true
+              class="search-bar"
               placeholder="Conductor Actual"
+              (ionCancel)="searchBarActive = false"
               (ionFocus)="searchBarActive = true"
               (ionChange)="filterWithSearch(selectedDriver)"
               [(ngModel)]="selectedDriver">
     </ion-searchbar>
   </ion-item>
-  <ion-list *ngIf=searchBarActive>
+  <ion-list *ngIf=searchBarActive class="search-list">
     <ion-item *ngFor="let driver of driversFiltered" (click)="selectItem(driver)">
       {{ driver }}
     </ion-item>
   </ion-list>
-  <ion-item>
-    Packing
-  </ion-item>
-  <ion-item>
-    Puerto: {{ portId }}
-  </ion-item>
 </ion-list>

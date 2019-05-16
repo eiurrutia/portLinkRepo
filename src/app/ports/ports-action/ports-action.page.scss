@@ -1,4 +1,22 @@
 
-.custom-content {
-  background: transparent;
+.search-list {
+  overflow-y: scroll!important;
+  margin-left: 6%;
+  margin-right: 6%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.search-bar {
+  padding-bottom: 0;
+}
+
+.search-bar-item {
+  --background: transparent !important;
+}
+
+.main-list {
+  overflow-y: scroll!important;
+  background: transparent !important;
+  margin-top: 20%;
 }
