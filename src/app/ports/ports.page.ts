@@ -39,6 +39,7 @@ export class PortsPage implements OnInit {
 
     this.portsArray = [];
     this.portsArray.push(new Port());
+    this.portsArray[0].id = 0;
     this.portsArray[0].shipName = 'Morning Peace';
     this.portsArray[0].unitsToCollect = 285;
     this.portsArray[0].collectedUnits = 20;
@@ -61,6 +62,7 @@ export class PortsPage implements OnInit {
     this.portsArray[0].advancedPercentage = this.portsArray[0].collectedUnits / this.portsArray[0].modelsQuantityInPacking;
 
     this.portsArray.push(new Port());
+    this.portsArray[1].id = 1;
     this.portsArray[1].shipName = 'Cecilie';
     this.portsArray[1].unitsToCollect = 85;
     this.portsArray[1].collectedUnits = 30;
@@ -83,6 +85,7 @@ export class PortsPage implements OnInit {
     this.portsArray[1].advancedPercentage = this.portsArray[1].collectedUnits / this.portsArray[1].modelsQuantityInPacking;
 
     this.portsArray.push(new Port());
+    this.portsArray[2].id = 2;
     this.portsArray[2].shipName = 'Pleaiades Leader';
     this.portsArray[2].unitsToCollect = 20;
     this.portsArray[2].collectedUnits = 100;
@@ -103,8 +106,6 @@ export class PortsPage implements OnInit {
     this.portsArray[2].toCollectLittleUnits = 2;
     this.portsArray[2].damages = 3;
     this.portsArray[2].advancedPercentage = this.portsArray[2].collectedUnits / this.portsArray[2].modelsQuantityInPacking;
-
-    console.log(this.portsArray);
 
   }
 
@@ -145,7 +146,6 @@ export class PortsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 
