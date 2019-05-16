@@ -23,7 +23,7 @@ const routes: Routes = [
     data: {preload: true}
   },
   {
-    path: 'action',
+    path: 'action/:id',
     component: PortsActionPage,
     data: {preload: true}
   }
@@ -43,6 +43,7 @@ const routes: Routes = [
     PortsActionPage
   ],
   exports: [PortsPage,
-            PortsNewPage]
+            PortsNewPage,
+            PortsActionPage]
 })
 export class PortsPageModule {}

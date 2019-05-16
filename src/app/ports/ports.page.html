@@ -1,4 +1,4 @@
-<ion-grid no-margin>
+<ion-grid no-margin style="overflow-y: scroll!important;">
   <ion-row style="margin-top:15%;">
       <ion-col size="0.5">
       </ion-col>
@@ -112,6 +112,16 @@
                         <ion-col size="6" no-padding>
                             Vueltas Estimadas: 65<br>
                             Vueltas Realizadas: 34<br>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" no-padding>
+                        </ion-col>
+                        <ion-col size="6" no-padding>
+                          <ion-button class="continue-button"
+                            [routerLink]="['/user-menu/ports/action/', item.id]">
+                            <span style="font-size: smaller;">CONTINUAR</span><ion-icon style="color: white;" md="md-arrow-forward"></ion-icon>
+                          </ion-button>
                         </ion-col>
                       </ion-row>
                     </div>
