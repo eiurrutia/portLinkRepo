@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Port } from '../port.model';
 
 @Component({
@@ -10,6 +11,9 @@ import { Port } from '../port.model';
 export class PortsActionPage implements OnInit {
   portsArray: any;
   portId = null;
+
+  correctSlectedDriver = false;
+  lastSelectedDriver: string;
 
   selectedDriver: string;
   searchBarActive = false;
@@ -29,7 +33,8 @@ export class PortsActionPage implements OnInit {
                        'Miguel Bravo'];
   driversFiltered = [];
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private activatedRoute: ActivatedRoute,
+              private alertController: AlertController) { }
 
   ngOnInit() {
     this.driversFiltered = this.activeDriversDicc;
@@ -116,7 +121,34 @@ export class PortsActionPage implements OnInit {
       return driver.toLocaleLowerCase().includes(toSearch.toLocaleLowerCase());
       });
     }
+    if (this.activeDriversDicc.includes(this.selectedDriver)) {
+      this.correctSlectedDriver = true;
+      if (this.lastSelectedDriver !== this.selectedDriver) {
+        this.changeDriver();
+      }
+    } else { this.correctSlectedDriver = false; }
   }
+
+  async changeDriver() {
+    const alert = await this.alertController.create({
+      header: 'Cambiar Conductor',
+      subHeader: 'Deseas cambiar al conductor a registrar?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => { this.selectedDriver = this.lastSelectedDriver; }
+        }, {
+          text: 'Aceptar',
+          handler: () => { this.lastSelectedDriver = this.selectedDriver; }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
 
 
 }

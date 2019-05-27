@@ -20,3 +20,13 @@
   background: transparent !important;
   margin-top: 20%;
 }
+
+.searchbar-green {
+  --icon-color: green;
+  color: green;
+}
+
+.searchbar-red {
+  --icon-color: red;
+  color: red;
+}

@@ -2,7 +2,10 @@
   <ion-item class="search-bar-item">
     <ion-searchbar animated
               show-cancel-button=true
+              searchIcon="person"
               class="search-bar"
+              [ngClass]="{'searchbar-green': correctSlectedDriver,
+                          'searchbar-red': !correctSlectedDriver}"
               placeholder="Conductor Actual"
               (ionCancel)="searchBarActive = false"
               (ionFocus)="searchBarActive = true"
