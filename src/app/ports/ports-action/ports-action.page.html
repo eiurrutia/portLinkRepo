@@ -13,20 +13,161 @@
               [(ngModel)]="selectedDriver">
     </ion-searchbar>
   </ion-item>
-  <ion-list *ngIf=searchBarActive class="search-list">
-    <ion-item *ngFor="let driver of driversFiltered" (click)="selectItem(driver)">
-      {{ driver }}
-    </ion-item>
-  </ion-list>
-  <ion-list *ngIf=!searchBarActive class="search-list">
-    <ion-item *ngFor="let driver of driversFiltered">
-      CACA
-    </ion-item>
-  </ion-list>
+<ion-list *ngIf=searchBarActive class="search-list">
+  <ion-item *ngFor="let driver of driversFiltered" (click)="selectItem(driver)">
+    {{ driver }}
+  </ion-item>
 </ion-list>
+<ion-list *ngIf=correctSlectedDriver class="search-list">
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" style="text-align: right;">
+          <ion-icon name="logo-model-s"></ion-icon>
+        </ion-col>
+        <ion-col size="4" style="text-align: center;">
+          <ion-label position="center">VIN</ion-label>
+        </ion-col>
+        <ion-col size="2">
+          <ion-icon name="logo-model-s"></ion-icon>
+        </ion-col>
+        <ion-col size="2" style="text-align: right;">
+          <ion-icon name="settings"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-input class="vin-input" clearInput ></ion-input>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+        </ion-col>
+        <ion-col size="4" style="text-align: center">
+          Registro
+        </ion-col>
+        <ion-col size="4" style="text-align: right">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          Modelo:
+        </ion-col>
+        <ion-col size="8" style="text-align: right">
+          Yaris ST AT
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          Color:
+        </ion-col>
+        <ion-col size="8" style="text-align: right">
+          Plata
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          Fecha:
+        </ion-col>
+        <ion-col size="8" style="text-align: right">
+          21/07/2019
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          Hora:
+        </ion-col>
+        <ion-col size="8" style="text-align: right">
+          22:19
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" no-padding>
+        <ion-list *ngIf=correctSlectedDriver class="total-count">
+          <ion-item no-padding class="general-count">
+            <ion-grid>
+              <ion-row style="margin-top: 2%;">
+                <ion-col style="text-align: center;">
+                  Conteo Conductor
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="5" style="text-align: center; font-size: small;">
+                  Vuelta Actual:
+                </ion-col>
+                <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
+                  3
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="6" style="text-align: center; font-size: small;">
+                  Unidades Cargadas:
+                </ion-col>
+                <ion-col size="6" style="text-align: center; font-size: x-large;
+                                         align-self: center; color: green;">
+                  4
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="6" style="text-align: center; font-size: small;">
+                  Última carga:
+                </ion-col>
+                <ion-col size="6" style="text-align: center; font-size: large; align-self: center;">
+                  22:11
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="6" no-padding>
+        <ion-list *ngIf=correctSlectedDriver class="total-count">
+          <ion-item no-padding class="general-count">
+            <ion-grid>
+              <ion-row style="margin-top: 2%;">
+                <ion-col style="text-align: center;">
+                  Conteo General
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="5" style="align-self: center;">
+                  Total:
+                </ion-col>
+                <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
+                  300
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="6" style="text-align: center; font-size: small;">
+                  Retirado
+                </ion-col>
+                <ion-col size="6" style="text-align: center; font-size: small;">
+                  Por retirar
+                </ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 2%;">
+                <ion-col size="6" style="text-align: center; font-size: large; color: green; align-self: center;">
+                  200
+                </ion-col>
+                <ion-col size="6" style="text-align: center; font-size: large; color: red; align-self: center;">
+                  100
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
+</ion-list>
 <ion-tabs style="overflow-y: scroll!important;">
-
   <ion-tab-bar slot="bottom">
     <ion-tab-button [ngClass]="{'tab-button-active': buttonTabActiveDicc['barcode'],
                                 'tab-button-inactive': !buttonTabActiveDicc['barcode']}"

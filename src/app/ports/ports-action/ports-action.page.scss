@@ -40,3 +40,26 @@
 .tab-button-inactive {
   color: black;
 }
+
+.vin-input {
+  border-radius: 10px;
+    border-width: medium;
+    --background: #f1f1f1;
+    border-color: black;
+    border-bottom: solid;
+    text-align: center;
+}
+
+.total-count {
+  overflow-y: scroll!important;
+  margin-top: 5%;
+  margin-left: 6%;
+  margin-right: 6%;
+  padding-top: 0;
+  padding-bottom: 0;
+  z-index: inherit;
+}
+
+.general-count {
+  --ion-safe-area-right: 0;
+}
