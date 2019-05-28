@@ -33,6 +33,13 @@ export class PortsActionPage implements OnInit {
                        'Miguel Bravo'];
   driversFiltered = [];
 
+  buttonTabActiveDicc = {
+                        'barcode': true,
+                        'resume': false,
+                        'packing': false,
+                        'share': false
+                        };
+
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController) { }
 
@@ -148,7 +155,12 @@ export class PortsActionPage implements OnInit {
     await alert.present();
   }
 
-
+  changeTabButton(nameButton: string) {
+    for (const button of Object.keys(this.buttonTabActiveDicc)) {
+      this.buttonTabActiveDicc[button] = false;
+    }
+    this.buttonTabActiveDicc[nameButton] = true;
+  }
 
 
 }

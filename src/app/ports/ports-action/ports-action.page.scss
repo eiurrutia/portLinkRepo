@@ -5,6 +5,7 @@
   margin-right: 6%;
   padding-top: 0;
   padding-bottom: 0;
+  z-index: inherit;
 }
 
 .search-bar {
@@ -19,6 +20,7 @@
   overflow-y: scroll!important;
   background: transparent !important;
   margin-top: 20%;
+  z-index: inherit;
 }
 
 .searchbar-green {
@@ -29,4 +31,12 @@
 .searchbar-red {
   --icon-color: red;
   color: red;
+}
+
+.tab-button-active {
+  color: dodgerblue;
+}
+
+.tab-button-inactive {
+  color: black;
 }
