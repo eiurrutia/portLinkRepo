@@ -43,11 +43,12 @@
 
 .vin-input {
   border-radius: 10px;
-    border-width: medium;
-    --background: #f1f1f1;
-    border-color: black;
-    border-bottom: solid;
-    text-align: center;
+  border-width: medium;
+  --background: #f1f1f1;
+  border-color: black;
+  border-bottom: solid;
+  text-align: center;
+  font-size: x-large;
 }
 
 .total-count {
@@ -62,4 +63,9 @@
 
 .general-count {
   --ion-safe-area-right: 0;
+}
+
+.resume-list {
+  margin-right: 2%;
+  margin-left: 2%;
 }
