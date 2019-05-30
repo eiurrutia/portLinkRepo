@@ -69,3 +69,41 @@
   margin-right: 2%;
   margin-left: 2%;
 }
+
+.forecast_container{
+  overflow-x: scroll!important;
+  // overflow-y: hidden;
+  //word-wrap: break-word;
+  height: auto;
+  font-size:0.8em;
+  font-weight:700;
+}
+
+.preview {
+  --min-height: 450px;
+}
+
+.preview-col {
+  width: auto;
+  border-left-width: thin;
+  border-left-color: black;
+  border-left-style: solid;
+  border-right-width: thin;
+  border-right-color: black;
+  border-right-style: solid;
+}
+
+.header-row {
+  background-color: #a2a4ab;
+  color: white;
+  padding-right: 10px;
+  padding-left: 5px;
+}
+
+.info-row {
+  background-color: greenyellow;
+  color: black;
+  padding-right: 10px;
+  padding-left: 5px;
+  white-space: nowrap;
+}

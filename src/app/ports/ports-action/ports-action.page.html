@@ -293,6 +293,59 @@
 </div>
 
 
+<!-- Packing View -->
+<div *ngIf="buttonTabActiveDicc['packing']" style="z-index: inherit;">
+  <ion-list class="main-list resume-list">
+    <ion-item style="padding-bottom: 4%;">
+      <ion-searchbar animated style="padding-bottom: 2%;"
+                show-cancel-button=true
+                searchIcon="search"
+                class="search-bar"
+                placeholder="Buscar"
+                (change)="searchInPacking()"
+                [(ngModel)]="wordSearchedInPacking">
+      </ion-searchbar>
+    </ion-item>
+    <ion-item class="preview">
+      <ion-content scrollY="true">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="5" no-padding>
+              <ion-grid style="height: auto; font-size:0.8em; font-weight:700;" no-padding>
+                <ion-row class="header-row" nowrap style="padding: 0;">
+                  <ion-col size="12" class="preview-col header-row" style="padding: 0;" nowrap>
+                    vin
+                  </ion-col>
+                </ion-row>
+                <ion-row class="info-row" *ngFor="let model of packingListExample" nowrap style="padding: 0;">
+                  <ion-col size="12" class="preview-col info-row" style="padding: 0;"  nowrap>
+                    {{ model['vin'] }}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+            <ion-col size="7" no-padding>
+              <ion-grid class="forecast_container" no-padding>
+                <ion-row class="header-row" nowrap style="padding: 0;">
+                  <ion-col size="6" class="preview-col header-row" *ngFor="let header of packingListHeaders" no-padding nowrap>
+                    {{ header }}
+                  </ion-col>
+                </ion-row>
+                <ion-row class="info-row" *ngFor="let model of packingListExample" nowrap style="padding: 0;">
+                  <ion-col size="6" class="preview-col info-row" *ngFor="let header of packingListHeaders" no-padding nowrap>
+                    {{ model[header] }}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ion-item>
+  </ion-list>
+</div>
+
+
 <ion-tabs style="overflow-y: scroll!important;">
   <ion-tab-bar slot="bottom">
     <ion-tab-button [ngClass]="{'tab-button-active': buttonTabActiveDicc['barcode'],
