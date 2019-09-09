@@ -17,6 +17,7 @@ import { File } from '@ionic-native/file/ngx';
 
 import { AppRoutingPreloaderService } from './app-routing-preloader.service';
 import { PortsService } from './ports/shared/ports.service';
+import { UnitsService } from './units/shared/units.service';
 import { Globals } from './globals';
 
 import { PortsPageModule } from './ports/ports.module';
@@ -44,6 +45,7 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     File,
     AppRoutingPreloaderService,
     PortsService,
+    UnitsService,
     Globals
   ],
   bootstrap: [AppComponent]

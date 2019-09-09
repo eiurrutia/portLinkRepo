@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
+import { UnitsService } from '../../units/shared/units.service';
+
+import { Unit } from '../../units/unit.model';
+
 @Component({
   selector: 'app-new-port-modal',
   templateUrl: './new-port-modal.page.html',
@@ -21,8 +25,11 @@ export class NewPortModalPage implements OnInit {
   countPerSizeDicc = {};
   headerSizeDicc: any;
 
+  message: any;
+
   constructor(private modalController: ModalController,
-              private navController: NavController) { }
+              private navController: NavController,
+              private unitsService: UnitsService) { }
 
   ngOnInit() {
     console.log('sigue funcionando');
@@ -49,8 +56,35 @@ export class NewPortModalPage implements OnInit {
 
   async confirmModal() {
     const modal = await this.modalController.getTop();
+    this.registerUnits(this.finalPacking);
     modal.dismiss();
     this.navController.navigateRoot('user-menu/drivers/drivers-selection');
+  }
+
+
+  registerUnit(unit: any) {
+    this.unitsService.createUnit(unit).subscribe(
+      newUnit => {
+        console.log('unit creada');
+      },
+      error => {
+        // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
+        this.message = {message: 'Error, el chofer ya existe', status: 400};
+      }
+    );
+  }
+
+  registerUnits(units: any) {
+    Object.keys(units).map((key, index) => {
+      const backUnitModel = {
+        'model': units[key]['modelo'],
+        'size': units[key]['tamaño'],
+        'color': units[key]['color'],
+        'vin': units[key]['vin'],
+      };
+      this.registerUnit(backUnitModel);
+    });
+    console.log('Todas las unidades creadas');
   }
 
   countPerSize() {
