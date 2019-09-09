@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -15,6 +16,8 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 
 import { AppRoutingPreloaderService } from './app-routing-preloader.service';
+import { PortsService } from './ports/shared/ports.service';
+import { Globals } from './globals';
 
 import { PortsPageModule } from './ports/ports.module';
 import { UserProfilePageModule } from './user-profile/user-profile.module';
@@ -29,7 +32,8 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     PortsPageModule,
-    UserProfilePageModule],
+    UserProfilePageModule,
+    HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -38,7 +42,9 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     FilePath,
     FileOpener,
     File,
-    AppRoutingPreloaderService
+    AppRoutingPreloaderService,
+    PortsService,
+    Globals
   ],
   bootstrap: [AppComponent]
 })

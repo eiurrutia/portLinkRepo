@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
+import { PortsService } from './shared/ports.service';
+
 import { Port } from './port.model';
 
 @Component({
@@ -22,6 +24,7 @@ export class PortsPage implements OnInit {
   // to try
   pleiadesDetail: boolean;
   portsArray: Port[];
+  portsList: Port[];
 
   @Output() sendCount: EventEmitter <boolean> = new EventEmitter<boolean>();
 
@@ -29,9 +32,13 @@ export class PortsPage implements OnInit {
     this.presentAlertConfirm();
   }
 
-  constructor(public alertController: AlertController) { }
+  constructor(public alertController: AlertController,
+              private portsService: PortsService) { }
 
   ngOnInit() {
+
+    this.getPorts();
+
     this.activeItemsList = true;
     this.recentItemsList = false;
 
@@ -124,6 +131,19 @@ export class PortsPage implements OnInit {
   changePleiadesDetail() {
     this.pleiadesDetail = !this.pleiadesDetail;
   }
+
+  getPorts(): void {
+    this.portsService.getPorts().subscribe(
+      portsList => {
+        this.portsList = portsList;
+        console.log(this.portsList);
+      },
+      error => {
+        console.log(`Error fetching ports`);
+      }
+    );
+  }
+
 
   async presentAlertConfirm() {
     const alert = await this.alertController.create({

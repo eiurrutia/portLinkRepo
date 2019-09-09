@@ -36,7 +36,9 @@
     "cordova-plugin-filechooser": "1.2.0",
     "cordova-plugin-filepath": "1.5.1",
     "core-js": "^2.5.4",
+    "dynamoose": "^1.8.0",
     "rxjs": "~6.3.3",
+    "rxjs-compat": "^6.5.3",
     "ts-xlsx": "0.0.11",
     "zone.js": "~0.8.29"
   },
