@@ -303,8 +303,6 @@ export class PortsNewPage implements OnInit {
         }
       }
     }
-    console.log(' este es el this.packingDiccId');
-    console.log(this.packingDiccId);
   }
 
   // To generate final array for the packingDicc

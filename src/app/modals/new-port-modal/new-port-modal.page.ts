@@ -46,7 +46,7 @@ export class NewPortModalPage implements OnInit {
 
   generatePreviewObjects() {
     this.previewObjects = [];
-    this.previewVins = []
+    this.previewVins = [];
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[0]]);
     this.previewVins.push(Object.keys(this.finalPacking)[0]);
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[1]]);
