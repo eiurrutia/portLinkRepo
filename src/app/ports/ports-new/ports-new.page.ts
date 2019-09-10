@@ -9,6 +9,10 @@ import { File } from '@ionic-native/file/ngx';
 
 import { NewPortModalPage } from '../../modals/new-port-modal/new-port-modal.page';
 
+import { ImportersService } from '../../importers/shared/importers.service';
+
+import { Importer } from '../../importers/importer.model';
+
 
 @Component({
   selector: 'app-ports-new',
@@ -36,6 +40,8 @@ export class PortsNewPage implements OnInit {
   allHeadersPresent = false;
   packingQuantity: number;
   shipName: string;
+  selectedImporter: Importer;
+  importersList: Importer[];
   vinExample: string;
   editDigitsMode = false;
   editShipNameMode = false;
@@ -52,7 +58,8 @@ export class PortsNewPage implements OnInit {
               private fileee: File,
               private toastController: ToastController,
               private modalController: ModalController,
-              private alertController: AlertController) { }
+              private alertController: AlertController,
+              private importersService: ImportersService) { }
 
   incomingfile(event) {
     this.file = event.target.files[0];
@@ -167,6 +174,7 @@ export class PortsNewPage implements OnInit {
   }
 
   ngOnInit() {
+    this.getImporters();
     this.packingToggle = true;
     this.displayPreviewTable = false;
     this.stringFile = 'No hay archivo seleccionado';
@@ -312,6 +320,9 @@ export class PortsNewPage implements OnInit {
   // Check if there is pending info
   checkPendingInfo(): boolean {
     this.pendingInfo = '';
+    if (!this.selectedImporter) {
+      this.pendingInfo = this.pendingInfo.concat('·Falta seleccionar el importador correspondiente. <br>');
+    }
     if (this.repeatedElement) {
       this.pendingInfo = this.pendingInfo.concat('·Dígitos insuficientes, existen VIN repetidos. <br>');
     }
@@ -343,6 +354,7 @@ export class PortsNewPage implements OnInit {
         component: NewPortModalPage,
         componentProps: {
           shipName: this.shipName.concat(' ' + this.today),
+          importer: this.selectedImporter,
           finalPacking: this.finalPackingDicc,
           modelsCount: this.differentsModelsCount,
           modelsSize: this.differentsModelsSizes
@@ -350,6 +362,18 @@ export class PortsNewPage implements OnInit {
       });
       modal.present();
     }
+  }
+
+  getImporters(): void {
+    this.importersService.getImporters().subscribe(
+      importersList => {
+        this.importersList = importersList.data;
+        console.log(this.importersList);
+      },
+      error => {
+        console.log(`Error fetching importers`);
+      }
+    );
   }
 
 }
