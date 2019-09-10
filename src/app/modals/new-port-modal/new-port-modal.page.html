@@ -17,8 +17,9 @@
                 <ion-row class="header-row" nowrap>
                   {{ key }}
                 </ion-row>
-                <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
-                  {{ model[key] }}
+                <ion-row class="info-row" *ngFor="let model of previewObjects; let i = index" nowrap>
+                  <span *ngIf="key != 'vin'"> {{ model[key] }} </span>
+                  <span *ngIf="key == 'vin'"> {{ previewVins[i] }} </span>
                 </ion-row>
               </ion-col>
           </ion-row>

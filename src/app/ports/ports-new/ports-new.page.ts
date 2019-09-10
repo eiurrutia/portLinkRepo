@@ -158,6 +158,7 @@ export class PortsNewPage implements OnInit {
     toast.present();
   }
 
+  // To generate preview packing
   displayPreviewPacking() {
     this.headers = Object.keys(this.packingDicc[0]);
     for (const key of Object.keys(this.packingDicc[0])) {
@@ -302,14 +303,16 @@ export class PortsNewPage implements OnInit {
         }
       }
     }
+    console.log(' este es el this.packingDiccId');
+    console.log(this.packingDiccId);
   }
 
-  // To generate preview array for the packingDicc
+  // To generate final array for the packingDicc
   generateFinalArray() {
     this.finalPackingDicc = {};
     for (const key of Object.keys(this.packingDiccId)) {
       this.finalPackingDicc[key] = {};
-      this.finalPackingDicc[key]['vin'] = key;
+      this.finalPackingDicc[key]['vin'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']];
       this.finalPackingDicc[key]['modelo'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']];
       this.finalPackingDicc[key]['color'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['color']];
       this.finalPackingDicc[key]['tamaño'] =

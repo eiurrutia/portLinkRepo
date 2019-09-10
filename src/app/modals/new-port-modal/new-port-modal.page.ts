@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
+import { PortsService } from '../../ports/shared/ports.service';
 import { UnitsService } from '../../units/shared/units.service';
 
+import { Port } from '../../ports/port.model';
 import { Unit } from '../../units/unit.model';
 
 @Component({
@@ -16,6 +18,7 @@ export class NewPortModalPage implements OnInit {
   finalPacking;
   modelsCount;
   modelsSize;
+  importer;
   shipName;
   previewObjects = [];
   headers: any;
@@ -43,9 +46,13 @@ export class NewPortModalPage implements OnInit {
 
   generatePreviewObjects() {
     this.previewObjects = [];
+    this.previewVins = []
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[0]]);
+    this.previewVins.push(Object.keys(this.finalPacking)[0]);
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[1]]);
+    this.previewVins.push(Object.keys(this.finalPacking)[1]);
     this.previewObjects.push(this.finalPacking[Object.keys(this.finalPacking)[2]]);
+    this.previewVins.push(Object.keys(this.finalPacking)[2]);
     this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
