@@ -21,6 +21,7 @@ export class NewPortModalPage implements OnInit {
   importer;
   shipName;
   previewObjects = [];
+  // Drivers list
   headers: any;
 
 
@@ -29,9 +30,11 @@ export class NewPortModalPage implements OnInit {
   headerSizeDicc: any;
 
   message: any;
+  portObject = {};
 
   constructor(private modalController: ModalController,
               private navController: NavController,
+              private portsService: PortsService,
               private unitsService: UnitsService) { }
 
   ngOnInit() {
@@ -44,6 +47,7 @@ export class NewPortModalPage implements OnInit {
     this.countPerSize();
   }
 
+  // Generate array with three elements to preview table.
   generatePreviewObjects() {
     this.previewObjects = [];
     this.previewVins = [];
@@ -56,19 +60,22 @@ export class NewPortModalPage implements OnInit {
     this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
+  // Close modal.
   async closeModal() {
     const modal = await this.modalController.getTop();
     modal.dismiss();
   }
 
+  // Confirm new port and close modal.
   async confirmModal() {
     const modal = await this.modalController.getTop();
-    this.registerUnits(this.finalPacking);
+    this.generatePortObjectToBackend();
     modal.dismiss();
     this.navController.navigateRoot('user-menu/drivers/drivers-selection');
   }
 
 
+  // Create unit in backend.
   registerUnit(unit: any) {
     this.unitsService.createUnit(unit).subscribe(
       newUnit => {
@@ -76,44 +83,83 @@ export class NewPortModalPage implements OnInit {
       },
       error => {
         // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
-        this.message = {message: 'Error, el chofer ya existe', status: 400};
+        this.message = {message: 'Error, la unidad ya existe', status: 400};
       }
     );
   }
 
-  registerUnits(units: any) {
-    Object.keys(units).map((key, index) => {
+
+  // Create port in backend.
+  createPort(port: any) {
+    this.portsService.createPort(port).subscribe(
+      newPort => {
+        console.log('Port creado on éxito');
+        console.log(newPort);
+        this.registerUnits(this.finalPacking, newPort);
+      },
+      error => {
+        // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
+        this.message = {message: 'Error, el puerto ya existe', status: 400};
+      }
+    );
+  }
+
+  // We build unit's object to send to backend.
+  async registerUnits(units: any, port: any) {
+    await Object.keys(units).map((key, index) => {
       const backUnitModel = {
         'model': units[key]['modelo'],
         'size': units[key]['tamaño'],
         'color': units[key]['color'],
         'vin': units[key]['vin'],
+        'port': port['_id']
       };
       this.registerUnit(backUnitModel);
     });
-    console.log('Todas las unidades creadas');
   }
 
+  // Build count array by size.
   countPerSize() {
     this.totalCount = 0;
-    if (Object.values(this.modelsSize).includes('pequeno')) {
-      this.countPerSizeDicc['pequeno'] = 0;
-    }
-    if (Object.values(this.modelsSize).includes('mediano')) {
-      this.countPerSizeDicc['mediano'] = 0;
-    }
-    if (Object.values(this.modelsSize).includes('grande')) {
-          this.countPerSizeDicc['grande'] = 0;
-    }
-    if (Object.values(this.modelsSize).includes('extraGrande')) {
-      this.countPerSizeDicc['extraGrande'] = 0;
-    }
+    this.countPerSizeDicc['pequeno'] = 0;
+    this.countPerSizeDicc['mediano'] = 0;
+    this.countPerSizeDicc['grande'] = 0;
+    this.countPerSizeDicc['extraGrande'] = 0;
+
     for (const model of Object.keys(this.modelsCount)) {
       this.countPerSizeDicc[this.modelsSize[model]] += this.modelsCount[model];
       this.totalCount += this.modelsCount[model];
     }
-    console.log(this.countPerSizeDicc);
     this.headerSizeDicc = Object.keys(this.countPerSizeDicc);
+  }
+
+  // We build object to create port in backend.
+  generatePortObjectToBackend() {
+    this.portObject['shipName'] = this.shipName;
+    this.portObject['arrivalDate'] = new Date().toLocaleDateString();
+    this.portObject['importer'] = this.importer._id;
+    this.portObject['unitsInPacking'] = {};
+    this.portObject['unitsInPacking']['totalQuantity'] = this.totalCount;
+    this.portObject['unitsInPacking']['smallQuantity'] = this.countPerSizeDicc['pequeno'];
+    this.portObject['unitsInPacking']['mediumQuantity'] = this.countPerSizeDicc['mediano'];
+    this.portObject['unitsInPacking']['bigQuantity'] = this.countPerSizeDicc['grande'];
+    this.portObject['unitsInPacking']['extraQuantity'] = this.countPerSizeDicc['extraGrande'];
+    // Collected units attribute should be created auto.
+    this.portObject['modelsCountDicc'] = {};
+    this.portObject['modelsCountDicc']['toCollect'] = {};
+    this.portObject['modelsCountDicc']['collected'] = {};
+    for (const key of Object.keys(this.modelsCount)) {
+      this.portObject['modelsCountDicc']['toCollect'][key] = this.modelsCount[key];
+      this.portObject['modelsCountDicc']['collected'][key] = 0;
+    }
+    this.portObject['portRates'] = {};
+    this.portObject['portRates']['small'] = this.importer['rates']['small'];
+    this.portObject['portRates']['medium'] = this.importer['rates']['medium'];
+    this.portObject['portRates']['big'] = this.importer['rates']['big'];
+    this.portObject['portRates']['extra'] = this.importer['rates']['extra'];
+
+    // And we create the port in backend.
+    this.createPort(this.portObject);
   }
 
 }
