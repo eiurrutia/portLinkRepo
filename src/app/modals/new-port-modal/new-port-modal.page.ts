@@ -38,11 +38,6 @@ export class NewPortModalPage implements OnInit {
               private unitsService: UnitsService) { }
 
   ngOnInit() {
-    console.log('sigue funcionando');
-    console.log(this.finalPacking);
-    console.log(this.modelsCount);
-    console.log(this.modelsSize);
-    console.log(this.shipName);
     this.generatePreviewObjects();
     this.countPerSize();
   }
