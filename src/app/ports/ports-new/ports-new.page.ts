@@ -165,7 +165,7 @@ export class PortsNewPage implements OnInit {
       this.autoDetectHeader(key);
     }
     this.allHeadersPresent = this.detectAllHeaders();
-    this.shipName = this.packingDicc[0][this.diccToDefineHeadersInverse['nave']];
+    this.shipName = this.packingDicc[0][this.diccToDefineHeadersInverse['nave']].toUpperCase();
     this.vinExample = this.packingDicc[0][this.diccToDefineHeadersInverse['vin']];
     this.detectDifferentsModels();
     this.displayPreviewTable = true;
