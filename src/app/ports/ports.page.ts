@@ -135,7 +135,7 @@ export class PortsPage implements OnInit {
   getPorts(): void {
     this.portsService.getPorts().subscribe(
       portsList => {
-        this.portsList = portsList;
+        this.portsList = portsList.data;
         console.log(this.portsList);
       },
       error => {

@@ -39,7 +39,7 @@
                       <ion-icon class="increase-icon" style="color: #17ff0f; padding-top: 1%;" name="wifi"></ion-icon>
                     </ion-col>
                     <ion-col size="10" style="padding-left: 0;">
-                      <ion-label style="padding-left: 10%;"> Activos (3): </ion-label>
+                      <ion-label style="padding-left: 10%;"> Activos ({{ portsList?.length }}): </ion-label>
                       <ion-icon *ngIf="activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
                       <ion-icon *ngIf="!activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
                     </ion-col>
@@ -50,14 +50,14 @@
               <!-- *ngFor Item -->
               <ion-row *ngIf="activeItemsList">
                 <ion-list style="width: 100%; border-radius: 40px;">
-                  <ion-item  *ngFor="let item of portsArray" class="item item-text-wrap">
-                    <ion-grid>
+                  <ion-item  *ngFor="let item of portsList" class="item item-text-wrap">
+                    <ion-grid *ngIf="!item.finished">
                     <ion-row style="width: 100%;" (click)="item.showDetail = !item.showDetail">
-                      <ion-col size="8">
+                      <ion-col size="8" style="padding-bottom: 0px;">
                           {{ item.shipName }}
                       </ion-col>
                       <ion-col size="3" style="text-align: right;">
-                          {{ item.modelsQuantityInPacking }}
+                          {{ item.unitsInPacking.totalQuantity }}
                       </ion-col>
                       <ion-col size="1" style="text-align: right;">
                         <ion-icon *ngIf="!item.showDetail" style="padding-top: 3%;" name="add"></ion-icon>
@@ -65,51 +65,77 @@
                       </ion-col>
                     </ion-row>
                     <ion-row>
-                      <ion-progress-bar color="primary" value="{{ item.advancedPercentage }}"></ion-progress-bar>
+                      <ion-col style="color: #808080cf; font-size: small; padding-top: 0px;">
+                        {{ item.importer.name }}
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-progress-bar color="primary" value="{{ item.collectedUnits.totalQuantity/item.unitsInPacking.totalQuantity }}"></ion-progress-bar>
                     </ion-row>
                     <!-- Detail -->
                     <div *ngIf="item.showDetail">
                       <ion-row class="rows-details-items" style="padding-top: 5%;">
                         <ion-col size="6" no-padding>
                             Total Retiradas:<br>
-                            <p style="color: green; font-size: 150%; text-align: center">{{ item.collectedUnits }}</p>
+                            <p style="color: green; font-size: 150%; text-align: center">{{ item?.collectedUnits?.totalQuantity }}</p>
                         </ion-col>
                         <ion-col size="6" no-padding>
                             Total Faltantes:<br>
-                             <p style="color: red; font-size: 150%; text-align: center">{{ item.unitsToCollect }}</p>
+                             <p style="color: red; font-size: 150%; text-align: center">
+                               {{ item?.unitsInPacking?.totalQuantity - item?.collectedUnits?.totalQuantity}}
+                             </p>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items" style="padding-top: 1%;">
+                        <ion-col style="text-align: center;">
+                          <b>Detalle Tamaños</b>
                         </ion-col>
                       </ion-row>
                       <ion-row class="rows-details-items">
                         <ion-col size="6" no-padding>
-                          <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.collectedLittleUnits }}<br></div>
-                          <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.collectedMediumUnits }}<br></div>
-                          <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.collectedBigUnits }}<br></div>
-                          <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.collectedExtraBigUnits }}<br></div>
+                          <div *ngIf="item.unitsInPacking.smallQuantity!=0">-Pequeñas: <span style="color: green;">{{ item?.collectedUnits?.smallQuantity }}<br></span></div>
+                          <div *ngIf="item.unitsInPacking.mediumQuantity!=0">-Medianas: <span style="color: green;">{{ item?.collectedUnits?.mediumQuantity }}<br></span></div>
+                          <div *ngIf="item.unitsInPacking.bigQuantity!=0">-Grandes: <span style="color: green;">{{ item?.collectedUnits?.bigQuantity }}<br></span></div>
+                          <div *ngIf="item.unitsInPacking.extraQuantity!=0">-Extra G.: <span style="color: green;">{{ item?.collectedUnits?.extraQuantity }}<br></span></div>
                         </ion-col>
                         <ion-col size="6" no-padding>
-                          <div *ngIf="item.littleUnitsQuantity!=0">-Pequeñas: {{ item.toCollectLittleUnits }} ({{ item.littleUnitsQuantity }})<br></div>
-                          <div *ngIf="item.mediumUnitsQuantity!=0">-Medianas: {{ item.toCollectMediumUnits }} ({{ item.mediumUnitsQuantity }})<br></div>
-                          <div *ngIf="item.bigUnitsQuantity!=0">-Grandes: {{ item.toCollectBigUnits }} ({{ item.bigUnitsQuantity }})<br></div>
-                          <div *ngIf="item.extraBigUnitsQuantity!=0">-Extra G.: {{ item.toCollectExtraBigUnits }} ({{ item.extraBigUnitsQuantity }})<br></div>
+                          <div *ngIf="item.unitsInPacking.smallQuantity!=0">
+                            -Pequeñas: <span style="color: red;"> {{ item?.unitsInPacking?.smallQuantity - item?.collectedUnits?.smallQuantity }} </span>
+                            ({{ item?.unitsInPacking?.smallQuantity }})<br>
+                          </div>
+                          <div *ngIf="item.unitsInPacking.mediumQuantity!=0">
+                            -Medianas: <span style="color: red;"> {{ item?.unitsInPacking?.mediumQuantity - item?.collectedUnits?.mediumQuantity }} </span>
+                              ({{ item?.unitsInPacking?.mediumQuantity }})<br>
+                          </div>
+                          <div *ngIf="item.unitsInPacking.bigQuantity!=0">
+                            -Grandes:  <span style="color: red;"> {{ item?.unitsInPacking?.bigQuantity- item?.collectedUnits?.bigQuantity }} </span>
+                              ({{ item?.unitsInPacking?.bigQuantity }})<br>
+                          </div>
+                          <div *ngIf="item.unitsInPacking.extraQuantity!=0">
+                            -Extra G.: <span style="color: red;">{{ item?.unitsInPacking?.extraQuantity- item?.collectedUnits?.extraQuantity }} </span>
+                              ({{ item?.unitsInPacking?.extraQuantity }})<br>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items" style="padding-top: 1%;">
+                        <ion-col style="text-align: center;">
+                          <b>Detalle Modelos</b>
                         </ion-col>
                       </ion-row>
                       <ion-row class="rows-details-items">
                         <ion-col size="6" no-padding>
-                          Marcas:<br>
-                          -Mazda<br>
+                          <div *ngFor="let model of item.modelsCountDicc.collected | keyvalue">-{{ model.key }}: <span style="color: green;">{{ model.value }}</span></div>
                         </ion-col>
                         <ion-col size="6" no-padding>
-                            Modelos:<br>
-                            -BT 50<br>
-                            -Ram 25<br>
+                          <div *ngFor="let model of item.modelsCountDicc.totalToCollect | keyvalue">-{{ model.key }}: <span style="color: red;">{{ model.value - item.modelsCountDicc.collected[model.key] }}</span> ({{ model.value }})</div>
                         </ion-col>
                       </ion-row>
-                      <ion-row class="rows-details-items">
+                      <ion-row *ngIf="item.consideredDrivers" class="rows-details-items">
                         <ion-col size="6" no-padding>
                             Conductores considerados: 5<br>
                             Daños: {{ item.damages }}<br>
                         </ion-col>
-                        <ion-col size="6" no-padding>
+                        <ion-col *ngIf="item.estimatedLaps" size="6" no-padding>
                             Vueltas Estimadas: 65<br>
                             Vueltas Realizadas: 34<br>
                         </ion-col>
