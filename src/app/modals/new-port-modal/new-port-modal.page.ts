@@ -21,6 +21,7 @@ export class NewPortModalPage implements OnInit {
   importer;
   shipName;
   previewObjects = [];
+  previewVins = [];
   // Drivers list
   headers: any;
 
@@ -140,13 +141,17 @@ export class NewPortModalPage implements OnInit {
     this.portObject['unitsInPacking']['bigQuantity'] = this.countPerSizeDicc['grande'];
     this.portObject['unitsInPacking']['extraQuantity'] = this.countPerSizeDicc['extraGrande'];
     // Collected units attribute should be created auto.
+
+    // Dicc with collected and uncollected units by models
     this.portObject['modelsCountDicc'] = {};
-    this.portObject['modelsCountDicc']['toCollect'] = {};
+    this.portObject['modelsCountDicc']['totalToCollect'] = {};
     this.portObject['modelsCountDicc']['collected'] = {};
     for (const key of Object.keys(this.modelsCount)) {
-      this.portObject['modelsCountDicc']['toCollect'][key] = this.modelsCount[key];
+      this.portObject['modelsCountDicc']['totalToCollect'][key] = this.modelsCount[key];
       this.portObject['modelsCountDicc']['collected'][key] = 0;
     }
+
+    // Importer Rates according to that time.
     this.portObject['portRates'] = {};
     this.portObject['portRates']['small'] = this.importer['rates']['small'];
     this.portObject['portRates']['medium'] = this.importer['rates']['medium'];
