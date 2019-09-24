@@ -23,19 +23,7 @@ export class DriversSelectionPage implements OnInit {
   driversList: any;
   thirdList: any;
 
-  activeDriversDicc = {'Manuel Sáez': true,
-                       'Juan Marchant': false,
-                       'Robin Pinilla': true,
-                       'Jorge Contreras': false,
-                       'Gastón Cataldo': false,
-                       'Victor Moreno': true,
-                       'Jorge Osorio': true,
-                       'Luis González': true,
-                       'Cristian Espinoza': false,
-                       'Moises Sepulveda': false,
-                       'Miguel Vargas': false,
-                       'Francisco Bravo': true,
-                       'Miguel Bravo': false};
+  activeDriversDicc = {};
 
   thirdsDicc = {'Ocare': 0,
                 'Patricio Lizama': 0,
@@ -67,7 +55,6 @@ export class DriversSelectionPage implements OnInit {
     this.getDrivers();
     this.countActiveDrivers();
     this.countActiveThirds();
-    this.activeDriversDiccKeys = Object.keys(this.activeDriversDicc);
     this.thirdsDiccKeys = Object.keys(this.thirdsDicc);
 
   }
@@ -186,11 +173,16 @@ export class DriversSelectionPage implements OnInit {
         this.driversList = driversList.data;
         console.log('this.driversList');
         console.log(this.driversList);
+        this.generateActivableDriversDict(this.driversList);
       },
       error => {
         console.log(`Error fetching drivers`);
       }
     );
+  }
+
+  generateActivableDriversDict(driversList: any): void {
+    for (const driver of driversList) { this.activeDriversDicc[driver.name] = false; }
   }
 
 }

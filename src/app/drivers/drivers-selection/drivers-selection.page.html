@@ -21,9 +21,9 @@
       <ion-item>
         Selección de Conductores
       </ion-item>
-      <ion-item *ngFor="let driver of activeDriversDiccKeys">
-        <ion-label> {{driver}} </ion-label>
-        <ion-toggle [(ngModel)]="activeDriversDicc[driver]"
+      <ion-item *ngFor="let driver of activeDriversDicc | keyvalue">
+        <ion-label> {{driver.key}} </ion-label>
+        <ion-toggle [(ngModel)]="activeDriversDicc[driver.key]"
           (ionChange)="countActiveDrivers()"></ion-toggle>
       </ion-item>
     </ion-list>
@@ -35,24 +35,24 @@
       <ion-item>
         Selección de Terceros
       </ion-item>
-      <ion-item *ngFor="let third of thirdsDiccKeys">
+      <ion-item *ngFor="let third of thirdsDicc | keyvalue">
         <ion-grid>
           <ion-row>
             <ion-col size="7">
-              <ion-label> {{third}} </ion-label>
+              <ion-label> {{third.key}} </ion-label>
             </ion-col>
             <ion-col size="5" style="text-align: right;">
-              <ion-button (click)="changeNumber(third, -1)" shape="round" color="light">-</ion-button>
-              <ion-button shape="round" color="light">{{ thirdsDicc[third] }}</ion-button>
-              <ion-button (click)="changeNumber(third, 1)" shape="round" color="light">+</ion-button>
+              <ion-button (click)="changeNumber(third.key, -1)" shape="round" color="light">-</ion-button>
+              <ion-button shape="round" color="light">{{ thirdsDicc[third.key] }}</ion-button>
+              <ion-button (click)="changeNumber(third.key, 1)" shape="round" color="light">+</ion-button>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="thirdsDicc[third] > 1" align-items-center>
-            <div *ngFor="let item of createArray(thirdsDicc[third]); let i = index">
+          <ion-row *ngIf="thirdsDicc[third.key] > 1" align-items-center>
+            <div *ngFor="let item of createArray(thirdsDicc[third.key]); let i = index">
               <ion-row>
-                <span *ngIf="nameThirdsDicc[third][i + 1] == ''" class="third-without-name">*</span>
+                <span *ngIf="nameThirdsDicc[third.key][i + 1] == ''" class="third-without-name">*</span>
                 <ion-input type=text placeholder="Nombre Conductor {{ i + 1 }}"
-                          [(ngModel)]="nameThirdsDicc[third][i + 1]"></ion-input>
+                          [(ngModel)]="nameThirdsDicc[third.key][i + 1]"></ion-input>
               </ion-row>
             </div>
           </ion-row>
