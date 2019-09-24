@@ -20,6 +20,7 @@ import { PortsService } from './ports/shared/ports.service';
 import { UnitsService } from './units/shared/units.service';
 import { ImportersService } from './importers/shared/importers.service';
 import { DriversService } from './drivers/shared/drivers.service';
+import { ThirdsService } from './thirds/shared/thirds.service';
 import { Globals } from './globals';
 
 import { PortsPageModule } from './ports/ports.module';
@@ -51,6 +52,7 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     UnitsService,
     ImportersService,
     DriversService,
+    ThirdsService,
     Globals
   ],
 
