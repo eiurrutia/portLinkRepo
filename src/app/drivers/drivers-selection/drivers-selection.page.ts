@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { IonSlides, AlertController, NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+
+import { DriversService } from '../shared/drivers.service';
 
 @Component({
   selector: 'app-drivers-selection',
@@ -17,6 +20,9 @@ export class DriversSelectionPage implements OnInit {
     width: 375,
     height: 440
   };
+  driversList: any;
+  thirdList: any;
+
   activeDriversDicc = {'Manuel Sáez': true,
                        'Juan Marchant': false,
                        'Robin Pinilla': true,
@@ -38,6 +44,8 @@ export class DriversSelectionPage implements OnInit {
   activeDriversDiccKeys: any;
   thirdsDiccKeys: any;
 
+  portId: string;
+
   nameThirdsDicc = {'Ocare': {1: ''},
                     'Patricio Lizama': {1: ''},
                     'Sergio Soto': {1: ''}
@@ -49,10 +57,14 @@ export class DriversSelectionPage implements OnInit {
   activeDriversCount = 0;
   activeThirdsCount = 0;
 
-  constructor(private alertController: AlertController,
-              private navController: NavController) { }
+  constructor(private activatedRoute: ActivatedRoute,
+              private alertController: AlertController,
+              private navController: NavController,
+              private driversService: DriversService) { }
 
   ngOnInit() {
+    this.portId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.getDrivers();
     this.countActiveDrivers();
     this.countActiveThirds();
     this.activeDriversDiccKeys = Object.keys(this.activeDriversDicc);
@@ -166,6 +178,19 @@ export class DriversSelectionPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  getDrivers(): void {
+    this.driversService.getDrivers().subscribe(
+      driversList => {
+        this.driversList = driversList.data;
+        console.log('this.driversList');
+        console.log(this.driversList);
+      },
+      error => {
+        console.log(`Error fetching drivers`);
+      }
+    );
   }
 
 }
