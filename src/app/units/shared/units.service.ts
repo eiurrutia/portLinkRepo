@@ -25,6 +25,13 @@ export class UnitsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+
+  getUnitsByPort(portId: string): Observable<any> {
+    const url = `${this.backUrl}/units?port=${portId}`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
+
   createUnit(unit: Unit): Observable<Unit> {
     const url = `${this.backUrl}/units/`;
     return this.http.post<Unit>(url, unit, this.httpOptions).catch(this.errorHandler);
