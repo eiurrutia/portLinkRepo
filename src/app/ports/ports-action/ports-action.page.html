@@ -184,7 +184,7 @@
             Total:
           </ion-col>
           <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-            300
+            {{ currentPort.unitsInPacking.totalQuantity }}
           </ion-col>
         </ion-row>
         <ion-row style="margin-top: 2%;">
@@ -192,13 +192,13 @@
             Retirado:
           </ion-col>
           <ion-col size="2.5" style="text-align: center; font-size: x-large; align-self: center; color: green;">
-            200
+            {{ currentPort.collectedUnits.totalQuantity }}
           </ion-col>
           <ion-col size="3.5" style="align-self: center;">
             Por retirar:
           </ion-col>
           <ion-col size="2.5" style="text-align: center; font-size: x-large; align-self: center; color: red;">
-            100
+            {{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -210,32 +210,60 @@
             Tamaños
           </ion-col>
         </ion-row>
-        <ion-row style="margin-top: 2%;">
+        <ion-row *ngIf="currentPort.unitsInPacking.smallQuantity != 0" style="margin-top: 2%;">
+          <ion-col size="4" style="text-align: right; align-self: center;">
+            Pequeñas:
+          </ion-col>
+          <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
+            {{ currentPort.unitsInPacking.smallQuantity }}
+          </ion-col>
+          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
+            {{ currentPort.collectedUnits.smallQuantity }}
+          </ion-col>
+          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
+            {{ currentPort.unitsInPacking.smallQuantity - currentPort.collectedUnits.smallQuantity }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="currentPort.unitsInPacking.mediumQuantity != 0" style="margin-top: 2%;">
           <ion-col size="4" style="text-align: right; align-self: center;">
             Medianas:
           </ion-col>
           <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
-            100
+            {{ currentPort.unitsInPacking.mediumQuantity }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
-            80
+            {{ currentPort.collectedUnits.mediumQuantity }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
-            20
+            {{ currentPort.unitsInPacking.mediumQuantity - currentPort.collectedUnits.mediumQuantity }}
           </ion-col>
         </ion-row>
-        <ion-row style="margin-top: 2%;">
+        <ion-row *ngIf="currentPort.unitsInPacking.bigQuantity != 0" style="margin-top: 2%;">
           <ion-col size="4" style="text-align: right; align-self: center;">
             Grandes:
           </ion-col>
           <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
-            200
+            {{ currentPort.unitsInPacking.bigQuantity }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
-            120
+            {{ currentPort.collectedUnits.bigQuantity }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
-            80
+            {{ currentPort.unitsInPacking.bigQuantity - currentPort.collectedUnits.bigQuantity }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="currentPort.unitsInPacking.extraQuantity != 0" style="margin-top: 2%;">
+          <ion-col size="4" style="text-align: right; align-self: center;">
+            Extra:
+          </ion-col>
+          <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
+            {{ currentPort.unitsInPacking.extraQuantity }}
+          </ion-col>
+          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
+            {{ currentPort.collectedUnits.extraQuantity }}
+          </ion-col>
+          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
+            {{ currentPort.unitsInPacking.extraQuantity - currentPort.collectedUnits.extraQuantity }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -247,44 +275,30 @@
             Modelos
           </ion-col>
         </ion-row>
-        <ion-row style="margin-top: 2%;">
+        <ion-row *ngFor="let item of currentPort.modelsCountDicc.totalToCollect | keyvalue" style="margin-top: 2%;">
           <ion-col size="4" style="text-align: right; align-self: center;">
-            Yaris SD:
+            {{ item.key }}
           </ion-col>
           <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
-            100
+            {{ item.value }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
-            80
+            {{ currentPort.modelsCountDicc.collected[item.key] }}
           </ion-col>
           <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
-            20
-          </ion-col>
-        </ion-row>
-        <ion-row style="margin-top: 2%;">
-          <ion-col size="4" style="text-align: right; align-self: center;">
-            4Runner:
-          </ion-col>
-          <ion-col size="4" style="text-align: center; font-size: x-large; align-self: center;">
-            200
-          </ion-col>
-          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: green;">
-            120
-          </ion-col>
-          <ion-col size="2" style="text-align: center; font-size: medium; align-self: center; color: red;">
-            80
+            {{ item.value - currentPort.modelsCountDicc.collected[item.key] }}
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="currentPort.doneLaps">
       <ion-grid>
         <ion-row style="margin-top: 2%;">
           <ion-col size="5" style="align-self: center; font-size: large;">
             Total Vueltas:
           </ion-col>
           <ion-col size="7" style="text-align: center; font-size: large; align-self: center;">
-            25
+            {{ currentPort.doneLaps }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -317,7 +331,7 @@
                     vin
                   </ion-col>
                 </ion-row>
-                <ion-row class="info-row" *ngFor="let model of packingListExample" nowrap style="padding: 0;">
+                <ion-row class="info-row" *ngFor="let model of unitsList" nowrap style="padding: 0;">
                   <ion-col size="12" class="preview-col info-row" style="padding: 0;"  nowrap>
                     {{ model['vin'] }}
                   </ion-col>
@@ -331,7 +345,7 @@
                     {{ header }}
                   </ion-col>
                 </ion-row>
-                <ion-row class="info-row" *ngFor="let model of packingListExample" nowrap style="padding: 0;">
+                <ion-row class="info-row" *ngFor="let model of unitsList" nowrap style="padding: 0;">
                   <ion-col size="6" class="preview-col info-row" *ngFor="let header of packingListHeaders" no-padding nowrap>
                     {{ model[header] }}
                   </ion-col>
