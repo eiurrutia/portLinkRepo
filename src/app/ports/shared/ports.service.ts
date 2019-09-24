@@ -26,6 +26,11 @@ export class PortsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  getPort(id: string): Observable<any> {
+    const url = `${this.backUrl}/ports/${id}/`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   createPort(port: any): Observable<any> {
     const url = `${this.backUrl}/ports/`;
     return this.http.post<any>(url, port, this.httpOptions).catch(this.errorHandler);
