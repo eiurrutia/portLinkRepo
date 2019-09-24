@@ -19,6 +19,7 @@ import { AppRoutingPreloaderService } from './app-routing-preloader.service';
 import { PortsService } from './ports/shared/ports.service';
 import { UnitsService } from './units/shared/units.service';
 import { ImportersService } from './importers/shared/importers.service';
+import { DriversService } from './drivers/shared/drivers.service';
 import { Globals } from './globals';
 
 import { PortsPageModule } from './ports/ports.module';
@@ -49,6 +50,7 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     PortsService,
     UnitsService,
     ImportersService,
+    DriversService,
     Globals
   ],
 
