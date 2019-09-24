@@ -67,7 +67,7 @@ export class NewPortModalPage implements OnInit {
     const modal = await this.modalController.getTop();
     this.generatePortObjectToBackend();
     modal.dismiss();
-    this.navController.navigateRoot('user-menu/drivers/drivers-selection');
+    // this.navController.navigateRoot('user-menu/ports/drivers/drivers-selection');
   }
 
 
@@ -92,6 +92,7 @@ export class NewPortModalPage implements OnInit {
         console.log('Port creado on éxito');
         console.log(newPort);
         this.registerUnits(this.finalPacking, newPort);
+        this.navController.navigateRoot(`user-menu/ports/${newPort._id}/drivers/drivers-selection`);
       },
       error => {
         // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
@@ -132,7 +133,7 @@ export class NewPortModalPage implements OnInit {
   // We build object to create port in backend.
   generatePortObjectToBackend() {
     this.portObject['shipName'] = this.shipName;
-    this.portObject['arrivalDate'] = new Date().toLocaleDateString();
+    this.portObject['arrivalDate'] = Date.now(); // For now
     this.portObject['importer'] = this.importer._id;
     this.portObject['unitsInPacking'] = {};
     this.portObject['unitsInPacking']['totalQuantity'] = this.totalCount;
