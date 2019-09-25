@@ -32,6 +32,7 @@ export class DriversSelectionPage implements OnInit {
   nameThirdsDicc = {};
 
   portId: string;
+  currentPort: any;
 
   segment = 'drivers';
   firstMove = true;
@@ -40,6 +41,7 @@ export class DriversSelectionPage implements OnInit {
   activeThirdsCount = 0;
 
   portObjectToPatch = {};
+  estimatedLapsByDriver = 0;
 
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
@@ -49,9 +51,14 @@ export class DriversSelectionPage implements OnInit {
               private thirdsService: ThirdsService) { }
 
   ngOnInit() {
+    this.getBackInfo();
+  }
+
+  async getBackInfo() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getDrivers();
-    this.getThirds();
+    await this.getPort(this.portId);
+    await this.getDrivers();
+    await this.getThirds();
   }
 
   segmentChanged(ev: any) {
@@ -81,6 +88,7 @@ export class DriversSelectionPage implements OnInit {
     for (const value of Object.values(this.activeDriversDicc)) {
       if (value) {this.activeDriversCount += 1; }
     }
+    this.calculateEstimatedLapsByDriver();
   }
 
   countActiveThirds() {
@@ -88,6 +96,7 @@ export class DriversSelectionPage implements OnInit {
     for (const value of Object.values(this.accountantThirdsDicc)) {
       if (value) { this.activeThirdsCount += Number(value); }
     }
+    this.calculateEstimatedLapsByDriver();
   }
 
   changeNumber(third: string, num: number) {
@@ -230,6 +239,17 @@ export class DriversSelectionPage implements OnInit {
     return this.portObjectToPatch;
   }
 
+  getPort(portId: string) {
+    this.portsService.getPort(portId).subscribe(
+      port => {
+        this.currentPort = port;
+      },
+      error => {
+        console.log(`Error fetching current port`);
+      }
+    );
+  }
+
   patchPort(portObjectToPatch: any): void {
     this.portsService.associateDriversToPort(this.portId, portObjectToPatch).subscribe(
       portPatched => {
@@ -245,6 +265,15 @@ export class DriversSelectionPage implements OnInit {
   async addListOfDriversAndThirdsToPort() {
     await this.generateObjectToPatch();
     await this.patchPort(this.portObjectToPatch);
+  }
+
+  calculateEstimatedLapsByDriver() {
+    if (this.activeDriversCount + this.activeThirdsCount > 0) {
+      this.estimatedLapsByDriver = parseFloat((+this.currentPort['estimatedLaps'] /
+        (this.activeDriversCount + this.activeThirdsCount)).toFixed(1));
+    } else {
+      this.estimatedLapsByDriver = 0;
+    }
   }
 
 }
