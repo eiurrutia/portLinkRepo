@@ -44,8 +44,8 @@ export class NewPortModalPage implements OnInit {
   ngOnInit() {
     this.generatePreviewObjects();
     this.countPerSize();
-    this.estimatedLoad = +this.estimatedLoadString;
-    this.estimatedLaps = (this.totalCount / this.estimatedLoad).toFixed(1);
+    this.estimatedLoad = Number(this.estimatedLoadString);
+    this.estimatedLaps = parseFloat((this.totalCount / this.estimatedLoad).toFixed(1));
   }
 
   // Generate array with three elements to preview table.
