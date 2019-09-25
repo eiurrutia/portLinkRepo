@@ -88,7 +88,7 @@
         </ion-row>
       </ion-grid>
     </ion-item>
-    <ion-item>
+    <ion-item style="color: dimgray;">
       <ion-label>Cantidad de unidades</ion-label> {{ packingQuantity }}
     </ion-item>
     <ion-item class="models-items" *ngFor="let model of differentsModelsCount | keyvalue">
@@ -106,6 +106,35 @@
             <ion-select-option value="grande">Grande</ion-select-option>
             <ion-select-option value="extraGrande">Extra Grande</ion-select-option>
           </ion-select>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid no-padding>
+        <ion-row no-padding>
+          <ion-col size="8" no-padding class="align-text-middle">
+            <ion-label>Unidades por carga: </ion-label>
+          </ion-col>
+          <ion-col size="4" no-padding>
+            <!-- <ion-input type="number" value="8" [(ngModel)]="estimatedLoad"></ion-input> -->
+            <ion-select class="estimated-load-select" [(ngModel)]="estimatedLoad"
+              okText="Confirmar" cancelText="Cancelar">
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+              <ion-select-option value="4">4</ion-select-option>
+              <ion-select-option value="5">5</ion-select-option>
+              <ion-select-option value="6">6</ion-select-option>
+              <ion-select-option value="7">7</ion-select-option>
+              <ion-select-option selected="true" value="8">8</ion-select-option>
+              <ion-select-option value="9">9</ion-select-option>
+              <ion-select-option value="10">10</ion-select-option>
+              <ion-select-option value="11">11</ion-select-option>
+              <ion-select-option value="12">12</ion-select-option>
+              <ion-select-option value="13">13</ion-select-option>
+              <ion-select-option value="14">14</ion-select-option>
+              <ion-select-option value="15">15</ion-select-option>
+            </ion-select>
+          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>

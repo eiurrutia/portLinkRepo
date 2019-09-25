@@ -42,6 +42,7 @@ export class PortsNewPage implements OnInit {
   shipName: string;
   selectedImporter: Importer;
   importersList: Importer[];
+  estimatedLoad = '8';
   vinExample: string;
   editDigitsMode = false;
   editShipNameMode = false;
@@ -356,6 +357,7 @@ export class PortsNewPage implements OnInit {
         componentProps: {
           shipName: this.shipName.concat(' ' + this.today),
           importer: this.selectedImporter,
+          estimatedLoad: this.estimatedLoad,
           finalPacking: this.finalPackingDicc,
           modelsCount: this.differentsModelsCount,
           modelsSize: this.differentsModelsSizes
