@@ -18,6 +18,7 @@ export class NewPortModalPage implements OnInit {
   finalPacking;
   modelsCount;
   modelsSize;
+  estimatedLoad;
   importer;
   shipName;
   previewObjects = [];
@@ -135,6 +136,7 @@ export class NewPortModalPage implements OnInit {
     this.portObject['shipName'] = this.shipName;
     this.portObject['arrivalDate'] = Date.now(); // For now
     this.portObject['importer'] = this.importer._id;
+    this.portObject['estimatedLoad'] = this.estimatedLoad;
     this.portObject['unitsInPacking'] = {};
     this.portObject['unitsInPacking']['totalQuantity'] = this.totalCount;
     this.portObject['unitsInPacking']['smallQuantity'] = this.countPerSizeDicc['pequeno'];
