@@ -357,7 +357,7 @@ export class PortsNewPage implements OnInit {
         componentProps: {
           shipName: this.shipName.concat(' ' + this.today),
           importer: this.selectedImporter,
-          estimatedLoad: this.estimatedLoad,
+          estimatedLoadString: this.estimatedLoad,
           finalPacking: this.finalPackingDicc,
           modelsCount: this.differentsModelsCount,
           modelsSize: this.differentsModelsSizes
