@@ -119,7 +119,6 @@ export class DriversSelectionPage implements OnInit {
 
   async presentAlertConfirm() {
     this.generateObjectToPatch();
-    console.log(this.portObjectToPatch);
     const alert = await this.alertController.create({
       header: 'Continuar',
       message: 'Quieres crear realizar este puerto con ' + (this.activeDriversCount +
@@ -234,11 +233,11 @@ export class DriversSelectionPage implements OnInit {
   patchPort(portObjectToPatch: any): void {
     this.portsService.associateDriversToPort(this.portId, portObjectToPatch).subscribe(
       portPatched => {
-        console.log('port actualizado con lista de conductores');
+        console.log('Port patched with drivers and thirds list.');
         console.log(portPatched);
       },
       error => {
-        console.log(`Error patching port`);
+        console.log(`Error patching port.`);
       }
     );
   }
