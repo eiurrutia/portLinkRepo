@@ -145,7 +145,7 @@ export class DriversSelectionPage implements OnInit {
           handler: () => {
             this.addListOfDriversAndThirdsToPort();
             this.sendCount.emit(true);
-            // this.navController.navigateRoot('/user-menu/ports');
+            this.navController.navigateRoot('/user-menu/ports');
             console.log('Confirm Okay');
           }
         }
