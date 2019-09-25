@@ -51,21 +51,21 @@
         <ion-row *ngFor="let size of headerSizeDicc">
           <ion-col size="1">
           </ion-col>
-          <ion-col *ngIf="size=='pequeno'" size="6">
+          <ion-col *ngIf="size=='pequeno' && countPerSizeDicc[size] > 0" size="6">
             Pequeños:
           </ion-col>
-          <ion-col *ngIf="size=='mediano'" size="6">
+          <ion-col *ngIf="size=='mediano' && countPerSizeDicc[size] > 0" size="6">
             Medianos:
           </ion-col>
-          <ion-col *ngIf="size=='grande'" size="6">
+          <ion-col *ngIf="size=='grande' && countPerSizeDicc[size] > 0" size="6">
             Grandes:
           </ion-col>
-          <ion-col *ngIf="size=='extraGrande'" size="6">
+          <ion-col *ngIf="size=='extraGrande' && countPerSizeDicc[size] > 0" size="6">
             Extra Grandes:
           </ion-col>
           <ion-col size="1">
           </ion-col>
-          <ion-col style="text-align: right;" size="3">
+          <ion-col style="text-align: right;" *ngIf="countPerSizeDicc[size] > 0" size="3">
             {{ countPerSizeDicc[size] }}
           </ion-col>
           <ion-col size="1">
@@ -81,6 +81,18 @@
           </ion-col>
           <ion-col class="align-text-middle" size="7">
             {{ estimatedLoad }} unidades.
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">
+            Total Vueltas Estimadas:
+          </ion-col>
+          <ion-col class="align-text-middle" size="7">
+            {{ estimatedLaps }} vueltas.
           </ion-col>
         </ion-row>
       </ion-grid>

@@ -18,7 +18,7 @@ export class NewPortModalPage implements OnInit {
   finalPacking;
   modelsCount;
   modelsSize;
-  estimatedLoad;
+  estimatedLoadString;
   importer;
   shipName;
   previewObjects = [];
@@ -28,6 +28,8 @@ export class NewPortModalPage implements OnInit {
 
 
   totalCount: number;
+  estimatedLoad: number;
+  estimatedLaps: number;
   countPerSizeDicc = {};
   headerSizeDicc: any;
 
@@ -42,6 +44,8 @@ export class NewPortModalPage implements OnInit {
   ngOnInit() {
     this.generatePreviewObjects();
     this.countPerSize();
+    this.estimatedLoad = +this.estimatedLoadString;
+    this.estimatedLaps = (this.totalCount / this.estimatedLoad).toFixed(1);
   }
 
   // Generate array with three elements to preview table.
@@ -136,7 +140,8 @@ export class NewPortModalPage implements OnInit {
     this.portObject['shipName'] = this.shipName;
     this.portObject['arrivalDate'] = Date.now(); // For now
     this.portObject['importer'] = this.importer._id;
-    this.portObject['estimatedLoad'] = this.estimatedLoad;
+    this.portObject['estimatedLoad'] = Number(this.estimatedLoad);
+    this.portObject['estimatedLaps'] = Number(this.estimatedLaps);
     this.portObject['unitsInPacking'] = {};
     this.portObject['unitsInPacking']['totalQuantity'] = this.totalCount;
     this.portObject['unitsInPacking']['smallQuantity'] = this.countPerSizeDicc['pequeno'];
