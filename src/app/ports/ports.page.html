@@ -100,19 +100,19 @@
                         </ion-col>
                         <ion-col size="6" no-padding>
                           <div *ngIf="item.unitsInPacking.smallQuantity!=0">
-                            -Pequeñas: <span style="color: red;"> {{ item?.unitsInPacking?.smallQuantity - item?.collectedUnits?.smallQuantity }} </span>
+                            -Pequeñas:   <span style="color: red;"> {{ item?.unitsInPacking?.smallQuantity - item?.collectedUnits?.smallQuantity }} </span>
                             ({{ item?.unitsInPacking?.smallQuantity }})<br>
                           </div>
                           <div *ngIf="item.unitsInPacking.mediumQuantity!=0">
-                            -Medianas: <span style="color: red;"> {{ item?.unitsInPacking?.mediumQuantity - item?.collectedUnits?.mediumQuantity }} </span>
+                            -Medianas:   <span style="color: red;"> {{ item?.unitsInPacking?.mediumQuantity - item?.collectedUnits?.mediumQuantity }} </span>
                               ({{ item?.unitsInPacking?.mediumQuantity }})<br>
                           </div>
                           <div *ngIf="item.unitsInPacking.bigQuantity!=0">
-                            -Grandes:  <span style="color: red;"> {{ item?.unitsInPacking?.bigQuantity- item?.collectedUnits?.bigQuantity }} </span>
+                            -Grandes:    <span style="color: red;"> {{ item?.unitsInPacking?.bigQuantity- item?.collectedUnits?.bigQuantity }} </span>
                               ({{ item?.unitsInPacking?.bigQuantity }})<br>
                           </div>
                           <div *ngIf="item.unitsInPacking.extraQuantity!=0">
-                            -Extra G.: <span style="color: red;">{{ item?.unitsInPacking?.extraQuantity- item?.collectedUnits?.extraQuantity }} </span>
+                            -Extra G.:   <span style="color: red;">{{ item?.unitsInPacking?.extraQuantity- item?.collectedUnits?.extraQuantity }} </span>
                               ({{ item?.unitsInPacking?.extraQuantity }})<br>
                           </div>
                         </ion-col>
@@ -130,14 +130,29 @@
                           <div *ngFor="let model of item.modelsCountDicc.totalToCollect | keyvalue">-{{ model.key }}: <span style="color: red;">{{ model.value - item.modelsCountDicc.collected[model.key] }}</span> ({{ model.value }})</div>
                         </ion-col>
                       </ion-row>
-                      <ion-row *ngIf="item.consideredDrivers" class="rows-details-items">
-                        <ion-col size="6" no-padding>
-                            Conductores considerados: 5<br>
-                            Daños: {{ item.damages }}<br>
+                      <ion-row class="rows-details-items" style="padding-top: 1%;">
+                        <ion-col style="text-align: center;">
+                          <b>---------------------------------</b>
                         </ion-col>
-                        <ion-col *ngIf="item.estimatedLaps" size="6" no-padding>
-                            Vueltas Estimadas: 65<br>
-                            Vueltas Realizadas: 34<br>
+                      </ion-row>
+                      <ion-row *ngIf="item.estimatedTrucks" class="rows-details-items">
+                        <ion-col  style="text-align: center;" no-padding>
+                         Camiones considerados:   <span style="font-weight: 700;">{{ item?.estimatedTrucks }}</span><br>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items">
+                        <ion-col style="text-align: center;" no-padding>
+                          Daños:   <span style="font-weight: 700;">{{ item?.damages }}</span><br>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row *ngIf="item.estimatedLaps" class="rows-details-items">
+                        <ion-col style="text-align: center;" no-padding>
+                            Vueltas Estimadas:   <span style="color: red; font-weight: 700;">{{ item?.estimatedLaps }}</span><br>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row class="rows-details-items">
+                        <ion-col style="text-align: center;" no-padding>
+                            Vueltas Realizadas:   <span style="color: green; font-weight: 700;">{{ item?.doneLaps }}</span><br>
                         </ion-col>
                       </ion-row>
                       <ion-row>
