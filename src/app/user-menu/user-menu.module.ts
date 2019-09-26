@@ -12,9 +12,6 @@ import { PortsNewPage } from '../ports/ports-new/ports-new.page';
 
 import { AppRoutingPreloaderService } from '../app-routing-preloader.service';
 
-import { PortsPageModule } from '../ports/ports.module';
-import { UserProfilePageModule } from '../user-profile/user-profile.module';
-import { DriversPageModule } from '../drivers/drivers.module';
 
 const routes: Routes = [
   {
@@ -28,10 +25,6 @@ const routes: Routes = [
       {
         path: 'ports',
         loadChildren: '../ports/ports.module#PortsPageModule'
-      },
-      {
-        path: 'drivers',
-        loadChildren: '../drivers/drivers.module#DriversPageModule'
       }
     ]
   }
@@ -43,9 +36,6 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    PortsPageModule,
-    DriversPageModule,
-    UserProfilePageModule
   ],
   declarations: [
     UserMenuPage
