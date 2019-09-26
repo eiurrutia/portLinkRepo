@@ -26,6 +26,16 @@ export class PortsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  getActivePorts(): Observable<any> {
+    const url = `${this.backUrl}/ports?finished=false`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
+  getRecentPorts(): Observable<any> {
+    const url = `${this.backUrl}/ports?finished=true`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   getPort(id: string): Observable<any> {
     const url = `${this.backUrl}/ports/${id}/`;
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
