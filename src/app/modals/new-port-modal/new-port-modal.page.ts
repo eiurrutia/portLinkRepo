@@ -97,7 +97,7 @@ export class NewPortModalPage implements OnInit {
         console.log('Port creado on éxito');
         console.log(newPort);
         this.registerUnits(this.finalPacking, newPort);
-        this.navController.navigateRoot(`user-menu/ports/${newPort._id}/drivers/drivers-selection`);
+        this.navController.navigateRoot(`user-menu/ports/new-port/${newPort._id}/drivers/drivers-selection`);
       },
       error => {
         // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
