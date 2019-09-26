@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { NewPortModalPageModule } from '../modals/new-port-modal/new-port-modal.module';
-import { DriversPageModule } from '../drivers/drivers.module';
 
 import { PortsPage } from './ports.page';
 import { PortsNewPage } from './ports-new/ports-new.page';
@@ -16,7 +15,7 @@ import { NewPortModalPage } from '../modals/new-port-modal/new-port-modal.page';
 const routes: Routes = [
   {
     path: '',
-    component: PortsPage
+    component: PortsPage,
   },
   {
     path: 'new-port',
@@ -29,8 +28,8 @@ const routes: Routes = [
     data: {preload: true}
   },
   {
-    path: ':id/drivers',
-    loadChildren: '../drivers/drivers.module#DriversPageModule'
+     path: 'new-port/:id/drivers',
+     loadChildren: '../drivers/drivers.module#DriversPageModule'
   }
 ];
 
@@ -40,8 +39,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    NewPortModalPageModule,
-    DriversPageModule
+    NewPortModalPageModule
   ],
   declarations: [
     PortsPage,
