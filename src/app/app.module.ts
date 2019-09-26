@@ -23,7 +23,6 @@ import { DriversService } from './drivers/shared/drivers.service';
 import { ThirdsService } from './thirds/shared/thirds.service';
 import { Globals } from './globals';
 
-import { PortsPageModule } from './ports/ports.module';
 import { UserProfilePageModule } from './user-profile/user-profile.module';
 
 
@@ -35,7 +34,6 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     ReactiveFormsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    PortsPageModule,
     UserProfilePageModule,
     HttpClientModule],
 
