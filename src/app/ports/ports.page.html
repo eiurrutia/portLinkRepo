@@ -39,7 +39,7 @@
                       <ion-icon class="increase-icon" style="color: #17ff0f; padding-top: 1%;" name="wifi"></ion-icon>
                     </ion-col>
                     <ion-col size="10" style="padding-left: 0;">
-                      <ion-label style="padding-left: 10%;"> Activos ({{ portsList?.length }}): </ion-label>
+                      <ion-label style="padding-left: 10%;"> Activos ({{ activePortsList?.length }}): </ion-label>
                       <ion-icon *ngIf="activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropup"></ion-icon>
                       <ion-icon *ngIf="!activeItemsList" style="margin-left: 5%; margin-top: 5%;" name="arrow-dropdown"></ion-icon>
                     </ion-col>
@@ -50,7 +50,7 @@
               <!-- *ngFor Item -->
               <ion-row *ngIf="activeItemsList">
                 <ion-list style="width: 100%; border-radius: 40px;">
-                  <ion-item  *ngFor="let item of portsList" class="item item-text-wrap">
+                  <ion-item  *ngFor="let item of activePortsList" class="item item-text-wrap">
                     <ion-grid *ngIf="!item.finished">
                     <ion-row style="width: 100%;" (click)="item.showDetail = !item.showDetail">
                       <ion-col size="8" style="padding-bottom: 0px;">
