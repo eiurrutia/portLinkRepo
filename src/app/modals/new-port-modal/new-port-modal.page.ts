@@ -83,8 +83,28 @@ export class NewPortModalPage implements OnInit {
         console.log('unit creada');
       },
       error => {
-        // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
         this.message = {message: 'Error, la unidad ya existe', status: 400};
+
+        // Error when unit already exist in other port. So we are going to try to patch the newPort id to that unit;
+        if (error === 409) {
+          console.log('Existen unidades de este packing asignadas a otro puerto.')
+          this.updatePortToUnit(unit.port, unit.vin)
+        }
+      }
+    );
+  }
+
+
+  //To update unit port if the unit is already created.
+  updatePortToUnit(portId: string, unitVin: string) {
+    const unitObj = {'port': portId};
+    this.unitsService.updateUnit(unitVin, unitObj).subscribe(
+      unitUpdated => {
+        console.log('Se ha actualizado correctamente el puerto de la unidad');
+        console.log(unitUpdated);
+      },
+      error => {
+        console.log('Error actualizando el puerto de la unidad.')
       }
     );
   }

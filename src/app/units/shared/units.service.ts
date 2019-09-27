@@ -31,6 +31,10 @@ export class UnitsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  updateUnit(unitVin: string, unitObj: any): Observable<any> {
+    const url = `${this.backUrl}/units?vin=${unitVin}`;
+    return this.http.patch<any>(url, unitObj, this.httpOptions).catch(this.errorHandler);
+  }
 
   createUnit(unit: Unit): Observable<Unit> {
     const url = `${this.backUrl}/units/`;
