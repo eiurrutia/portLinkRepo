@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
 import { PortsService } from './shared/ports.service';
+import { UnitsService } from '../units/shared/units.service';
 
 import { Port } from './port.model';
 
@@ -27,7 +28,8 @@ export class PortsPage implements OnInit {
   }
 
   constructor(public alertController: AlertController,
-              private portsService: PortsService) { }
+              private portsService: PortsService,
+              private unitsService: UnitsService) { }
 
   ngOnInit() {
     this.getActivePorts();
@@ -54,7 +56,7 @@ export class PortsPage implements OnInit {
         console.log(this.activePortsList);
       },
       error => {
-        console.log(`Error fetching active ports`);
+        console.log(`Error fetching active ports: ${error}`);
       }
     );
   }
@@ -66,7 +68,7 @@ export class PortsPage implements OnInit {
         console.log(this.recentPortsList);
       },
       error => {
-        console.log(`Error fetching recent ports`);
+        console.log(`Error fetching recent ports: ${error}`);
       }
     );
   }
@@ -82,7 +84,7 @@ export class PortsPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+            console.log('Confirm Cancel:', blah);
           }
         }, {
           text: 'Aceptar',
@@ -94,6 +96,62 @@ export class PortsPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async presentAlertDelete(port: any) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar Puerto',
+      message: `Quieres eliminar el puerto ${port.shipName} ?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel:', blah);
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.deletePort(port);
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  deletePort(port: any) {
+    // First we delete the units associated to this port.
+    this.unitsService.getUnitsByPort(port._id).subscribe(
+      unitsList => {
+        console.log(unitsList);
+        unitsList.data.map( unit => { this.unitsService.deleteUnit(unit._id).subscribe(
+          unitDeleted => {
+            console.log('Unit deleted successfully: ', unitDeleted._id);
+          },
+          error => {
+            console.log('Error deleting a unit: ', error);
+          }
+        ); });
+        console.log('All port units deleted');
+        // And then we delete the port.
+        this.portsService.deletePort(port._id).subscribe(
+          deletedPort => {
+            console.log('Port deleted successfully: ', deletedPort._id);
+            // And then we update the active ports list.
+            this.getActivePorts();
+          },
+          error => {
+            console.log('Error deleting port: ', error);
+          }
+        );
+      },
+      error => {
+        console.log('Error getting units to delete by port: ', error);
+      }
+    );
   }
 
 
