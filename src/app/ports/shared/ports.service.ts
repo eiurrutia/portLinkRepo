@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
-import { Port } from '../port.model';
 import { Globals } from '../../globals';
 
 
@@ -49,6 +48,11 @@ export class PortsService {
   associateDriversToPort(id: string, port: any): Observable<any> {
     const url = `${this.backUrl}/ports/${id}/`;
     return this.http.patch<any>(url, port, this.httpOptions).catch(this.errorHandler);
+  }
+
+  deletePort(portId: string): Observable<any> {
+    const url = `${this.backUrl}/ports/${portId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
   errorHandler(error: HttpErrorResponse) {
