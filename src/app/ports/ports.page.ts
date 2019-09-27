@@ -21,6 +21,8 @@ export class PortsPage implements OnInit {
   activePortsList: Port[];
   recentPortsList: Port[];
 
+  message: any;
+
   @Output() sendCount: EventEmitter <boolean> = new EventEmitter<boolean>();
 
   public sendRecord() {
@@ -129,10 +131,10 @@ export class PortsPage implements OnInit {
         console.log(unitsList);
         unitsList.data.map( unit => { this.unitsService.deleteUnit(unit._id).subscribe(
           unitDeleted => {
-            console.log('Unit deleted successfully: ', unitDeleted._id);
+            this.message = 'Unit deleted successfully: ' + unitDeleted._id;
           },
           error => {
-            console.log('Error deleting a unit: ', error);
+            this.message = 'Error deleting a unit: ' + error;
           }
         ); });
         console.log('All port units deleted');
