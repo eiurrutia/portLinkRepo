@@ -17,7 +17,7 @@
     </ion-item>
   <ion-list *ngIf=searchBarActive class="search-list">
     <ion-item *ngFor="let driver of driversFiltered" (click)="selectItem(driver)">
-      {{ driver }}
+      {{ driver.nick }}
     </ion-item>
   </ion-list>
   <ion-list *ngIf=correctSlectedDriver class="search-list">

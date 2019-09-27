@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 import { PortsService } from '../shared/ports.service';
+import { DriversService } from '../../drivers/shared/drivers.service';
+import { ThirdsService } from '../../thirds/shared/thirds.service';
 import { UnitsService } from '../../units/shared/units.service';
 
-import { Port } from '../port.model';
-import { Unit } from '../../units/unit.model';
 
 @Component({
   selector: 'app-ports-action',
@@ -21,23 +21,14 @@ export class PortsActionPage implements OnInit {
 
   correctSlectedDriver = false;
   lastSelectedDriver: string;
+  lastSelectedDriverObject: any;
 
   selectedDriver: string;
+  selectedDriverObject: any;
   searchBarActive = false;
 
-  activeDriversDicc = ['Manuel Sáez',
-                       'Juan Marchant',
-                       'Robin Pinilla',
-                       'Jorge Contreras',
-                       'Gastón Cataldo',
-                       'Victor Moreno',
-                       'Jorge Osorio',
-                       'Luis González',
-                       'Cristian Espinoza',
-                       'Moises Sepulveda',
-                       'Miguel Vargas',
-                       'Francisco Bravo',
-                       'Miguel Bravo'];
+  activeDriversAndThirdsList = [];
+  namesArray = [];
   driversFiltered = [];
 
   buttonTabActiveDicc = {
@@ -457,14 +448,14 @@ export class PortsActionPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private portsService: PortsService,
+              private driversService: DriversService,
+              private thirdsService: ThirdsService,
               private unitsService: UnitsService) { }
 
   ngOnInit() {
-    this.driversFiltered = this.activeDriversDicc;
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
     this.getPort(this.portId);
-
-
+    this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
   buildPackingListHeaders() {
@@ -476,20 +467,25 @@ export class PortsActionPage implements OnInit {
     console.log(this.packingListHeaders);
   }
 
-  selectItem(driver: string) {
-    this.selectedDriver = driver;
+  selectItem(driver: any) {
+    this.selectedDriver = driver.nick;
+    this.selectedDriverObject = driver;
     this.searchBarActive = false;
   }
 
-  filterWithSearch(toSearch: string) {
-    if (toSearch === '') {this.driversFiltered = this.activeDriversDicc;
-    } else { this.driversFiltered = this.activeDriversDicc.filter((driver) => {
-      return driver.toLocaleLowerCase().includes(toSearch.toLocaleLowerCase());
+  filterWithSearch(toSearch: any) {
+    if (!toSearch) {this.driversFiltered = this.activeDriversAndThirdsList;
+    } else { this.driversFiltered = this.activeDriversAndThirdsList.filter((driver) => {
+      return driver.nick.toLocaleLowerCase().includes(toSearch.toLocaleLowerCase());
       });
     }
-    if (this.activeDriversDicc.includes(this.selectedDriver)) {
+
+    if (this.namesArray.includes(this.selectedDriver)) {
       this.correctSlectedDriver = true;
-      if (this.lastSelectedDriver !== this.selectedDriver) {
+      if (!this.lastSelectedDriverObject) {
+        this.lastSelectedDriver = this.selectedDriver;
+        this.lastSelectedDriverObject = this.selectedDriverObject;
+      } else if (this.lastSelectedDriver !== this.selectedDriver) {
         this.changeDriver();
       }
     } else { this.correctSlectedDriver = false; }
@@ -504,14 +500,25 @@ export class PortsActionPage implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => { this.selectedDriver = this.lastSelectedDriver; }
+          handler: () => {
+            this.selectedDriver = this.lastSelectedDriver;
+            this.selectedDriverObject = this.lastSelectedDriverObject;
+          }
         }, {
           text: 'Aceptar',
-          handler: () => { this.lastSelectedDriver = this.selectedDriver; }
+          handler: () => {
+            this.lastSelectedDriver = this.selectedDriver;
+            this.lastSelectedDriverObject = this.selectedDriverObject;
+          }
         }
       ]
     });
     await alert.present();
+  }
+
+
+  getDriverInfo() {
+
   }
 
   changeTabButton(nameButton: string) {
@@ -542,12 +549,11 @@ export class PortsActionPage implements OnInit {
     this.portsService.getPort(portId).subscribe(
       currentPort => {
         this.currentPort = currentPort;
-        console.log('este es el current port');
-        console.log(currentPort);
         this.getCurrentPortUnits(currentPort._id);
+        this.generateDriversAndThirdsArray(currentPort);
       },
       error => {
-        console.log(`Error fetching port`);
+        console.log(`Error fetching port: ${error}.`);
       }
     );
   }
@@ -557,13 +563,48 @@ export class PortsActionPage implements OnInit {
       unitsList => {
         this.unitsList = unitsList.data;
         this.buildPackingListHeaders();
-        console.log('este es el units list');
-        console.log(this.unitsList);
       },
       error => {
-        console.log(`Error fetching units by port`);
+        console.log(`Error fetching units by port: ${error}.`);
       }
     );
+  }
+
+  generateDriversAndThirdsArray(currentPort: any) {
+    // We build drivers array
+    currentPort.consideredDrivers.map( driver => {
+      this.driversService.getDriver(driver.driverId).subscribe(
+        backDriver => {
+          this.activeDriversAndThirdsList.push({'_id': backDriver._id, 'nick': backDriver.name, 'third': false});
+          this.namesArray.push(backDriver.name);
+        },
+        error => {
+          console.log('Error getting driver: ', error);
+        }
+      );
+    });
+
+    // We build thirds array
+    currentPort.consideredThirds.map( third => {
+      this.thirdsService.getThird(third.thirdId).subscribe(
+        backThird => {
+          if (third.nickName) {
+            this.activeDriversAndThirdsList.push({'_id': backThird._id,
+                                                  'nick': backThird.name + ' - ' + third.nickName,
+                                                  'third': true});
+            this.namesArray.push(backThird.name + ' - ' + third.nickName);
+          } else {
+            this.activeDriversAndThirdsList.push({'_id': backThird._id,
+                                                  'nick': backThird.name,
+                                                  'third': true});
+            this.namesArray.push(backThird.name);
+          }
+        },
+        error => {
+          console.log('Error getting third: ', error);
+        }
+      );
+    });
   }
 
 
