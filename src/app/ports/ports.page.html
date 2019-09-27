@@ -162,7 +162,9 @@
                         <ion-col size="6" no-padding>
                           <ion-button class="continue-button"
                             [routerLink]="['/user-menu/ports/action/', item._id]">
-                            <span style="font-size: smaller;">CONTINUAR</span><ion-icon style="color: white;" md="md-arrow-forward"></ion-icon>
+                            <span *ngIf="item.collectedUnits.totalQuantity > 0" style="font-size: smaller;">CONTINUAR</span>
+                            <span *ngIf="item.collectedUnits.totalQuantity == 0" style="font-size: smaller;">COMENZAR</span>
+                            <ion-icon style="color: white;" md="md-arrow-forward"></ion-icon>
                           </ion-button>
                         </ion-col>
                       </ion-row>
