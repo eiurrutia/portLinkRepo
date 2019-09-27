@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
-import { PortsNewPage } from '../ports/ports-new/ports-new.page';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { Router, NavigationEnd } from '@angular/router';
+
+import { PortsService } from '../ports/shared/ports.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -12,10 +13,9 @@ export class UserMenuPage implements OnInit {
   menu_title = 'Perfil';
   selectedPath = '';
 
-  constructor(private menu: MenuController,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private navController: NavController) {
+  constructor(private portsService: PortsService,
+              private menu: MenuController,
+              private router: Router) {
                 router.events.subscribe((val) => {
                   // see also
                   if (val instanceof NavigationEnd) {
@@ -45,6 +45,7 @@ export class UserMenuPage implements OnInit {
   setTitle(url: string) {
     if (url.includes('ports')) {
       if (url.includes('new')) { this.menu_title = 'Nuevo Puerto';
+    } else if (url.includes('action')) { this.getAndSetPortName(url);
       } else {this.menu_title = 'Puertos'; }
     } else if (url.includes('drivers')) {
       this.menu_title = 'Conductores';
@@ -53,19 +54,23 @@ export class UserMenuPage implements OnInit {
     }
   }
 
-  // customFunc(data) {
-    // if (data) {this.activateNew(); }
-  //  console.log('se llamo a data y se imprime', data);
-  //  if (data === 'perro') {
-  //    this.activatePorts();
-  //    console.log('cacac');
-  //  }
-  // }
+  getAndSetPortName(url: string) {
+    // Get port id from url. Always is the element after the word 'action'.
+    const portId = url.split('/')[url.split('/').indexOf('action') +  1];
+    this.portsService.getPort(portId).subscribe(
+      port => {
+        this.menu_title = port.shipName;
+      },
+      error => {
+        console.log('Error getting the port: ', error);
+        this.menu_title = 'Registro de Vins';
+      }
+    );
+  }
 
 
   ngOnInit() {
-    // console.log(this.activatedRoute.snapshot.pathFromRoot);
-    // console.log(this.navController.router.routerState.snapshot.url);
+
   }
 
 }
