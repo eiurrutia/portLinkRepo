@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 
 import { PortsService } from '../../ports/shared/ports.service';
 import { UnitsService } from '../../units/shared/units.service';
 
-import { Port } from '../../ports/port.model';
-import { Unit } from '../../units/unit.model';
+
 
 @Component({
   selector: 'app-new-port-modal',
@@ -81,22 +79,21 @@ export class NewPortModalPage implements OnInit {
   registerUnit(unit: any) {
     this.unitsService.createUnit(unit).subscribe(
       newUnit => {
-        console.log('unit creada');
+        console.log('Unit creada: ', newUnit._id);
       },
       error => {
         this.message = {message: 'Error, la unidad ya existe', status: 400};
-
         // Error when unit already exist in other port. So we are going to try to patch the newPort id to that unit;
         if (error === 409) {
-          console.log('Existen unidades de este packing asignadas a otro puerto.')
-          this.updatePortToUnit(unit.port, unit.vin)
+          console.log('Existen unidades de este packing asignadas a otro puerto.');
+          this.updatePortToUnit(unit.port, unit.vin);
         }
       }
     );
   }
 
 
-  //To update unit port if the unit is already created.
+  // To update unit port if the unit is already created.
   updatePortToUnit(portId: string, unitVin: string) {
     const unitObj = {'port': portId};
     this.unitsService.updateUnit(unitVin, unitObj).subscribe(
@@ -105,7 +102,7 @@ export class NewPortModalPage implements OnInit {
         console.log(unitUpdated);
       },
       error => {
-        console.log('Error actualizando el puerto de la unidad.')
+        console.log('Error actualizando el puerto de la unidad: ', error);
       }
     );
   }
@@ -121,8 +118,7 @@ export class NewPortModalPage implements OnInit {
         this.navController.navigateRoot(`user-menu/ports/new-port/${newPort._id}/drivers/drivers-selection`);
       },
       error => {
-        // console.log(`Error registering ${driver.firstName} ${driver.lastName}: ${error}`);
-        this.message = {message: 'Error, el puerto ya existe', status: 400};
+        console.log(`Error registering port: ${error}`);
       }
     );
   }
