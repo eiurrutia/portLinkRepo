@@ -79,7 +79,7 @@ export class NewPortModalPage implements OnInit {
   registerUnit(unit: any) {
     this.unitsService.createUnit(unit).subscribe(
       newUnit => {
-        console.log('Unit creada: ', newUnit._id);
+        this.message = 'Unit creada: ' + newUnit._id;
       },
       error => {
         this.message = {message: 'Error, la unidad ya existe', status: 400};
@@ -98,8 +98,7 @@ export class NewPortModalPage implements OnInit {
     const unitObj = {'port': portId};
     this.unitsService.updateUnit(unitVin, unitObj).subscribe(
       unitUpdated => {
-        console.log('Se ha actualizado correctamente el puerto de la unidad');
-        console.log(unitUpdated);
+        this.message = 'Se ha actualizado correctamente el puerto de la unidad: ' + unitUpdated._id;
       },
       error => {
         console.log('Error actualizando el puerto de la unidad: ', error);
@@ -125,7 +124,7 @@ export class NewPortModalPage implements OnInit {
 
   // We build unit's object to send to backend.
   async registerUnits(units: any, port: any) {
-    await Object.keys(units).map((key, index) => {
+    await Object.keys(units).map( key => {
       const backUnitModel = {
         'model': units[key]['modelo'],
         'size': units[key]['tamaño'],
