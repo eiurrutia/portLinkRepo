@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ToastController, ModalController, AlertController } from '@ionic/angular';
 import * as XLSX from 'ts-xlsx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
@@ -56,7 +56,6 @@ export class PortsNewPage implements OnInit {
   constructor(private fileChooser: FileChooser,
               private filePath: FilePath,
               private fileOpener: FileOpener,
-              private fileee: File,
               private toastController: ToastController,
               private modalController: ModalController,
               private alertController: AlertController,
@@ -72,7 +71,7 @@ export class PortsNewPage implements OnInit {
       this.filePath.resolveNativePath(file).then(resolvedFilePath => {
         this.stringFile = file;
         this.fileOpener.open(resolvedFilePath, 'application/xlsx').then(value => {
-          alert('It worked');
+          alert('It worked: ');
         }).catch(err => {
           alert(JSON.stringify(err));
         });
@@ -360,7 +359,8 @@ export class PortsNewPage implements OnInit {
           estimatedLoadString: this.estimatedLoad,
           finalPacking: this.finalPackingDicc,
           modelsCount: this.differentsModelsCount,
-          modelsSize: this.differentsModelsSizes
+          modelsSize: this.differentsModelsSizes,
+          digitsToConsider: this.digitsToConsider
         }
       });
       modal.present();
@@ -374,7 +374,7 @@ export class PortsNewPage implements OnInit {
         console.log(this.importersList);
       },
       error => {
-        console.log(`Error fetching importers`);
+        console.log(`Error fetching importers: ${error}.`);
       }
     );
   }
