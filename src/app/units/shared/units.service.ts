@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -27,7 +27,7 @@ export class UnitsService {
 
 
   getUnitsByPort(portId: string): Observable<any> {
-    const url = `${this.backUrl}/units?port=${portId}`;
+    const url = `${this.backUrl}/units?$limit=10000&port=${portId}`;
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
@@ -39,6 +39,11 @@ export class UnitsService {
   createUnit(unit: Unit): Observable<Unit> {
     const url = `${this.backUrl}/units/`;
     return this.http.post<Unit>(url, unit, this.httpOptions).catch(this.errorHandler);
+  }
+
+  deleteUnit(unitId: string): Observable<any> {
+    const url = `${this.backUrl}/units/${unitId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
   errorHandler(error: HttpErrorResponse) {
