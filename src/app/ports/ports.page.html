@@ -208,12 +208,12 @@
                       </ion-col>
                     </ion-row>
                     <ion-row>
-                      <ion-col style="color: #808080cf; font-size: small; padding-top: 0px;">
-                        {{ item.importer.name }}
+                      <ion-col size= "8" style="color: #808080cf; font-size: small; padding-top: 0px;">
+                        {{ item?.importer?.name }}
                       </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-progress-bar color="primary" value="{{ item.collectedUnits.totalQuantity/item.unitsInPacking.totalQuantity }}"></ion-progress-bar>
+                      <ion-col size="4" style="text-align: right; color:green; font-weight: 700;">
+                        {{ item?.collectedUnits?.totalQuantity }}
+                      </ion-col>
                     </ion-row>
                     <!-- Detail -->
                     <div *ngIf="item.showDetail">
