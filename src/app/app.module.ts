@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 
 import { AppRoutingPreloaderService } from './app-routing-preloader.service';
+import { LapsService } from './laps/shared/laps.service';
 import { PortsService } from './ports/shared/ports.service';
 import { UnitsService } from './units/shared/units.service';
 import { ImportersService } from './importers/shared/importers.service';
@@ -47,6 +48,7 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     File,
     AppRoutingPreloaderService,
     PortsService,
+    LapsService,
     UnitsService,
     ImportersService,
     DriversService,
