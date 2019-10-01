@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 import { PortsService } from '../shared/ports.service';
+import { LapsService } from '../../laps/shared/laps.service';
 import { DriversService } from '../../drivers/shared/drivers.service';
 import { ThirdsService } from '../../thirds/shared/thirds.service';
 import { UnitsService } from '../../units/shared/units.service';
@@ -26,6 +27,8 @@ export class PortsActionPage implements OnInit {
   selectedDriver: string;
   selectedDriverObject: any;
   searchBarActive = false;
+
+  currentLap: any;
 
   activeDriversAndThirdsList = [];
   namesArray = [];
@@ -448,6 +451,7 @@ export class PortsActionPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private portsService: PortsService,
+              private lapsService: LapsService,
               private driversService: DriversService,
               private thirdsService: ThirdsService,
               private unitsService: UnitsService) { }
@@ -485,6 +489,7 @@ export class PortsActionPage implements OnInit {
       if (!this.lastSelectedDriverObject) {
         this.lastSelectedDriver = this.selectedDriver;
         this.lastSelectedDriverObject = this.selectedDriverObject;
+        this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId);
       } else if (this.lastSelectedDriver !== this.selectedDriver) {
         this.changeDriver();
       }
@@ -509,11 +514,27 @@ export class PortsActionPage implements OnInit {
           handler: () => {
             this.lastSelectedDriver = this.selectedDriver;
             this.lastSelectedDriverObject = this.selectedDriverObject;
+            this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId);
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  getDriverInfoAboutHisLaps(driverId: string, portId: string) {
+    this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
+      result => {
+        if (result.total) {
+          this.currentLap = result.data[0];
+          console.log('se obtuvo la current lap. Esta es');
+          console.log(this.currentLap);
+        } else {this.currentLap = null; }
+      },
+      error => {
+        console.log('Error getting the driver laps: ', error);
+      }
+    );
   }
 
 
