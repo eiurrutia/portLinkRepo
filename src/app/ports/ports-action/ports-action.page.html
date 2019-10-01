@@ -107,7 +107,7 @@
                     Vuelta Actual:
                   </ion-col>
                   <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-                    3
+                    {{ currentLap ? currentLap.relativeNumber : '-' }}
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
@@ -116,7 +116,7 @@
                   </ion-col>
                   <ion-col size="6" style="text-align: center; font-size: x-large;
                                            align-self: center; color: green;">
-                    4
+                    {{ currentLap ? currentLap?.load?.length : '-' }}
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
@@ -124,7 +124,7 @@
                     Última carga:
                   </ion-col>
                   <ion-col size="6" style="text-align: center; font-size: large; align-self: center;">
-                    22:11
+                    {{ currentLap ? currentLap?.lastLoad : '-' }}
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -145,7 +145,7 @@
                     Total:
                   </ion-col>
                   <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-                    300
+                    {{ currentPort.unitsInPacking.totalQuantity }}
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
@@ -158,10 +158,10 @@
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
                   <ion-col size="6" style="text-align: center; font-size: large; color: green; align-self: center;">
-                    200
+                    {{ currentPort.collectedUnits.totalQuantity }}
                   </ion-col>
                   <ion-col size="6" style="text-align: center; font-size: large; color: red; align-self: center;">
-                    100
+                    {{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }}
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -367,7 +367,7 @@
                     (click)="changeTabButton('barcode')">
       <ion-icon name="barcode"></ion-icon>
       <ion-label>Registrar</ion-label>
-      <ion-badge style="background: red;">6</ion-badge>
+      <ion-badge *ngIf="currentLap" style="background: red; font-size: unset;">{{ currentLap?.load?.length }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button [ngClass]="{'tab-button-active': buttonTabActiveDicc['resume'],
