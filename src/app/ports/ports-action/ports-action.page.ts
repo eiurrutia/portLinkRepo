@@ -19,6 +19,7 @@ export class PortsActionPage implements OnInit {
   portId = null;
   currentPort: any;
   unitsList: any;
+  unitsDiccByVin: any;
 
   correctSlectedDriver = false;
   lastSelectedDriver: string;
@@ -462,6 +463,17 @@ export class PortsActionPage implements OnInit {
     this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
+  buildUnitsDiccByVin(unitsList: any) {
+    this.unitsDiccByVin = {};
+    unitsList.map( unit => {
+      const newVin = unit.vin.substring(unit.vin.length - this.currentPort.digitsToConsider);
+      this.unitsDiccByVin[newVin] = unit;
+    });
+    console.log('unitsDiccByVin');
+    console.log(this.unitsDiccByVin);
+
+  }
+
   buildPackingListHeaders() {
     this.packingListHeaders = Object.keys(this.unitsList[0]);
     const index = this.packingListHeaders.indexOf('vin', 0);
@@ -583,6 +595,7 @@ export class PortsActionPage implements OnInit {
     this.unitsService.getUnitsByPort(portId).subscribe(
       unitsList => {
         this.unitsList = unitsList.data;
+        this.buildUnitsDiccByVin(this.unitsList);
         this.buildPackingListHeaders();
       },
       error => {
