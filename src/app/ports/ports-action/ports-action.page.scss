@@ -107,3 +107,15 @@
   padding-left: 5px;
   white-space: nowrap;
 }
+
+.status-green {
+  --icon-color: green;
+  color: green;
+  text-align: right;
+}
+
+.status-red {
+  --icon-color: red;
+  color: red;
+  text-align: right;
+}
