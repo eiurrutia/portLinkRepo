@@ -1,5 +1,5 @@
 <!-- Barcode View -->
-<div *ngIf="buttonTabActiveDicc['barcode']" style="z-index: inherit;">
+<div *ngIf="buttonTabActiveDicc['barcode']" style="z-index: inherit; overflow-y: scroll!important; height: 90%;">
   <ion-list class="main-list">
     <ion-item class="search-bar-item">
       <ion-searchbar animated
@@ -41,7 +41,9 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-input class="vin-input" clearInput ></ion-input>
+          <ion-input class="vin-input"
+          [(ngModel)]="vinToRegister"
+          (keyup.enter)="searchUnit()" clearInput ></ion-input>
         </ion-row>
       </ion-grid>
     </ion-item>
@@ -61,7 +63,7 @@
             Modelo:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            Yaris ST AT
+            {{ unitFound.model ? unitFound.model : '-' }}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -69,23 +71,52 @@
             Color:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            Plata
+            {{ unitFound.color ? unitFound.color : '-' }}
           </ion-col>
         </ion-row>
         <ion-row>
+          <ion-col size="4">
+            Status:
+          </ion-col>
+          <ion-col *ngIf="!unitFound.model" size="8" style="text-align: right">
+            -
+          </ion-col>
+          <ion-col *ngIf="unitFound.model" size="8"
+          [ngClass]="{'status-green': unitFound.lapAssociated,
+                      'status-red': !unitFound.lapAssociated}">
+            {{ unitFound.lapAssociated ? 'Registrada' : 'No Registrada' }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unitFound.lapAssociated>
+          <ion-col size="4">
+            Conductor:
+          </ion-col>
+          <ion-col size="8" style="text-align: right">
+            {{ unitFound?.lapAssociated?.driver?.name }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unitFound.lapAssociated>
+          <ion-col size="4">
+            Vuelta:
+          </ion-col>
+          <ion-col size="8" style="text-align: right">
+            {{ unitFound?.lapAssociated?.relativeNumber }}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unitFound.lapAssociated>
           <ion-col size="4">
             Fecha:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            21/07/2019
+            {{ unitFound?.lapAssociated?.createdAt }}
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf=unitFound.lapAssociated>
           <ion-col size="4">
             Hora:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            22:19
+            {{ unitFound?.lapAssociated?.createdAt }}
             </ion-col>
           </ion-row>
         </ion-grid>
