@@ -20,6 +20,11 @@ export class PortsActionPage implements OnInit {
   currentPort: any;
   unitsList: any;
   unitsDiccByVin: any;
+  vinToRegister: any;
+
+  correctVin = 1; // Variable to define state of vin input. 0 --> invalid vin. 1 --> writing. 2 --> valid vin.
+  unitFound = {}; // Empty dicc when there is no unit selected.
+  lapAssociatedToUnitFound = {};
 
   correctSlectedDriver = false;
   lastSelectedDriver: string;
@@ -463,6 +468,62 @@ export class PortsActionPage implements OnInit {
     this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
+  // First we check in the local array if exist that vin. Then we get from the backend.
+  searchUnit() {
+    if (this.vinToRegister.length > this.currentPort.digitsToConsider) {
+      // Firs we check if the last digits are equals.
+      if (this.unitsDiccByVin[this.vinToRegister.substring(this.vinToRegister.length - this.currentPort.digitsToConsider)]) {
+        // Then we check if part of short-vin is inside of model complete-vin.
+        if (this.unitsDiccByVin[
+          this.vinToRegister.substring(
+            this.vinToRegister.length - this.currentPort.digitsToConsider)]
+          .vin.includes(this.vinToRegister)) {
+            console.log('se encontró la unidad 1');
+            this.correctVin = 2;
+            this.getUnitById(this.unitsDiccByVin[this.vinToRegister.substring(
+              this.vinToRegister.length - this.currentPort.digitsToConsider)]._id);
+          } else {
+            console.log('unidad no encontrada que conincida con todos caractéres que se incluyen.');
+            this.unitFound = {};
+            this.correctVin = 0;
+          }
+      } else { console.log('unidad no encontrada 1');
+              this.unitFound = {};
+              this.correctVin = 0;
+      }
+    } else {
+      if (this.unitsDiccByVin[this.vinToRegister]) {
+        this.correctVin = 2;
+        console.log('se encontró la unidad 2');
+        this.getUnitById(this.unitsDiccByVin[this.vinToRegister]._id);
+      } else { console.log('unidad no encontrada 2');
+               this.unitFound = {};
+               this.correctVin = 0;
+      }
+    }
+  }
+
+  // Depends the moment keyup has differents functions.
+  registerOrSearchUnit() {
+    // Case when we are searching for first time.
+    if (this.correctVin !== 2) {
+      this.searchUnit();
+
+    // We found a vin a we want to register.
+    // But enter keyup only works if vin isn't already registered.
+    } else if (!this.unitFound['lapAssociated']) {
+      console.log('Unidad registrada!');
+    } else {
+      // Do nothing in other case (we have a registered unit but we want user press the button manually).
+      console.log('se intenta re registrar una undiad. aprieta el botón.');
+    }
+  }
+
+  probar2() {
+    console.log('peo 2');
+    console.log(this.vinToRegister);
+  }
+
   buildUnitsDiccByVin(unitsList: any) {
     this.unitsDiccByVin = {};
     unitsList.map( unit => {
@@ -471,7 +532,6 @@ export class PortsActionPage implements OnInit {
     });
     console.log('unitsDiccByVin');
     console.log(this.unitsDiccByVin);
-
   }
 
   buildPackingListHeaders() {
@@ -538,6 +598,7 @@ export class PortsActionPage implements OnInit {
     this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
       result => {
         if (result.total) {
+          //  MAS TARDE FILTAR LAS DIFERENCIAS DE HORAS CON LA ACTUAL PARA VER SI EFECTIVAMENTE ES LA VUELTA ACTUAL
           this.currentLap = result.data[0];
           console.log('se obtuvo la current lap. Esta es');
           console.log(this.currentLap);
@@ -600,6 +661,39 @@ export class PortsActionPage implements OnInit {
       },
       error => {
         console.log(`Error fetching units by port: ${error}.`);
+      }
+    );
+  }
+
+  getUnitById(unitId: string) {
+    this.unitsService.getUnitById(unitId).subscribe(
+      unit => {
+        this.unitFound = unit;
+
+        // And if It has already been registered we get his lap lapAssociated and driver.
+        if (this.unitFound['lapAssociated']) {
+          this.lapsService.getLap(this.unitFound['lapAssociated']).subscribe(
+            lap => {
+              this.unitFound['lapAssociated'] = lap;
+              this.driversService.getDriver(lap.driver).subscribe(
+                driver => {
+                  this.unitFound['lapAssociated']['driver'] = driver;
+                },
+                driverError => {
+                  console.log('Error getting driver to lap: ', driverError);
+                }
+              );
+            },
+            error => {
+              console.log('Error getting lap to unit found: ', error);
+            }
+          );
+        }
+
+        console.log(this.unitFound);
+      },
+      error => {
+        console.log(`Error getting unit: ${unitId} E:${error}.`);
       }
     );
   }
