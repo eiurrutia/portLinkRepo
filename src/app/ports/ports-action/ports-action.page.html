@@ -50,7 +50,7 @@
           [(ngModel)]="vinToRegister"
           (ionChange)="correctVin = 1"
           (ionFocus)="correctVin = 1"
-          (keyup.enter)="searchUnit()" clearInput ></ion-input>
+          (keyup.enter)="registerOrSearchUnit()" clearInput ></ion-input>
         </ion-row>
       </ion-grid>
     </ion-item>
