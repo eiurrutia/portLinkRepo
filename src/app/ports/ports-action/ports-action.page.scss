@@ -119,3 +119,34 @@
   color: red;
   text-align: right;
 }
+
+.search-vin-item-valid {
+  --highlight-background: green !important;
+}
+
+.search-vin-item-invalid {
+  --highlight-background: red !important;
+}
+
+.search-vin-item-writing {
+  --highlight-background: blue !important;
+}
+
+:host {
+  
+  .item-interactive.item-has-focus {
+
+    .search-vin-item-valid {
+      --highlight-background: green !important;
+    }
+
+    .search-vin-item-invalid {
+      --highlight-background: red !important;
+    }
+
+    .search-vin-item-writing {
+      --highlight-background: blue !important;
+    }
+  }
+
+}
