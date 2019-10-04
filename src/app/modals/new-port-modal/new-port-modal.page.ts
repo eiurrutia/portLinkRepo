@@ -96,7 +96,7 @@ export class NewPortModalPage implements OnInit {
   // To update unit port if the unit is already created.
   updatePortToUnit(portId: string, unitVin: string) {
     const unitObj = {'port': portId};
-    this.unitsService.updateUnit(unitVin, unitObj).subscribe(
+    this.unitsService.updateUnitByVin(unitVin, unitObj).subscribe(
       unitUpdated => {
         this.message = 'Se ha actualizado correctamente el puerto de la unidad: ' + unitUpdated._id;
       },
