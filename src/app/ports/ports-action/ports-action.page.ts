@@ -8,6 +8,8 @@ import { DriversService } from '../../drivers/shared/drivers.service';
 import { ThirdsService } from '../../thirds/shared/thirds.service';
 import { UnitsService } from '../../units/shared/units.service';
 
+import * as moment from 'moment-timezone';
+
 
 @Component({
   selector: 'app-ports-action',
@@ -25,6 +27,7 @@ export class PortsActionPage implements OnInit {
   correctVin = 1; // Variable to define state of vin input. 0 --> invalid vin. 1 --> writing. 2 --> valid vin.
   unitFound = {}; // Empty dicc when there is no unit selected.
   lapAssociatedToUnitFound = {};
+  lastLoadText: string;
 
   correctSlectedDriver = false;
   lastSelectedDriver: string;
@@ -508,15 +511,42 @@ export class PortsActionPage implements OnInit {
     // Case when we are searching for first time.
     if (this.correctVin !== 2) {
       this.searchUnit();
-
     // We found a vin a we want to register.
     // But enter keyup only works if vin isn't already registered.
-    } else if (!this.unitFound['lapAssociated']) {
+    // We make sure with unitFound['model'] that could get unit from backend.
+  } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
       console.log('Unidad registrada!');
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
       console.log('se intenta re registrar una undiad. aprieta el botón.');
     }
+  }
+
+  registerUnit(unit: any) {
+    // Firs we check if we have to create a new lap
+    // or only we have to add the unit to the currente lap.
+
+  }
+
+  getCleanDate(date: Date, format: string): string {
+    return moment.tz(date, 'America/Santiago').format(format);
+  }
+
+  getDateDifference(date1: any, date2: any): string {
+    const a = moment.tz(date1, 'America/Santiago');
+    const b = moment.tz(date2, 'America/Santiago');
+    const diff = b.diff(a, 'hours', true);
+    const hours = Math.floor(diff);
+    const minutes =  Math.floor(((diff % 1) * 60));
+    let stringToReturn = '';
+    if (hours > 0) {stringToReturn += `${hours} hora(s)`; }
+    if (hours > 0 && minutes > 0) {stringToReturn += ' y '; }
+    stringToReturn += `${minutes} minuto(s)`;
+    return stringToReturn;
+  }
+
+  getDateNow() {
+    return Date.now();
   }
 
   probar2() {
@@ -600,6 +630,7 @@ export class PortsActionPage implements OnInit {
         if (result.total) {
           //  MAS TARDE FILTAR LAS DIFERENCIAS DE HORAS CON LA ACTUAL PARA VER SI EFECTIVAMENTE ES LA VUELTA ACTUAL
           this.currentLap = result.data[0];
+          this.lastLoadText = this.getDateDifference(this.currentLap.lastLoad, Date.now());
           console.log('se obtuvo la current lap. Esta es');
           console.log(this.currentLap);
         } else {this.currentLap = null; }
