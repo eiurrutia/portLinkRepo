@@ -49,7 +49,7 @@ export class LapsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
-  updateLapLoad(loadId: string, lap: string): Observable<any> {
+  updateLapLoad(loadId: string, lap: any): Observable<any> {
     const url = `${this.backUrl}/laps/${loadId}/`;
     return this.http.patch<any>(url, lap, this.httpOptions).catch(this.errorHandler);
   }
