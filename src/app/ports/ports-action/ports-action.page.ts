@@ -528,7 +528,9 @@ export class PortsActionPage implements OnInit {
     // or only we have to add the unit to the currente lap.
   }
 
+  createNewLap() {
 
+  }
 
 
   async createNewLapAlert(numberOfLap: number = 1) {
@@ -587,10 +589,6 @@ export class PortsActionPage implements OnInit {
     if (hours > 0 && minutes > 0) {stringToReturn += ' y '; }
     stringToReturn += `${minutes} minuto(s)`;
     return stringToReturn;
-  }
-
-  getDateNow() {
-    return Date.now();
   }
 
   probar2() {
