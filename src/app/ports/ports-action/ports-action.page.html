@@ -135,7 +135,7 @@
             Fecha:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            {{ unitFound?.lapAssociated?.createdAt }}
+            {{ getCleanDate(unitFound?.loadedDate, 'DD/MM/YYYY') }}
           </ion-col>
         </ion-row>
         <ion-row *ngIf=unitFound.lapAssociated>
@@ -143,7 +143,7 @@
             Hora:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            {{ unitFound?.lapAssociated?.createdAt }}
+            {{ getCleanDate(unitFound?.loadedDate, 'HH:mm') }}
             </ion-col>
         </ion-row>
         <ion-row *ngIf="unitFound.lapAssociated && correctVin == 2">
@@ -168,28 +168,28 @@
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
-                  <ion-col size="5" style="text-align: center; font-size: small;">
+                  <ion-col size="5" style="text-align: left; font-size: small;">
                     Vuelta Actual:
                   </ion-col>
                   <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-                    {{ currentLap ? currentLap.relativeNumber : '-' }}
+                    <b> {{ currentLap ? currentLap.relativeNumber : '-' }} </b>
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
-                  <ion-col size="6" style="text-align: center; font-size: small;">
+                  <ion-col size="6" style="text-align: left; font-size: small;">
                     Unidades Cargadas:
                   </ion-col>
                   <ion-col size="6" style="text-align: center; font-size: x-large;
                                            align-self: center; color: green;">
-                    {{ currentLap ? currentLap?.load?.length : '-' }}
+                    <b> {{ currentLap ? currentLap?.load?.length : '-' }} </b>
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
-                  <ion-col size="6" style="text-align: center; font-size: small;">
+                  <ion-col size="4" style="text-align: left; font-size: small;">
                     Última carga:
                   </ion-col>
-                  <ion-col size="6" style="text-align: center; font-size: large; align-self: center;">
-                    {{ currentLap ? currentLap?.lastLoad : '-' }}
+                  <ion-col size="8" style="text-align: center; font-size: small; align-self: center;">
+                    {{ currentLap ? 'Hace ' + lastLoadText : '-' }}
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -210,7 +210,7 @@
                     Total:
                   </ion-col>
                   <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-                    {{ currentPort.unitsInPacking.totalQuantity }}
+                    <b> {{ currentPort.unitsInPacking.totalQuantity }} </b>
                   </ion-col>
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
@@ -223,10 +223,10 @@
                 </ion-row>
                 <ion-row style="margin-top: 2%;">
                   <ion-col size="6" style="text-align: center; font-size: large; color: green; align-self: center;">
-                    {{ currentPort.collectedUnits.totalQuantity }}
+                    <b> {{ currentPort.collectedUnits.totalQuantity }} </b>
                   </ion-col>
                   <ion-col size="6" style="text-align: center; font-size: large; color: red; align-self: center;">
-                    {{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }}
+                    <b> {{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }} </b>
                   </ion-col>
                 </ion-row>
               </ion-grid>
