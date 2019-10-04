@@ -491,8 +491,8 @@ export class PortsActionPage implements OnInit {
             this.correctVin = 0;
           }
       } else { console.log('unidad no encontrada 1');
-              this.unitFound = {};
-              this.correctVin = 0;
+               this.unitFound = {};
+               this.correctVin = 0;
       }
     } else {
       if (this.unitsDiccByVin[this.vinToRegister]) {
@@ -505,6 +505,7 @@ export class PortsActionPage implements OnInit {
       }
     }
   }
+
 
   // Depends the moment keyup has differents functions.
   registerOrSearchUnit() {
@@ -525,8 +526,51 @@ export class PortsActionPage implements OnInit {
   registerUnit(unit: any) {
     // Firs we check if we have to create a new lap
     // or only we have to add the unit to the currente lap.
-
   }
+
+
+
+
+  async createNewLapAlert(numberOfLap: number = 1) {
+    const alert = await this.alertController.create({
+      header: 'Nueva Vuelta',
+      subHeader: `Deseas crear la vuelta número ${numberOfLap} para el conductor ${this.selectedDriver}?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            if (numberOfLap === 1) {
+              this.correctSlectedDriver = false;
+              this.selectedDriver = null;
+              this.selectedDriverObject = null;
+              this.lastSelectedDriver = null;
+              this.lastSelectedDriverObject = null;
+            }
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  checkHourDifferenceToNewLap(lastLap: any): boolean {
+    const a = moment.tz(lastLap.lastLoad, 'America/Santiago');
+    const b = moment.tz(Date.now(), 'America/Santiago');
+    const diff = b.diff(a, 'hours', true);
+    // And then we check if it has been more than 3 hours.
+    if (diff >= 3) { return true; }
+    return false;
+  }
+
+
+
 
   getCleanDate(date: Date, format: string): string {
     return moment.tz(date, 'America/Santiago').format(format);
@@ -570,7 +614,6 @@ export class PortsActionPage implements OnInit {
     if (index > -1) {
       this.packingListHeaders.splice(index, 1);
     }
-    console.log(this.packingListHeaders);
   }
 
   selectItem(driver: any) {
@@ -633,7 +676,13 @@ export class PortsActionPage implements OnInit {
           this.lastLoadText = this.getDateDifference(this.currentLap.lastLoad, Date.now());
           console.log('se obtuvo la current lap. Esta es');
           console.log(this.currentLap);
-        } else {this.currentLap = null; }
+          if (this.checkHourDifferenceToNewLap(this.currentLap)) {
+            this.createNewLapAlert(this.currentLap.relativeNumber + 1);
+          }
+        } else {
+          this.currentLap = null;
+          this.createNewLapAlert(); // First lap.
+        }
       },
       error => {
         console.log('Error getting the driver laps: ', error);
