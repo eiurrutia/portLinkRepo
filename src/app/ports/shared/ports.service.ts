@@ -45,6 +45,11 @@ export class PortsService {
     return this.http.post<any>(url, port, this.httpOptions).catch(this.errorHandler);
   }
 
+  updatePort(portId: string, portObj: any): Observable<any> {
+    const url = `${this.backUrl}/ports/${portId}`;
+    return this.http.patch<any>(url, portObj, this.httpOptions).catch(this.errorHandler);
+  }
+
   associateDriversToPort(id: string, port: any): Observable<any> {
     const url = `${this.backUrl}/ports/${id}/`;
     return this.http.patch<any>(url, port, this.httpOptions).catch(this.errorHandler);
