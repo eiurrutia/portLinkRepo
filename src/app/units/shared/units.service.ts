@@ -30,8 +30,18 @@ export class UnitsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  getUnitsByPortAndSize(portId: string, size: string): Observable<any> {
+    const url = `${this.backUrl}/units?$port=${portId}&size=${size}`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   getLoadedUnitsByPort(portId: string): Observable<any> {
     const url = `${this.backUrl}/units?port=${portId}&loaded=true`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
+  getLoadedUnitsByPortAndSize(portId: string, size: string): Observable<any> {
+    const url = `${this.backUrl}/units?port=${portId}&loaded=true&size=${size}`;
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
