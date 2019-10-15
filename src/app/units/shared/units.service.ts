@@ -45,6 +45,11 @@ export class UnitsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  getLoadedUnitsByPortAndModel(portId: string, model: string): Observable<any> {
+    const url = `${this.backUrl}/units?port=${portId}&loaded=true&model=${model}`;
+    return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   getUnitById(unitId: string): Observable<any> {
     const url = `${this.backUrl}/units/${unitId}`;
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
