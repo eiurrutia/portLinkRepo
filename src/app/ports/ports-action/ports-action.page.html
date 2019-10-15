@@ -10,7 +10,7 @@
                             'searchbar-red': !correctSlectedDriver}"
                 placeholder="Conductor Actual"
                 (ionCancel)="searchBarActive = false"
-                (ionFocus)="searchBarActive = true"
+                (ionFocus)="setSearhBarActive()"
                 (ionChange)="filterWithSearch(selectedDriver)"
                 [(ngModel)]="selectedDriver">
       </ion-searchbar>
@@ -48,8 +48,8 @@
                       'search-vin-item-writing': correctVin == 1,
                       'search-vin-item-invalid': correctVin == 0}"
           [(ngModel)]="vinToRegister"
-          (ionChange)="correctVin = 1"
-          (ionFocus)="correctVin = 1"
+          (ionChange)="correctVin = 1; unitFound = {}"
+          (ionFocus)="correctVin = 1; unitFound = {}"
           (keyup.enter)="registerOrSearchUnit()" clearInput ></ion-input>
         </ion-row>
       </ion-grid>
@@ -60,7 +60,7 @@
           <ion-col size="4">
           </ion-col>
           <ion-col size="4" style="text-align: center">
-            Registro
+            <b>Registro</b>
           </ion-col>
           <ion-col size="4" style="text-align: right">
           </ion-col>
@@ -146,9 +146,9 @@
             {{ getCleanDate(unitFound?.loadedDate, 'HH:mm') }}
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="unitFound.lapAssociated && correctVin == 2">
+        <ion-row *ngIf="unitFound?.lapAssociated && correctVin == 2 && unitFound?.lapAssociated?.driver?.name != selectedDriver">
           <ion-col style="text-align: center;">
-            <ion-button>
+            <ion-button *ngIf="unitFound?.lapAssociated?.driver?.name != selectedDriver">
               <span style="font-size: smaller;">REINGRESAR</span>
             </ion-button>
           </ion-col>
@@ -246,10 +246,10 @@
       <ion-grid no-padding>
         <ion-row style="margin-top: 2%;">
           <ion-col size="5" style="align-self: center; font-size: x-large;">
-            Total:
+            <b>Total:</b>
           </ion-col>
           <ion-col size="7" style="text-align: center; font-size: x-large; align-self: center;">
-            {{ currentPort.unitsInPacking.totalQuantity }}
+            <b>{{ currentPort.unitsInPacking.totalQuantity }}</b>
           </ion-col>
         </ion-row>
         <ion-row style="margin-top: 2%;">
@@ -257,13 +257,13 @@
             Retirado:
           </ion-col>
           <ion-col size="2.5" style="text-align: center; font-size: x-large; align-self: center; color: green;">
-            {{ currentPort.collectedUnits.totalQuantity }}
+            <b>{{ currentPort.collectedUnits.totalQuantity }}</b>
           </ion-col>
           <ion-col size="3.5" style="align-self: center;">
             Por retirar:
           </ion-col>
           <ion-col size="2.5" style="text-align: center; font-size: x-large; align-self: center; color: red;">
-            {{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }}
+            <b>{{ currentPort.unitsInPacking.totalQuantity - currentPort.collectedUnits.totalQuantity }}</b>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -272,7 +272,7 @@
       <ion-grid>
         <ion-row style="margin-top: 2%;">
           <ion-col>
-            Tamaños
+            <b>Tamaños</b>
           </ion-col>
         </ion-row>
         <ion-row *ngIf="currentPort.unitsInPacking.smallQuantity != 0" style="margin-top: 2%;">
@@ -337,7 +337,7 @@
       <ion-grid>
         <ion-row style="margin-top: 2%;">
           <ion-col>
-            Modelos
+            <b>Modelos</b>
           </ion-col>
         </ion-row>
         <ion-row *ngFor="let item of currentPort.modelsCountDicc.totalToCollect | keyvalue" style="margin-top: 2%;">

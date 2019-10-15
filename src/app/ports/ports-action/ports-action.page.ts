@@ -471,6 +471,13 @@ export class PortsActionPage implements OnInit {
     this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
+  // Set search drvier var active and delete search vin bar to start with field empty.
+  setSearhBarActive() {
+    this.searchBarActive = true;
+    this.vinToRegister = '';
+    this.unitFound = {};
+  }
+
   // First we check in the local array if exist that vin. Then we get from the backend.
   searchUnit() {
     if (this.vinToRegister.length > this.currentPort.digitsToConsider) {
@@ -517,19 +524,125 @@ export class PortsActionPage implements OnInit {
     // We make sure with unitFound['model'] that could get unit from backend.
   } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
       console.log('Unidad registrada!');
+      this.registerUnit(this.unitFound);
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
       console.log('se intenta re registrar una undiad. aprieta el botón.');
     }
   }
 
+  // Register unit in lap and update unit object in backend.
   registerUnit(unit: any) {
-    // Firs we check if we have to create a new lap
-    // or only we have to add the unit to the currente lap.
+    // Update lap in backend.
+    const lapObject = {};
+    lapObject['load'] = Object.assign([], this.currentLap.load);
+    lapObject['load'].push( {'unit': unit._id, 'loadedDate': Date.now()} );
+    lapObject['lastLoad'] = Date.now();
+    this.lapsService.updateLapLoad(this.currentLap._id, lapObject).subscribe(
+      lap => {
+        console.log('Lap actualizada con carga.');
+        console.log(lap);
+        this.currentLap = lap;
+        this.lastLoadText = this.getDateDifference(lap.lastLoad, Date.now());
+      },
+      error => {
+        console.log('Error cargando unidad a vuelta: ', error);
+      }
+    );
+
+    // Update unit in backend.
+    const unitObject = {};
+    unitObject['lapAssociated'] = this.currentLap._id;
+    unitObject['loadedDate'] = Date.now();
+    unitObject['loaded'] = true;
+    this.unitsService.updateUnit(unit._id, unitObject).subscribe(
+      unitUpdated => {
+        console.log('Unidad cargada actualizada.');
+        console.log(unitUpdated);
+        // We call get unit to update front variables (unitFound).
+        this.getUnitById(unitUpdated._id);
+        this.updateCountsToPort(unitUpdated);
+      },
+      error => {
+        console.log('Error actualizando unidad cargada: ', error);
+      }
+    );
   }
 
-  createNewLap() {
+  // Update general port counts.
+  updateCountsToPort(unit: any) {
+    // First we get the total of collected units.
+    this.unitsService.getLoadedUnitsByPort(this.portId).subscribe(
+      result => {
+        const portObject = {};
+        portObject['collectedUnits'] = Object.assign({}, this.currentPort['collectedUnits']);
+        portObject['modelsCountDicc'] = Object.assign({}, this.currentPort['modelsCountDicc']);
+        portObject['collectedUnits']['totalQuantity'] = result.total;
+        // Then we get the collected units by size.
+        this.unitsService.getLoadedUnitsByPortAndSize(this.portId, unit.size).subscribe(
+          getBySizeResult => {
+            portObject['collectedUnits'][this.getSizeCountAttribute(unit.size)] = getBySizeResult.total;
+            // Then we get the collected units by model.
+            this.unitsService.getLoadedUnitsByPortAndModel(this.portId, unit.model).subscribe(
+              getByModelResult => {
+                portObject['modelsCountDicc']['collected'][unit.model] = getByModelResult.total;
+                // And then we update port with the new info (object).
+                this.portsService.updatePort(this.portId, portObject).subscribe(
+                  port => {
+                    console.log('Cuenta puerto actualizada.');
+                    console.log(port);
+                    this.currentPort = port;
+                  },
+                  error => {
+                    console.log('Error updating port count: ', error);
+                  }
+                );
+              },
+              error => {
+                console.log('Error getting by port and model: ', error);
+              }
+            );
+          },
+          error => {
+            console.log('Error getting by port and size: ', error);
+          }
+        );
+      },
+      error => {
+        console.log('Error getting unidades cargadas para este puerto: ', error);
+      }
+    );
 
+  }
+
+  getSizeCountAttribute(size: string) {
+    if (size === 'pequeno') { return 'smallQuantity';
+    } else if (size === 'mediano') { return 'mediumQuantity';
+    } else if (size === 'grande') { return 'bigQuantity';
+    } else { return 'extraQuantity'; }
+  }
+
+
+
+
+
+  createNewLap(driverId: string, portId: string, isThird: boolean, relativeNumber: number) {
+    const lapObject = {};
+    lapObject['driver'] = driverId;
+    lapObject['port'] = portId;
+    lapObject['isThird'] = isThird;
+    lapObject['relativeNumber'] = relativeNumber;
+    lapObject['load'] = [];
+    this.lapsService.createLap(lapObject).subscribe(
+      lap => {
+        console.log('Vuelta creada!');
+        console.log(lap);
+        this.currentLap = lap;
+      },
+      error => {
+        console.log('Error creating a lap: ', error);
+      }
+    );
   }
 
 
@@ -554,6 +667,10 @@ export class PortsActionPage implements OnInit {
         }, {
           text: 'Aceptar',
           handler: () => {
+            this.createNewLap(this.selectedDriverObject._id,
+                              this.portId,
+                              this.selectedDriverObject.third,
+                              numberOfLap);
           }
         }
       ]
@@ -657,6 +774,8 @@ export class PortsActionPage implements OnInit {
           handler: () => {
             this.lastSelectedDriver = this.selectedDriver;
             this.lastSelectedDriverObject = this.selectedDriverObject;
+            console.log('this.selectedDriverObject');
+            console.log(this.selectedDriverObject);
             this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId);
           }
         }
@@ -669,9 +788,8 @@ export class PortsActionPage implements OnInit {
     this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
       result => {
         if (result.total) {
-          //  MAS TARDE FILTAR LAS DIFERENCIAS DE HORAS CON LA ACTUAL PARA VER SI EFECTIVAMENTE ES LA VUELTA ACTUAL
           this.currentLap = result.data[0];
-          this.lastLoadText = this.getDateDifference(this.currentLap.lastLoad, Date.now());
+          this.lastLoadText = this.getDateDifference(result.data[0].lastLoad, Date.now());
           console.log('se obtuvo la current lap. Esta es');
           console.log(this.currentLap);
           if (this.checkHourDifferenceToNewLap(this.currentLap)) {
@@ -753,14 +871,26 @@ export class PortsActionPage implements OnInit {
           this.lapsService.getLap(this.unitFound['lapAssociated']).subscribe(
             lap => {
               this.unitFound['lapAssociated'] = lap;
-              this.driversService.getDriver(lap.driver).subscribe(
-                driver => {
-                  this.unitFound['lapAssociated']['driver'] = driver;
-                },
-                driverError => {
-                  console.log('Error getting driver to lap: ', driverError);
-                }
-              );
+              // And we check if this laps was done by a driver or a third.
+              if (!lap.isThird) {
+                this.driversService.getDriver(lap.driver).subscribe(
+                  driver => {
+                    this.unitFound['lapAssociated']['driver'] = driver;
+                  },
+                  driverError => {
+                    console.log('Error getting driver to lap: ', driverError);
+                  }
+                );
+              } else {
+                this.thirdsService.getThird(lap.driver).subscribe(
+                  third => {
+                    this.unitFound['lapAssociated']['driver'] = third;
+                  },
+                  thirdError => {
+                    console.log('Error getting driver to lap: ', thirdError);
+                  }
+                );
+              }
             },
             error => {
               console.log('Error getting lap to unit found: ', error);
