@@ -527,6 +527,7 @@ export class PortsActionPage implements OnInit {
   } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
       console.log('Unidad registrada!');
       this.registerUnit(this.unitFound);
+      this.registerUnitAlert();
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
       console.log('se intenta re registrar una undiad. aprieta el botón.');
@@ -569,6 +570,22 @@ export class PortsActionPage implements OnInit {
         console.log('Error actualizando unidad cargada: ', error);
       }
     );
+  }
+
+
+  // Alert to reentry a unit.
+  async registerUnitAlert() {
+    const alert = await this.alertController.create({
+      header: 'Unidad Registrada',
+      subHeader: `Se registró la unidad ${this.unitFound['vin']}!`,
+      // buttons: [
+      //   {
+      //     text: 'Aceptar',
+      //     handler: () => {this.reentryUnit(); }
+      //   }
+      // ]
+    });
+    await alert.present();
   }
 
 
