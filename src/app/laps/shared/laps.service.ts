@@ -54,8 +54,8 @@ export class LapsService {
     return this.http.patch<any>(url, lap, this.httpOptions).catch(this.errorHandler);
   }
 
-  deleteLap(portId: string): Observable<any> {
-    const url = `${this.backUrl}/laps/${portId}`;
+  deleteLap(lapId: string): Observable<any> {
+    const url = `${this.backUrl}/laps/${lapId}`;
     return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
