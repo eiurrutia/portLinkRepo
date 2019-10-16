@@ -65,6 +65,11 @@
                       </ion-col>
                     </ion-row>
                     <ion-row>
+                      <ion-col style="padding-top: 0px; padding-bottom: 0px;">
+                        {{ getCleanDate(item.arrivalDate, 'DD/MM/YYYY') }}
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
                       <ion-col style="color: #808080cf; font-size: small; padding-top: 0px;">
                         {{ item.importer.name }}
                       </ion-col>
@@ -297,7 +302,7 @@
   </ion-row>
   <ion-row>
     <ion-fab style="bottom: 10%; right: 10%;" vertical="bottom" horizontal="end" edge>
-      <ion-fab-button size="big" (click)="sendRecord()" routerLink="/user-menu/ports/new-port" style="--background: seagreen;">
+      <ion-fab-button size="big" (click)="sendRecord()"  style="--background: seagreen;">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>

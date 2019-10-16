@@ -1,11 +1,14 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 import { PortsService } from './shared/ports.service';
 import { LapsService } from '../laps/shared/laps.service';
 import { UnitsService } from '../units/shared/units.service';
 
 import { Port } from './port.model';
+
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-ports',
@@ -31,6 +34,7 @@ export class PortsPage implements OnInit {
   }
 
   constructor(public alertController: AlertController,
+              public router: Router,
               private portsService: PortsService,
               private lapsService: LapsService,
               private unitsService: UnitsService) { }
@@ -78,6 +82,12 @@ export class PortsPage implements OnInit {
   }
 
 
+  // Get Date format to display in front.
+  getCleanDate(date: Date, format: string): string {
+    return moment.tz(date, 'America/Santiago').format(format);
+  }
+
+
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
       header: 'Crear Nuevo Puerto',
@@ -94,6 +104,7 @@ export class PortsPage implements OnInit {
           text: 'Aceptar',
           handler: () => {
             this.sendCount.emit(true);
+            this.router.navigateByUrl('/user-menu/ports/new-port');
             console.log('Confirm Okay');
           }
         }
