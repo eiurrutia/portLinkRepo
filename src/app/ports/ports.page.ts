@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
 import { PortsService } from './shared/ports.service';
+import { LapsService } from '../laps/shared/laps.service';
 import { UnitsService } from '../units/shared/units.service';
 
 import { Port } from './port.model';
@@ -31,6 +32,7 @@ export class PortsPage implements OnInit {
 
   constructor(public alertController: AlertController,
               private portsService: PortsService,
+              private lapsService: LapsService,
               private unitsService: UnitsService) { }
 
   ngOnInit() {
@@ -138,6 +140,26 @@ export class PortsPage implements OnInit {
           }
         ); });
         console.log('All port units deleted');
+
+        // Then we delete all the laps associated to this port.
+        this.lapsService.getLapsByPort(port._id).subscribe(
+          lapsList => {
+            console.log(lapsList);
+            lapsList.data.map( lap => { this.lapsService.deleteLap(lap._id).subscribe(
+              lapDeleted => {
+                this.message = 'Lap deleted successfully: ' + lapDeleted._id;
+              },
+              error => {
+                this.message = 'Error deleting a lap: ' + error;
+              }
+            ); });
+            console.log('Al port laps deleted')
+          },
+          error => {
+            console.log('Error getting laps to delete by port: ', error);
+          }
+        );
+
         // And then we delete the port.
         this.portsService.deletePort(port._id).subscribe(
           deletedPort => {
@@ -155,6 +177,4 @@ export class PortsPage implements OnInit {
       }
     );
   }
-
-
 }
