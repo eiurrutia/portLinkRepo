@@ -153,7 +153,7 @@ export class PortsPage implements OnInit {
                 this.message = 'Error deleting a lap: ' + error;
               }
             ); });
-            console.log('Al port laps deleted')
+            console.log('All port laps deleted');
           },
           error => {
             console.log('Error getting laps to delete by port: ', error);
