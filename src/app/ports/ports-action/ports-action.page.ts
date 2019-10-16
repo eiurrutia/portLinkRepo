@@ -534,6 +534,7 @@ export class PortsActionPage implements OnInit {
     }
   }
 
+
   // Register unit in lap and update unit object in backend.
   registerUnit(unit: any) {
     // Update lap in backend.
@@ -578,12 +579,12 @@ export class PortsActionPage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Unidad Registrada',
       subHeader: `Se registró la unidad ${this.unitFound['vin']}!`,
-      // buttons: [
-      //   {
-      //     text: 'Aceptar',
-      //     handler: () => {this.reentryUnit(); }
-      //   }
-      // ]
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {}
+        }
+      ]
     });
     await alert.present();
   }
@@ -740,7 +741,6 @@ export class PortsActionPage implements OnInit {
         console.log('Error getting unidades cargadas para este puerto: ', error);
       }
     );
-
   }
 
 
