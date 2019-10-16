@@ -471,12 +471,14 @@ export class PortsActionPage implements OnInit {
     this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
+
   // Set search drvier var active and delete search vin bar to start with field empty.
   setSearhBarActive() {
     this.searchBarActive = true;
     this.vinToRegister = '';
     this.unitFound = {};
   }
+
 
   // First we check in the local array if exist that vin. Then we get from the backend.
   searchUnit() {
@@ -568,6 +570,93 @@ export class PortsActionPage implements OnInit {
       }
     );
   }
+
+
+  // To reentry a registered unit.
+  reentryUnit() {
+    console.log('this.unitFound');
+    console.log(this.unitFound);
+
+    // ## Update a old lap removing the unit from list  ## //
+    const oldLapObject = {};
+    // unitFound has already the lapAssociated object.
+    let newLoadedUnitsArray = [];
+    newLoadedUnitsArray = Object.assign([], this.unitFound['lapAssociated']['load']);
+    // If is empty, we set last load null and we set a empty array.
+    if (newLoadedUnitsArray.length === 1) {
+      oldLapObject['load'] = [];
+      oldLapObject['lastLoad'] = null;
+    } else {
+      // We remove the unit from list.
+      let indexToRemove = -1;
+      for (let i = 0; i < newLoadedUnitsArray.length; i++) {
+        if (newLoadedUnitsArray[i]['unit'] === this.unitFound['_id']) { indexToRemove = i; }
+      }
+      if (indexToRemove !== -1 ) {newLoadedUnitsArray.splice(indexToRemove, 1); }
+      // And then We get the most currently charged unit and set the lastLoad.
+      const mostCurrentlyUnit = this.getLastLoadedUnitFromList(newLoadedUnitsArray);
+      oldLapObject['lastLoad'] = mostCurrentlyUnit['loadedDate'];
+      oldLapObject['load'] = Object.assign([], newLoadedUnitsArray);
+    }
+    // And then we update the object in backend.
+    this.lapsService.updateLapLoad(this.unitFound['lapAssociated']['_id'], oldLapObject).subscribe(
+      newOldLap => {
+        console.log('Lap updated when the unit deleted: ', newOldLap._id);
+        console.log(newOldLap);
+      },
+      error => {
+        console.log('Error updating the lap when a unit was reentry: ', error);
+      }
+    );
+
+
+    // ## Update the unit in backend with new lapAssociated id ## //
+    const reentryUnitObject = {};
+    reentryUnitObject['lapAssociated'] = this.currentLap['_id'];
+    reentryUnitObject['loadedDate'] = Date.now();
+    this.unitsService.updateUnit(this.unitFound['_id'], reentryUnitObject).subscribe(
+      reentryUnitUpdated => {
+        console.log('Reentried unit unit updated in backend');
+        console.log(reentryUnitUpdated);
+        // We call get unit to update front variables (unitFound).
+        this.getUnitById(reentryUnitUpdated._id);
+        this.updateCountsToPort(reentryUnitUpdated);
+      },
+      error => {
+        console.log('Error actualizando unidad cargada: ', error);
+      }
+    );
+
+
+    // ## Update the current Lap with the new unit ## //
+    const currentLapObject = {};
+    currentLapObject['load'] = Object.assign([], this.currentLap['load']);
+    currentLapObject['load'].push({'unit': this.unitFound['_id'], 'loadedDate': Date.now()});
+    currentLapObject['lastLoad'] = Date.now();
+    // And then we update the object in backend.
+    this.lapsService.updateLapLoad(this.currentLap['_id'], currentLapObject).subscribe(
+      newCurrentLap => {
+        console.log('Lap updated when the reentried unit: ', newCurrentLap._id);
+        console.log(newCurrentLap);
+        this.currentLap = newCurrentLap;
+        this.lastLoadText = this.getDateDifference(newCurrentLap.lastLoad, Date.now());
+      },
+      error => {
+        console.log('Error updating the current lap when a unit was reentry: ', error);
+      }
+    );
+  }
+
+
+  // Get the last loaded unit object from lap list.
+  getLastLoadedUnitFromList(array: any): any {
+    let maxDateUnit = array[0];
+    for (let i = 0; i < array.length; i++) {
+      if (moment(array[i]['loadedDate']).isAfter(maxDateUnit['loadedDate'])) {maxDateUnit = array[i]; }
+    }
+    return maxDateUnit;
+  }
+
 
   // Update general port counts.
   updateCountsToPort(unit: any) {
