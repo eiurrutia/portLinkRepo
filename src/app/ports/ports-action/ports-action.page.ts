@@ -572,7 +572,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
-  // To reentry a registered unit.
+  // To reentry a registered unit. Doen't recieve any params because unitFound has the info.
   reentryUnit() {
     console.log('this.unitFound');
     console.log(this.unitFound);
@@ -645,6 +645,28 @@ export class PortsActionPage implements OnInit {
         console.log('Error updating the current lap when a unit was reentry: ', error);
       }
     );
+  }
+
+
+  // Alert to reentry a unit.
+  async reentryUnitAlert() {
+    const alert = await this.alertController.create({
+      header: 'Reingresar Unidad',
+      subHeader: `Deseas registrar la unidad ${this.unitFound['vin']} para el conductor ${this.selectedDriver}
+        y descartar el registro anterior?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Aceptar',
+          handler: () => {this.reentryUnit(); }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 

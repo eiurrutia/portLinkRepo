@@ -148,7 +148,7 @@
         </ion-row>
         <ion-row *ngIf="unitFound?.lapAssociated && correctVin == 2 && unitFound?.lapAssociated?.driver?.name != selectedDriver">
           <ion-col style="text-align: center;">
-            <ion-button *ngIf="unitFound?.lapAssociated?.driver?.name != selectedDriver" (click)="reentryUnit()">
+            <ion-button *ngIf="unitFound?.lapAssociated?.driver?.name != selectedDriver" (click)="reentryUnitAlert()">
               <span style="font-size: smaller;">REINGRESAR</span>
             </ion-button>
           </ion-col>
