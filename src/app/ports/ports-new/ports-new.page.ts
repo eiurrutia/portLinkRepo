@@ -354,7 +354,7 @@ export class PortsNewPage implements OnInit {
       const modal = await this.modalController.create({
         component: NewPortModalPage,
         componentProps: {
-          shipName: this.shipName.concat(' ' + this.today),
+          shipName: this.shipName,
           importer: this.selectedImporter,
           estimatedLoadString: this.estimatedLoad,
           finalPacking: this.finalPackingDicc,
