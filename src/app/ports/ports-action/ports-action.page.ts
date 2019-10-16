@@ -615,6 +615,8 @@ export class PortsActionPage implements OnInit {
 
   }
 
+
+  // Clean the size to modify counts diccs by size.
   getSizeCountAttribute(size: string) {
     if (size === 'pequeno') { return 'smallQuantity';
     } else if (size === 'mediano') { return 'mediumQuantity';
@@ -623,9 +625,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
-
-
-
+  // Create a new lap sending object to backend.
   createNewLap(driverId: string, portId: string, isThird: boolean, relativeNumber: number) {
     const lapObject = {};
     lapObject['driver'] = driverId;
@@ -646,6 +646,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
+  // Alert to create a new lap.
   async createNewLapAlert(numberOfLap: number = 1) {
     const alert = await this.alertController.create({
       header: 'Nueva Vuelta',
@@ -679,6 +680,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
+  // Check if there is enough time since the last load to create a new lap.
   checkHourDifferenceToNewLap(lastLap: any): boolean {
     const a = moment.tz(lastLap.lastLoad, 'America/Santiago');
     const b = moment.tz(Date.now(), 'America/Santiago');
@@ -689,12 +691,13 @@ export class PortsActionPage implements OnInit {
   }
 
 
-
-
+  // Get Date format to display in front.
   getCleanDate(date: Date, format: string): string {
     return moment.tz(date, 'America/Santiago').format(format);
   }
 
+
+  // Return string with time since the last load.
   getDateDifference(date1: any, date2: any): string {
     const a = moment.tz(date1, 'America/Santiago');
     const b = moment.tz(date2, 'America/Santiago');
@@ -708,11 +711,8 @@ export class PortsActionPage implements OnInit {
     return stringToReturn;
   }
 
-  probar2() {
-    console.log('peo 2');
-    console.log(this.vinToRegister);
-  }
 
+  // Build a dicc with cut vins.
   buildUnitsDiccByVin(unitsList: any) {
     this.unitsDiccByVin = {};
     unitsList.map( unit => {
@@ -723,6 +723,8 @@ export class PortsActionPage implements OnInit {
     console.log(this.unitsDiccByVin);
   }
 
+
+  // Build packing list headers.
   buildPackingListHeaders() {
     this.packingListHeaders = Object.keys(this.unitsList[0]);
     const index = this.packingListHeaders.indexOf('vin', 0);
@@ -731,12 +733,16 @@ export class PortsActionPage implements OnInit {
     }
   }
 
+
+  // Select Item in searcbar to driver.
   selectItem(driver: any) {
     this.selectedDriver = driver.nick;
     this.selectedDriverObject = driver;
     this.searchBarActive = false;
   }
 
+
+  // Filter in select driver bar when the user is writing.
   filterWithSearch(toSearch: any) {
     if (!toSearch) {this.driversFiltered = this.activeDriversAndThirdsList;
     } else { this.driversFiltered = this.activeDriversAndThirdsList.filter((driver) => {
@@ -756,6 +762,8 @@ export class PortsActionPage implements OnInit {
     } else { this.correctSlectedDriver = false; }
   }
 
+
+  // Alert when the user change the slected driver.
   async changeDriver() {
     const alert = await this.alertController.create({
       header: 'Cambiar Conductor',
@@ -784,6 +792,8 @@ export class PortsActionPage implements OnInit {
     await alert.present();
   }
 
+
+  // Get the last lap to selected driver or create a new lap if he doesn't have.
   getDriverInfoAboutHisLaps(driverId: string, portId: string) {
     this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
       result => {
@@ -807,10 +817,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
-  getDriverInfo() {
-
-  }
-
+  // Change selection to bottom tabs-bar.
   changeTabButton(nameButton: string) {
     for (const button of Object.keys(this.buttonTabActiveDicc)) {
       this.buttonTabActiveDicc[button] = false;
@@ -818,6 +825,8 @@ export class PortsActionPage implements OnInit {
     this.buttonTabActiveDicc[nameButton] = true;
   }
 
+
+  // Search with searchbar in packing list [BUILDING]
   searchInPacking() {
     const vinArray = this.packingListExample.filter(
       movement => movement.vin.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
@@ -835,6 +844,7 @@ export class PortsActionPage implements OnInit {
   }
 
 
+  // Get Port Object from backend form url.
   getPort(portId: string): void {
     this.portsService.getPort(portId).subscribe(
       currentPort => {
@@ -848,6 +858,8 @@ export class PortsActionPage implements OnInit {
     );
   }
 
+
+  // Get the current port units to display preview info.
   getCurrentPortUnits(portId: string): void {
     this.unitsService.getUnitsByPort(portId).subscribe(
       unitsList => {
@@ -861,6 +873,8 @@ export class PortsActionPage implements OnInit {
     );
   }
 
+
+  // Get unit info with lap and then driver or third specifications.
   getUnitById(unitId: string) {
     this.unitsService.getUnitById(unitId).subscribe(
       unit => {
@@ -906,6 +920,8 @@ export class PortsActionPage implements OnInit {
     );
   }
 
+
+  // Generate thirds and drivers array to keep the objects and show lists.
   generateDriversAndThirdsArray(currentPort: any) {
     // We build drivers array
     currentPort.consideredDrivers.map( driver => {
