@@ -1050,9 +1050,9 @@ export class PortsActionPage implements OnInit {
 
 
   // Generate thirds and drivers array to keep the objects and show lists.
-  generateDriversAndThirdsArray(currentPort: any) {
+  async generateDriversAndThirdsArray(currentPort: any) {
     // We build drivers array
-    currentPort.consideredDrivers.map( driver => {
+    await currentPort.consideredDrivers.map( driver => {
       this.driversService.getDriver(driver.driverId).subscribe(
         backDriver => {
           this.activeDriversAndThirdsList.push({'_id': backDriver._id, 'nick': backDriver.name, 'third': false});
@@ -1065,7 +1065,7 @@ export class PortsActionPage implements OnInit {
     });
 
     // We build thirds array
-    currentPort.consideredThirds.map( third => {
+    await currentPort.consideredThirds.map( third => {
       this.thirdsService.getThird(third.thirdId).subscribe(
         backThird => {
           if (third.nickName) {
@@ -1085,6 +1085,69 @@ export class PortsActionPage implements OnInit {
         }
       );
     });
+    console.log('va a ordenar');
+    await console.log(this.activeDriversAndThirdsList);
+    await this.activeDriversAndThirdsList.sort( function(a, b) {
+      console.log('ordeno entre');
+      console.log(a.nick);
+      console.log(b.nick);
+      if (a.nick < b.nick) {
+        return -1;
+      } else {
+        return 1;
+      }
+      // if (!a.third && b.third ) {
+      //   return -1;
+      // }
+      // if (a.third && !b.third ) {
+      //   return 1;
+      // }
+      // if (a.third && b.third ) {
+      //   if (a.nick < b.nick) {
+      //     return -1;
+      //   } else {
+      //     return 1;
+      //   }
+      // }
+      // if (!a.third && !b.third ) {
+      //   if (a.nick < b.nick) {
+      //     return -1;
+      //   } else {
+      //     return 1;
+      //   }
+      // }
+      // return 0;
+    } );
+    await console.log(this.activeDriversAndThirdsList);
+  }
+
+
+  // Compare function to order drivers lists
+  compareIsThirdAndThenName(driver1, driver2) {
+    console.log('ordeno entre');
+    console.log(driver1.nick);
+    console.log(driver2.nick);
+    if (!driver1.third && driver2.third ) {
+      return -1;
+    }
+    if (driver1.third && !driver2.third ) {
+      return 1;
+    }
+    if (driver1.third && driver2.third ) {
+      if (driver1.nick < driver2.nick) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    if (!driver1.third && !driver2.third ) {
+      if (driver1.nick < driver2.nick) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    return 0;
   }
 
 
