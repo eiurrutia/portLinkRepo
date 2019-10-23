@@ -16,6 +16,9 @@ const routes: Routes = [
   {
     path: 'drivers-selection',
     component: DriversSelectionPage
+  },
+  { path: 'trucks-association',
+    loadChildren: '../trucks/trucks.module#TrucksPageModule'
   }
 ];
 
