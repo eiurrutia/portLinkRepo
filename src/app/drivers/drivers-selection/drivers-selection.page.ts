@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { IonSlides, AlertController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-
 import { PortsService } from '../../ports/shared/ports.service';
 import { DriversService } from '../shared/drivers.service';
 import { ThirdsService } from '../../thirds/shared/thirds.service';
@@ -137,7 +135,7 @@ export class DriversSelectionPage implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
+          handler: () => {
             console.log('Confirm Cancel: blah');
           }
         }, {
@@ -145,7 +143,7 @@ export class DriversSelectionPage implements OnInit {
           handler: () => {
             this.addListOfDriversAndThirdsToPort();
             this.sendCount.emit(true);
-            this.navController.navigateRoot('/user-menu/ports');
+            this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association`);
             console.log('Confirm Okay');
           }
         }
@@ -179,7 +177,7 @@ export class DriversSelectionPage implements OnInit {
         this.generateActivableDriversDicc(this.driversList);
       },
       error => {
-        console.log(`Error fetching drivers`);
+        console.log(`Error fetching drivers: `, error);
       }
     );
   }
@@ -196,7 +194,7 @@ export class DriversSelectionPage implements OnInit {
         this.generateAccountantThirdsDicc(thirdsList);
       },
       error => {
-        console.log(`Error fetching thirds`);
+        console.log(`Error fetching thirds: `, error);
       }
     );
   }
@@ -245,7 +243,7 @@ export class DriversSelectionPage implements OnInit {
         this.currentPort = port;
       },
       error => {
-        console.log(`Error fetching current port`);
+        console.log(`Error fetching current port: `, error);
       }
     );
   }
@@ -257,7 +255,7 @@ export class DriversSelectionPage implements OnInit {
         console.log(portPatched);
       },
       error => {
-        console.log(`Error patching port.`);
+        console.log(`Error patching port: `, error);
       }
     );
   }
