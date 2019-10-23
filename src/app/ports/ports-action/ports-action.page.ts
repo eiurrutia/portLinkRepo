@@ -26,6 +26,7 @@ export class PortsActionPage implements OnInit {
 
   correctVin = 1; // Variable to define state of vin input. 0 --> invalid vin. 1 --> writing. 2 --> valid vin.
   unitFound = {}; // Empty dicc when there is no unit selected.
+  recentRegistered = false; // To know if shown unit was recent registered.
   lapAssociatedToUnitFound = {};
   lastLoadText: string;
 
@@ -527,6 +528,7 @@ export class PortsActionPage implements OnInit {
   } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
       console.log('Unidad registrada!');
       this.registerUnit(this.unitFound);
+      this.recentRegistered = true;
       this.registerUnitAlert();
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
@@ -594,6 +596,7 @@ export class PortsActionPage implements OnInit {
   reentryUnit() {
     console.log('this.unitFound');
     console.log(this.unitFound);
+    this.recentRegistered = true;
 
     // ## Update a old lap removing the unit from list  ## //
     const oldLapObject = {};

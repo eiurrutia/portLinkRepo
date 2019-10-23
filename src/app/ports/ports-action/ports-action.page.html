@@ -48,8 +48,8 @@
                       'search-vin-item-writing': correctVin == 1,
                       'search-vin-item-invalid': correctVin == 0}"
           [(ngModel)]="vinToRegister"
-          (ionChange)="correctVin = 1; unitFound = {}"
-          (ionFocus)="correctVin = 1; unitFound = {}"
+          (ionChange)="correctVin = 1; unitFound = {}; recentRegistered = false;"
+          (ionFocus)="correctVin = 1; unitFound = {}; recentRegistered = false;"
           (keyup.enter)="registerOrSearchUnit()" clearInput ></ion-input>
         </ion-row>
       </ion-grid>
@@ -146,7 +146,8 @@
             {{ getCleanDate(unitFound?.loadedDate, 'HH:mm') }}
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="unitFound?.lapAssociated && correctVin == 2 && unitFound?.lapAssociated?.driver?.name != selectedDriver">
+        <ion-row *ngIf="unitFound?.lapAssociated && !recentRegistered &&
+                        correctVin == 2 && unitFound?.lapAssociated?._id != currentLap._id">
           <ion-col style="text-align: center;">
             <ion-button *ngIf="unitFound?.lapAssociated?.driver?.name != selectedDriver" (click)="reentryUnitAlert()">
               <span style="font-size: smaller;">REINGRESAR</span>
