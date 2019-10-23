@@ -9,7 +9,6 @@ import { NewPortModalPageModule } from '../modals/new-port-modal/new-port-modal.
 import { PortsPage } from './ports.page';
 import { PortsNewPage } from './ports-new/ports-new.page';
 import { PortsActionPage } from './ports-action/ports-action.page';
-import { NewPortModalPage } from '../modals/new-port-modal/new-port-modal.page';
 
 
 const routes: Routes = [
