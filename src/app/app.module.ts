@@ -22,6 +22,9 @@ import { UnitsService } from './units/shared/units.service';
 import { ImportersService } from './importers/shared/importers.service';
 import { DriversService } from './drivers/shared/drivers.service';
 import { ThirdsService } from './thirds/shared/thirds.service';
+import { TrucksService } from './trucks/shared/trucks.service';
+import { RampsService } from './ramps/shared/ramps.service';
+import { DriverTruckRampAssociationsService } from './drivers/shared/driver-truck-ramp-associations.service';
 import { Globals } from './globals';
 
 import { UserProfilePageModule } from './user-profile/user-profile.module';
@@ -53,6 +56,9 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     ImportersService,
     DriversService,
     ThirdsService,
+    TrucksService,
+    RampsService,
+    DriverTruckRampAssociationsService,
     Globals
   ],
 
