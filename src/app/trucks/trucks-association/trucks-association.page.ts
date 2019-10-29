@@ -58,7 +58,6 @@ export class TrucksAssociationPage implements OnInit {
         this.currentPort = port;
 
         // We get the drivers considered.
-        this.driversAssociatedDicc = {};
         if (this.currentPort['consideredDrivers'].length > 0) {
           this.currentPort['consideredDrivers'].map(driverElement => {
             this.driversService.getDriver(driverElement.driverId).subscribe(
