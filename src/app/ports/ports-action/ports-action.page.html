@@ -425,6 +425,16 @@
   </ion-list>
 </div>
 
+<div *ngIf="buttonTabActiveDicc['share']" style="z-index: inherit;">
+  <ion-list class="main-list">
+    <ion-item>
+      <ion-button (click)="navigateAssociationUrl()">
+        Asociación conductores
+      </ion-button>
+    </ion-item>
+  </ion-list>  
+</div>
+
 
 <ion-tabs style="overflow-y: scroll!important;">
   <ion-tab-bar slot="bottom">

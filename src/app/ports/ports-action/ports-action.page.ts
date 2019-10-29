@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 import { PortsService } from '../shared/ports.service';
 import { LapsService } from '../../laps/shared/laps.service';
@@ -460,6 +460,7 @@ export class PortsActionPage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
+              private navController: NavController,
               private portsService: PortsService,
               private lapsService: LapsService,
               private driversService: DriversService,
@@ -1122,6 +1123,12 @@ export class PortsActionPage implements OnInit {
       // return 0;
     } );
     await console.log(this.activeDriversAndThirdsList);
+  }
+
+
+  // Navigate to association
+  navigateAssociationUrl() {
+    this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association`);
   }
 
 
