@@ -63,6 +63,11 @@ export class TrucksAssociationPage implements OnInit {
             this.driversService.getDriver(driverElement.driverId).subscribe(
               driver => {
                 this.driversDicc[driver._id] = Object.assign({}, driver);
+                if (this.driversAssociatedDicc[driver._id] === undefined) {
+                  this.driversAssociatedDicc[driver._id] = Object.assign({}, driver);
+                  this.driversAssociatedDicc[driver._id]['truck'] = null;
+                  this.driversAssociatedDicc[driver._id]['ramp'] = null;
+                }
               },
               error => {
                 console.log('Error fetching driver: ', error);
@@ -70,8 +75,9 @@ export class TrucksAssociationPage implements OnInit {
             );
           });
         }
+        console.log(this.driversDicc);
 
-        // We get the thirds considered.
+        // We get the thirds considered. SEE BECAUSE THE KEY SHOULD BE THE NICKNAME AND CAN BE THE SAME TO DOFFERENTS THIRDS COMPANIES.
         if (this.currentPort['consideredThirds'].length > 0) {
           this.currentPort['consideredThirds'].map(thirdElement => {
             this.thirdsService.getThird(thirdElement.thirdId).subscribe(
@@ -84,6 +90,7 @@ export class TrucksAssociationPage implements OnInit {
             );
           });
         }
+        console.log(this.thirdsDicc);
 
       },
       error => {
@@ -128,13 +135,68 @@ export class TrucksAssociationPage implements OnInit {
   }
 
 
+  // To know if dicc is empty.
+  isEmpty(obj: any): boolean {
+    if (Object.keys(obj).length) { return false; }
+    return true;
+  }
+
+
+  // Set selected truck to driver.
+  truckSelectChange(driver: any, truck: any) {
+    this.checkIfTruckIsAssignedToOther(driver, truck);
+    this.driversAssociatedDicc[driver._id]['truck'] = truck;
+    console.log(this.driversAssociatedDicc);
+  }
+
+
+  // Check if truck is selected to another driver.
+  checkIfTruckIsAssignedToOther(driver: any, truck: any) {
+    Object.keys(this.driversAssociatedDicc).map( associate => {
+      if (this.driversAssociatedDicc[associate]['truck'] !== null) {
+        if (this.driversAssociatedDicc[associate]['truck'] === truck) {
+          if (associate !== driver._id) {
+            // The truck was assigned to other driver. We have to set null in that driver.
+            this.driversAssociatedDicc[associate]['truck'] = null;
+          }
+        }
+      }
+    });
+  }
+
+
+  // Set selected ramp to driver.
+  rampSelectChange(driver: any, ramp: any) {
+    this.checkIfRampIsAssignedToOther(driver, ramp);
+    this.driversAssociatedDicc[driver._id]['ramp'] = ramp;
+    console.log(this.driversAssociatedDicc);
+  }
+
+
+  // Check if ramp is selected to another driver.
+  checkIfRampIsAssignedToOther(driver: any, ramp: any) {
+    Object.keys(this.driversAssociatedDicc).map( associate => {
+      if (this.driversAssociatedDicc[associate]['ramp'] !== null) {
+        if (this.driversAssociatedDicc[associate]['ramp'] === ramp) {
+          if (associate !== driver._id) {
+            // The truck was assigned to other driver. We have to set null in that driver.
+            this.driversAssociatedDicc[associate]['ramp'] = null;
+          }
+        }
+      }
+    });
+  }
+
+
   // Build selectable list for trucks.
   buildSelectableTrucksList() {
     this.selectableTrucksList = [];
     const trucksList = Object.keys(this.trucks);
     const associatedTruckList = [];
     for (const driverId of Object.keys(this.driversAssociatedDicc)) {
-      associatedTruckList.push(this.driversAssociatedDicc[driverId]['truck']['plateNumber']);
+      if (this.driversAssociatedDicc[driverId]['truck'] !== null ) {
+        associatedTruckList.push(this.driversAssociatedDicc[driverId]['truck']['plateNumber']);
+      }
     }
     console.log('associatedTruckList');
     console.log(associatedTruckList);
@@ -156,10 +218,11 @@ export class TrucksAssociationPage implements OnInit {
               this.driversAssociatedDicc[association.driverId] = Object.assign({}, driver);
               this.trucksService.getTruck(association.truckId).subscribe(
                 truck => {
-                  this.driversAssociatedDicc[association.driverId]['truck'] = Object.assign({}, truck);
+                  this.driversAssociatedDicc[association.driverId]['truck'] = truck.plateNumber;
                   this.rampsService.getRamp(association.rampId).subscribe(
                     ramp => {
-                      this.driversAssociatedDicc[association.driverId]['ramp'] = Object.assign({}, ramp);
+                      this.driversAssociatedDicc[association.driverId]['ramp'] = ramp.plateNumber;
+                      console.log('this.driversAssociatedDicc');
                       console.log(this.driversAssociatedDicc);
                       resolve(ramp);
                     },

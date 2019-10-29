@@ -1,9 +1,52 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>trucks-association</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content>
+<ion-list *ngIf="!isEmpty(driversDicc)" class="main-form">
+  <ion-item style="font-weight: 700;">
+    <ion-label style="text-align: center;"><b> Asociar Equipos </b></ion-label>
+  </ion-item>
+  <ion-item *ngFor="let driver of driversDicc | keyvalue">
+    <ion-grid>
+      <ion-row>
+        <ion-label><b> {{ driver.value.name }} </b></ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-row text-center align-items-center>
+            <ion-col>
+              <span *ngIf="!driversAssociatedDicc[driver.key]['truck']" class="without-info">*</span>Camión:
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="!isEmpty(trucks)">
+            <ion-col>
+              <ion-select class="truck-select"
+                          placeholder="----"
+                          [(ngModel)]="driversAssociatedDicc[driver.key]['truck']"
+                          (ngModelChange)="truckSelectChange(driver.value, $event)">
+                <ion-select-option *ngFor="let truck of trucks | keyvalue" [value]="truck.key">{{ truck.key }} - {{ truck.value.model }}</ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="6">
+          <ion-row text-center>
+            <ion-col>
+              <span *ngIf="!driversAssociatedDicc[driver.key]['ramp']" class="without-info">*</span>Rampla:
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="!isEmpty(ramps)">
+            <ion-col>
+              <ion-select class="ramp-select"
+                          placeholder="----"
+                          [(ngModel)]="driversAssociatedDicc[driver.key]['ramp']"
+                          (ngModelChange)="rampSelectChange(driver.value, $event)">
+                <ion-select-option *ngFor="let ramp of ramps | keyvalue" [value]="ramp.key">{{ ramp.key }} - {{ ramp.value.model }}</ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+  <ion-item *ngFor="let third of thirdsDicc | keyvalue">
+    <ion-label> {{ third.value.nickName }} </ion-label>
+    <ion-toggle></ion-toggle>
+  </ion-item>
+</ion-list>

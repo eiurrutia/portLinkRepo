@@ -1,0 +1,23 @@
+.main-form {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 20%;
+	overflow-y: scroll!important;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+}
+
+.truck-select {
+  max-width: 100%;
+  text-align: center;
+}
+
+.ramp-select {
+  max-width: 100%;
+  text-align: center;
+}
+
+.without-info {
+  font-size: large;
+  color: red;
+}
