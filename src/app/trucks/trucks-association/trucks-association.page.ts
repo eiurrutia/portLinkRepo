@@ -75,7 +75,6 @@ export class TrucksAssociationPage implements OnInit {
             );
           });
         }
-        console.log(this.driversDicc);
 
         // We get the thirds considered. SEE BECAUSE THE KEY SHOULD BE THE NICKNAME AND CAN BE THE SAME TO DOFFERENTS THIRDS COMPANIES.
         if (this.currentPort['consideredThirds'].length > 0) {
@@ -83,6 +82,7 @@ export class TrucksAssociationPage implements OnInit {
             this.thirdsService.getThird(thirdElement.thirdId).subscribe(
               third => {
                 this.thirdsDicc[third._id] = Object.assign({}, third);
+                thirdElement['third'] = third;
               },
               error => {
                 console.log('Error fetching third: ', error);
@@ -90,7 +90,8 @@ export class TrucksAssociationPage implements OnInit {
             );
           });
         }
-        console.log(this.thirdsDicc);
+        console.log('this.currentPort');
+        console.log(this.currentPort);
 
       },
       error => {
@@ -195,7 +196,7 @@ export class TrucksAssociationPage implements OnInit {
     const associatedTruckList = [];
     for (const driverId of Object.keys(this.driversAssociatedDicc)) {
       if (this.driversAssociatedDicc[driverId]['truck'] !== null ) {
-        associatedTruckList.push(this.driversAssociatedDicc[driverId]['truck']['plateNumber']);
+        associatedTruckList.push(this.driversAssociatedDicc[driverId]['truck']);
       }
     }
     console.log('associatedTruckList');
