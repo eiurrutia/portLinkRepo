@@ -328,15 +328,18 @@ export class TrucksAssociationPage implements OnInit {
             associationObject['rampId'] = null;
           }
 
-          this.associationsService.createAssociation(associationObject).subscribe(
-            association => {
-              console.log('Association created successfully.');
-              console.log(association);
-            },
-            error => {
-              console.log(`Error creating association to ${driver}: ${error}.`);
-            }
-          );
+          // Then if the ramp or truck are null we won't add the association to backend.
+          if (associationObject['truckId'] && associationObject['rampId']) {
+            this.associationsService.createAssociation(associationObject).subscribe(
+              association => {
+                console.log('Association created successfully.');
+                console.log(association);
+              },
+              error => {
+                console.log(`Error creating association to ${driver}: ${error}.`);
+              }
+            );
+          }
         });
       },
       error => {
