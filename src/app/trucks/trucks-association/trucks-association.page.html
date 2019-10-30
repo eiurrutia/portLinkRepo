@@ -1,6 +1,6 @@
 <ion-list *ngIf="!isEmpty(driversDicc)" class="main-form">
   <ion-item style="font-weight: 700;">
-    <ion-label style="text-align: center;"><b> Asociar Equipos </b></ion-label>
+    <ion-label style="text-align: center; font-size: xx-large;"><b style="color: red;">A</b><b>sociar Equipos </b></ion-label>
   </ion-item>
   <ion-item *ngFor="let driver of driversDicc | keyvalue">
     <ion-grid>
@@ -10,7 +10,7 @@
       <ion-row>
         <ion-col size="6">
           <ion-row text-center align-items-center>
-            <ion-col>
+            <ion-col style="color: gray;">
               <span *ngIf="!driversAssociatedDicc[driver.key]['truck']" class="without-info">*</span>Camión:
             </ion-col>
           </ion-row>
@@ -27,7 +27,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-row text-center>
-            <ion-col>
+            <ion-col style="color: gray;">
               <span *ngIf="!driversAssociatedDicc[driver.key]['ramp']" class="without-info">*</span>Rampla:
             </ion-col>
           </ion-row>
@@ -47,12 +47,27 @@
   </ion-item>
   <div *ngIf="!isEmpty(currentPort['consideredThirds'])">
   <ion-item>
-    <ion-label text-center><b> Terceros </b></ion-label>
+    <ion-label style="font-size: larger;"><b style="color: red;">T</b><b>erceros </b></ion-label>
   </ion-item>
   <ion-item *ngFor="let third of currentPort['consideredThirds']">
-    <ion-label *ngIf="third['nickName']"><b>{{ third?.third?.name }} - {{ third['nickName'] }}</b></ion-label>
-    <ion-label *ngIf="!third['nickName']"><b>{{ third?.third?.name }}</b></ion-label>
-    <ion-input text-center placeholder="Digite Patente AABB49"></ion-input>
+    <div *ngIf="third['nickName']">
+      <ion-label>
+        <span *ngIf="!thirdsPlatesNumbersDicc[third?.third?.name + ' - ' + third?.nickName]" class="without-info">*</span><b>{{ third?.third?.name }} - {{ third['nickName'] }}</b></ion-label>
+        <ion-input [(ngModel)]="thirdsPlatesNumbersDicc[third?.third?.name + ' - ' + third?.nickName]" text-center placeholder="Digite Patente AABB49"></ion-input>
+    </div>
+    <div *ngIf="!third['nickName']">
+    <ion-label>
+      <span *ngIf="!thirdsPlatesNumbersDicc[third?.third?.name]" class="without-info">*</span><b>{{ third?.third?.name }}</b></ion-label>
+      <ion-input [(ngModel)]="thirdsPlatesNumbersDicc[third?.third?.name]" text-center placeholder="Digite Patente AABB49"></ion-input>
+    </div>
+  </ion-item>
+  <ion-item text-center>
+    <ion-button expand="block"
+                color="medium"
+                size="large"
+                (click)="checkAllDriversAndThirdWithInfo()">
+      <b>Confirmar Equipos</b>
+    </ion-button>
   </ion-item>
   </div>
 </ion-list>

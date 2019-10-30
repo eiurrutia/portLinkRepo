@@ -27,6 +27,8 @@ export class TrucksAssociationPage implements OnInit {
   driversDicc = {};
   thirdsDicc = {};
 
+  thirdsPlatesNumbersDicc = {};
+
   selectableTrucksList = [];
 
 
@@ -77,10 +79,17 @@ export class TrucksAssociationPage implements OnInit {
         }
 
         // We get the thirds considered. SEE BECAUSE THE KEY SHOULD BE THE NICKNAME AND CAN BE THE SAME TO DOFFERENTS THIRDS COMPANIES.
+        this.thirdsPlatesNumbersDicc = {};
         if (this.currentPort['consideredThirds'].length > 0) {
           this.currentPort['consideredThirds'].map(thirdElement => {
             this.thirdsService.getThird(thirdElement.thirdId).subscribe(
               third => {
+                if (thirdElement['nickName']) {
+                  const stringKey = third['name'] + ' - ' + thirdElement['nickName'];
+                  this.thirdsPlatesNumbersDicc[stringKey] = null;
+                } else {
+                  this.thirdsPlatesNumbersDicc[third['name']] = null;
+                }
                 this.thirdsDicc[third._id] = Object.assign({}, third);
                 thirdElement['third'] = third;
               },
@@ -254,6 +263,44 @@ export class TrucksAssociationPage implements OnInit {
         console.log('Error fetching associations: ', error);
       }
     );
+  }
+
+
+  // Check if all drivers and thirds have trucks assocaited.
+  checkAllDriversAndThirdWithInfo() {
+    let missing = false;
+    // Check if there are drivers selected.
+    if (this.currentPort.consideredDrivers.length) {
+      for (const driver of this.currentPort.consideredDrivers) {
+        if (!this.driversAssociatedDicc[driver.driverId]['truck'] || !this.driversAssociatedDicc[driver.driverId]['ramp']) {
+          missing = true;
+        }
+      }
+    }
+
+    // Check if there are thirds selected.
+    if (this.currentPort.consideredThirds.length) {
+      for (const third of Object.keys(this.thirdsPlatesNumbersDicc)) {
+        if (!this.thirdsPlatesNumbersDicc[third]) {
+          missing = true;
+        }
+      }
+    }
+
+    console.log(this.driversAssociatedDicc);
+    console.log(this.thirdsPlatesNumbersDicc);
+
+    if (missing) {
+      console.log('Falta información por completar');
+    } else {
+      console.log('Toda la info lista');
+    }
+  }
+
+
+  // Send Associations to Back and update port lists.
+  sendInfoToBackAndFinishPortCreation() {
+
   }
 
 }
