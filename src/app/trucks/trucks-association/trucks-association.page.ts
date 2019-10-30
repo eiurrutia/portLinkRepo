@@ -87,12 +87,11 @@ export class TrucksAssociationPage implements OnInit {
           this.currentPort['consideredThirds'].map(thirdElement => {
             this.thirdsService.getThird(thirdElement.thirdId).subscribe(
               third => {
-                if (thirdElement['nickName']) {
-                  const stringKey = third['name'] + ' - ' + thirdElement['nickName'];
-                  this.thirdsPlatesNumbersDicc[stringKey] = null;
-                } else {
-                  this.thirdsPlatesNumbersDicc[third['name']] = null;
-                }
+                let stringKey = '';
+                if (thirdElement['nickName']) { stringKey = third['name'] + ' - ' + thirdElement['nickName'];
+                } else { stringKey = third['name']; }
+                if (thirdElement['truckPlateId']) { this.thirdsPlatesNumbersDicc[stringKey] = thirdElement['truckPlateId'];
+                } else { this.thirdsPlatesNumbersDicc[stringKey] = null; }
                 this.thirdsDicc[third._id] = Object.assign({}, third);
                 thirdElement['third'] = third;
               },
@@ -120,8 +119,6 @@ export class TrucksAssociationPage implements OnInit {
         trucks.map(truck => {
           this.trucks[truck['plateNumber']] = truck;
         });
-        console.log('trucks');
-        console.log(this.trucks);
         this.buildSelectableTrucksList();
       },
       error => {
@@ -138,8 +135,6 @@ export class TrucksAssociationPage implements OnInit {
         ramps.map(ramp => {
           this.ramps[ramp['plateNumber']] = ramp;
         });
-        console.log('ramps');
-        console.log(this.ramps);
       },
       error => {
         console.log('Error fetching ramps: ', error);
@@ -211,13 +206,9 @@ export class TrucksAssociationPage implements OnInit {
         associatedTruckList.push(this.driversAssociatedDicc[driverId]['truck']);
       }
     }
-    console.log('associatedTruckList');
-    console.log(associatedTruckList);
     trucksList.map(truck => {
       if (!associatedTruckList.includes(truck)) { this.selectableTrucksList.push(truck); }
     });
-    console.log('this.selectableTrucksList');
-    console.log(this.selectableTrucksList);
   }
 
 
@@ -235,8 +226,6 @@ export class TrucksAssociationPage implements OnInit {
                   this.rampsService.getRamp(association.rampId).subscribe(
                     ramp => {
                       this.driversAssociatedDicc[association.driverId]['ramp'] = ramp.plateNumber;
-                      console.log('this.driversAssociatedDicc');
-                      console.log(this.driversAssociatedDicc);
                       resolve(ramp);
                     },
                     error => {
