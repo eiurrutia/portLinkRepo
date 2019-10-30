@@ -54,6 +54,11 @@ export class DriverTruckRampAssociationsService {
     return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
+  deleteAllAssociations(): Observable<any> {
+    const url = `${this.backUrl}/associations`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return Observable.throwError(error.status  || 'Server Error');
   }
