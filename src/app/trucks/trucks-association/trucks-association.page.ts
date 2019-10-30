@@ -294,13 +294,96 @@ export class TrucksAssociationPage implements OnInit {
       console.log('Falta información por completar');
     } else {
       console.log('Toda la info lista');
+      this.sendInfoToBackAndFinishPortCreation();
     }
   }
 
 
   // Send Associations to Back and update port lists.
   sendInfoToBackAndFinishPortCreation() {
+    // First, we delete all the associations in backend and we replace
+    // with driversAssociatedDicc that contains all associations from back and
+    // updates (not only consideredDrivers to this port).
+    this.associationsService.deleteAllAssociations().subscribe(
+      () => {
+        console.log('All associations deleted. Ready to replace.');
+        Object.keys(this.driversAssociatedDicc).map( driver => {
+          const associationObject = {};
+          // Set the driver Id.
+          associationObject['driverId'] = driver;
+
+          // Set the truck Id.
+          const truck = this.driversAssociatedDicc[driver]['truck'];
+          if (truck) {
+            associationObject['truckId'] = this.trucks[truck]['_id'];
+          } else {
+            associationObject['truckId'] = null;
+          }
+
+          // Set the ramp Id.
+          const ramp = this.driversAssociatedDicc[driver]['ramp'];
+          if (ramp) {
+            associationObject['rampId'] = this.ramps[ramp]['_id'];
+          } else {
+            associationObject['rampId'] = null;
+          }
+
+          this.associationsService.createAssociation(associationObject).subscribe(
+            association => {
+              console.log('Association created successfully.');
+              console.log(association);
+            },
+            error => {
+              console.log(`Error creating association to ${driver}: ${error}.`);
+            }
+          );
+        });
+      },
+      error => {
+        console.log('Error deleting all the associations: ', error);
+      }
+    );
+
+
+    // And then we update the port info.
+
+    // We update drivers list with platesNumbers
+    let consideredDriversObj = [];
+    consideredDriversObj = Object.assign([], this.currentPort.consideredDrivers);
+    consideredDriversObj.map(driver => {
+      driver['truckPlateId'] = this.driversAssociatedDicc[driver.driverId]['truck'];
+      driver['rampPlateId'] = this.driversAssociatedDicc[driver.driverId]['ramp'];
+    });
+    console.log('consideredDriversObj');
+    console.log(consideredDriversObj);
+
+
+    // We update thirds list with platesNumbers
+    let consideredThirdsObj = [];
+    consideredThirdsObj = Object.assign([], this.currentPort.consideredThirds);
+    consideredThirdsObj.map(third => {
+      if (third['nickName']) {
+        third['truckPlateId'] = this.thirdsPlatesNumbersDicc[third.third.name + ' - ' + third.nickName];
+      } else {
+        third['truckPlateId'] = this.thirdsPlatesNumbersDicc[third.third.name];
+      }
+    });
+    console.log('consideredThirdsObj');
+    console.log(consideredThirdsObj);
+
+    // And we update the port in backend;
+    const portObj = {};
+    portObj['consideredDrivers'] = consideredDriversObj;
+    portObj['consideredThirds'] = consideredThirdsObj;
+    this.portsService.updatePort(this.portId, portObj).subscribe(
+      portUpdated => {
+        console.log('Puerto actualizado en backend correctamente.');
+        console.log(portUpdated);
+      },
+      error => {
+        console.log('Error updating list of drivers whit their plate numbers: ', error);
+      }
+    );
 
   }
-
 }
