@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController, NavController } from '@ionic/angular';
 
 import { PortsService } from '../../ports/shared/ports.service';
 import { DriversService } from '../../drivers/shared/drivers.service';
@@ -33,6 +34,8 @@ export class TrucksAssociationPage implements OnInit {
 
 
   constructor(private activatedRoute: ActivatedRoute,
+              private alertController: AlertController,
+              private navController: NavController,
               private portsService: PortsService,
               private driversService: DriversService,
               private thirdsService: ThirdsService,
@@ -291,11 +294,37 @@ export class TrucksAssociationPage implements OnInit {
     console.log(this.thirdsPlatesNumbersDicc);
 
     if (missing) {
-      console.log('Falta información por completar');
+      this.pendingInfoAlert();
     } else {
       console.log('Toda la info lista');
       this.sendInfoToBackAndFinishPortCreation();
+      this.createdPortAlert();
     }
+  }
+
+
+  // Alert to pending plate numbers to drivers.
+  async pendingInfoAlert() {
+    const alert = await this.alertController.create({
+      header: 'Falta Información',
+      subHeader: 'Falta que resuelvas los campos en rojo para continuar con la creación del puerto.',
+      message: 'Hay conductores sin número de patente asociada.',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+
+  // Alert to pending plate numbers to drivers.
+  async createdPortAlert() {
+    const alert = await this.alertController.create({
+      header: 'Puerto Creado',
+      subHeader: this.currentPort.shipName,
+      message: 'El puerto se ha creado correctamente.',
+      buttons: ['OK']
+    });
+    await alert.present();
+    this.navController.navigateForward(`/user-menu/ports`);
   }
 
 
@@ -357,9 +386,6 @@ export class TrucksAssociationPage implements OnInit {
       driver['truckPlateId'] = this.driversAssociatedDicc[driver.driverId]['truck'];
       driver['rampPlateId'] = this.driversAssociatedDicc[driver.driverId]['ramp'];
     });
-    console.log('consideredDriversObj');
-    console.log(consideredDriversObj);
-
 
     // We update thirds list with platesNumbers
     let consideredThirdsObj = [];
@@ -371,8 +397,6 @@ export class TrucksAssociationPage implements OnInit {
         third['truckPlateId'] = this.thirdsPlatesNumbersDicc[third.third.name];
       }
     });
-    console.log('consideredThirdsObj');
-    console.log(consideredThirdsObj);
 
     // And we update the port in backend;
     const portObj = {};
