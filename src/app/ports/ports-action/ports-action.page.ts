@@ -1120,6 +1120,11 @@ export class PortsActionPage implements OnInit {
     this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association`);
   }
 
+  // Navigate to drivers selection.
+  navigateDriversSelectionUrl() {
+    this.navController.navigateRoot(`user-menu/ports/new-port/${this.portId}/drivers/drivers-selection`);
+  }
+
 
   // Compare function to order drivers lists
   compareIsThirdAndThenName(driver1, driver2) {
