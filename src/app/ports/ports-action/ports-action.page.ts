@@ -758,13 +758,22 @@ export class PortsActionPage implements OnInit {
 
 
   // Create a new lap sending object to backend.
-  createNewLap(driverId: string, portId: string, isThird: boolean, relativeNumber: number) {
+  createNewLap(driver: any, portId: string, isThird: boolean, relativeNumber: number) {
     const lapObject = {};
-    lapObject['driver'] = driverId;
+    lapObject['driver'] = driver._id;
     lapObject['port'] = portId;
     lapObject['isThird'] = isThird;
     lapObject['relativeNumber'] = relativeNumber;
     lapObject['load'] = [];
+    lapObject['truck'] = driver.truckPlateId;
+    // We will register the ramp and unionized attributes only if it corresponds to a company driver.
+    if (!isThird) {
+      lapObject['unionized'] = driver.unionized;
+      lapObject['ramp'] = driver.rampPlateId;
+    } else {
+      lapObject['nickName'] = driver.nick;
+    }
+
     this.lapsService.createLap(lapObject).subscribe(
       lap => {
         console.log('Vuelta creada!');
@@ -772,6 +781,7 @@ export class PortsActionPage implements OnInit {
         this.currentLap = lap;
       },
       error => {
+        this.setFailLapCreate();
         console.log('Error creating a lap: ', error);
       }
     );
@@ -790,17 +800,13 @@ export class PortsActionPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             if (numberOfLap === 1) {
-              this.correctSlectedDriver = false;
-              this.selectedDriver = null;
-              this.selectedDriverObject = null;
-              this.lastSelectedDriver = null;
-              this.lastSelectedDriverObject = null;
+              this.setFailLapCreate();
             }
           }
         }, {
           text: 'Aceptar',
           handler: () => {
-            this.createNewLap(this.selectedDriverObject._id,
+            this.createNewLap(this.selectedDriverObject,
                               this.portId,
                               this.selectedDriverObject.third,
                               numberOfLap);
@@ -809,6 +815,16 @@ export class PortsActionPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+
+  // Set null varibles to error failed lap create.
+  setFailLapCreate() {
+    this.correctSlectedDriver = false;
+    this.selectedDriver = null;
+    this.selectedDriverObject = null;
+    this.lastSelectedDriver = null;
+    this.lastSelectedDriverObject = null;
   }
 
 
@@ -1056,73 +1072,45 @@ export class PortsActionPage implements OnInit {
   // Generate thirds and drivers array to keep the objects and show lists.
   async generateDriversAndThirdsArray(currentPort: any) {
     // We build drivers array
-    await currentPort.consideredDrivers.map( driver => {
-      this.driversService.getDriver(driver.driverId).subscribe(
+    await Promise.all(currentPort.consideredDrivers.map( async (driver) => {
+      return new Promise ( resolve => this.driversService.getDriver(driver.driverId).subscribe(
         backDriver => {
-          this.activeDriversAndThirdsList.push({'_id': backDriver._id, 'nick': backDriver.name, 'third': false});
+          this.activeDriversAndThirdsList.push({'_id': backDriver._id, 'nick': backDriver.name,
+                                                'third': false, 'truckPlateId': driver.truckPlateId,
+                                                'rampPlateId': driver.rampPlateId, 'unionized': backDriver.unionized});
           this.namesArray.push(backDriver.name);
+          resolve();
         },
         error => {
           console.log('Error getting driver: ', error);
         }
-      );
-    });
+      ));
+    }));
 
     // We build thirds array
-    await currentPort.consideredThirds.map( third => {
-      this.thirdsService.getThird(third.thirdId).subscribe(
+    await Promise.all(currentPort.consideredThirds.map( async (third) => {
+      return new Promise ( resolve => this.thirdsService.getThird(third.thirdId).subscribe(
         backThird => {
           if (third.nickName) {
             this.activeDriversAndThirdsList.push({'_id': backThird._id,
                                                   'nick': backThird.name + ' - ' + third.nickName,
-                                                  'third': true});
+                                                  'third': true, 'truckPlateId': third.truckPlateId});
             this.namesArray.push(backThird.name + ' - ' + third.nickName);
           } else {
             this.activeDriversAndThirdsList.push({'_id': backThird._id,
                                                   'nick': backThird.name,
-                                                  'third': true});
+                                                  'third': true, 'truckPlateId': third.truckPlateId});
             this.namesArray.push(backThird.name);
           }
+          resolve();
         },
         error => {
           console.log('Error getting third: ', error);
         }
-      );
-    });
-    console.log('va a ordenar');
-    await console.log(this.activeDriversAndThirdsList);
-    await this.activeDriversAndThirdsList.sort( function(a, b) {
-      console.log('ordeno entre');
-      console.log(a.nick);
-      console.log(b.nick);
-      if (a.nick < b.nick) {
-        return -1;
-      } else {
-        return 1;
-      }
-      // if (!a.third && b.third ) {
-      //   return -1;
-      // }
-      // if (a.third && !b.third ) {
-      //   return 1;
-      // }
-      // if (a.third && b.third ) {
-      //   if (a.nick < b.nick) {
-      //     return -1;
-      //   } else {
-      //     return 1;
-      //   }
-      // }
-      // if (!a.third && !b.third ) {
-      //   if (a.nick < b.nick) {
-      //     return -1;
-      //   } else {
-      //     return 1;
-      //   }
-      // }
-      // return 0;
-    } );
-    await console.log(this.activeDriversAndThirdsList);
+      ));
+    }));
+    // And then, we sort the list by drivers and thords and bay nickName.
+    await this.activeDriversAndThirdsList.sort( this.compareIsThirdAndThenName );
   }
 
 
@@ -1134,9 +1122,6 @@ export class PortsActionPage implements OnInit {
 
   // Compare function to order drivers lists
   compareIsThirdAndThenName(driver1, driver2) {
-    console.log('ordeno entre');
-    console.log(driver1.nick);
-    console.log(driver2.nick);
     if (!driver1.third && driver2.third ) {
       return -1;
     }
