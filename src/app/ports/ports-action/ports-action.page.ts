@@ -48,6 +48,7 @@ export class PortsActionPage implements OnInit {
                         'barcode': true,
                         'resume': false,
                         'packing': false,
+                        'setting': false,
                         'share': false
                         };
 
