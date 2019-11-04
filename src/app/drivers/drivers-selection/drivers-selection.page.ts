@@ -54,9 +54,8 @@ export class DriversSelectionPage implements OnInit {
 
   async getBackInfo() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
-    await this.getPort(this.portId);
-    await this.getDrivers();
-    await this.getThirds();
+    // We get the current port object and then the drivers and thirds.
+    this.getPort(this.portId);
   }
 
   segmentChanged(ev: any) {
@@ -185,7 +184,20 @@ export class DriversSelectionPage implements OnInit {
   generateActivableDriversDicc(driversList: any): void {
     for (const driver of driversList) { this.activeDriversDicc[driver._id] = false; }
     this.countActiveDrivers();
+    if (this.currentPort['consideredDrivers'].length > 0) {
+      this.setCurrentSelectedDrivers();
+    }
   }
+
+
+  // Set current selected drivers.
+  setCurrentSelectedDrivers() {
+    this.currentPort['consideredDrivers'].map( driver => {
+      this.activeDriversDicc[driver.driverId] = true;
+    });
+    this.countActiveDrivers();
+  }
+
 
   getThirds(): void {
     this.thirdsService.getThirds().subscribe(
@@ -204,6 +216,21 @@ export class DriversSelectionPage implements OnInit {
       this.accountantThirdsDicc[third._id] = 0;
       this.nameThirdsDicc[third._id] = {1: ''};
     }
+    this.countActiveThirds();
+    if (this.currentPort['consideredThirds'].length > 0) {
+      this.setCurrentSelectedThirds();
+    }
+  }
+
+
+  // Set current selected thirds.
+  setCurrentSelectedThirds() {
+    this.currentPort['consideredThirds'].map( third => {
+      this.accountantThirdsDicc[third.thirdId] += 1;
+      if (third['nickName']) {
+        this.nameThirdsDicc[third.thirdId][this.accountantThirdsDicc[third.thirdId]] = third['nickName'];
+      }
+    });
     this.countActiveThirds();
   }
 
@@ -241,6 +268,8 @@ export class DriversSelectionPage implements OnInit {
     this.portsService.getPort(portId).subscribe(
       port => {
         this.currentPort = port;
+        this.getDrivers();
+        this.getThirds();
       },
       error => {
         console.log(`Error fetching current port: `, error);
