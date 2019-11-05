@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, LoadingController } from '@ionic/angular';
 
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
@@ -58,9 +58,12 @@ export class PortsActionPage implements OnInit {
 
   wordSearchedInPacking: string;
 
+  loading: any;
+
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
+              private loadingController: LoadingController,
               private socialSharing: SocialSharing,
               private portsService: PortsService,
               private lapsService: LapsService,
@@ -68,10 +71,22 @@ export class PortsActionPage implements OnInit {
               private thirdsService: ThirdsService,
               private unitsService: UnitsService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
+    await this.presentLoading();
     this.getPort(this.portId);
     this.driversFiltered = this.activeDriversAndThirdsList;
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentLoading() {
+    // Prepare a loading controller
+    this.loading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.loading.present();
   }
 
 
@@ -140,7 +155,6 @@ export class PortsActionPage implements OnInit {
       console.log('Unidad registrada!');
       this.registerUnit(this.unitFound);
       this.recentRegistered = true;
-      this.registerUnitAlert();
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
       console.log('se intenta re registrar una undiad. aprieta el botón.');
@@ -149,7 +163,9 @@ export class PortsActionPage implements OnInit {
 
 
   // Register unit in lap and update unit object in backend.
-  registerUnit(unit: any) {
+  async registerUnit(unit: any) {
+    await this.presentLoading();
+
     // Update lap in backend.
     const lapObject = {};
     lapObject['load'] = Object.assign([], this.currentLap.load);
@@ -179,8 +195,11 @@ export class PortsActionPage implements OnInit {
         // We call get unit to update front variables (unitFound).
         this.getUnitById(unitUpdated._id);
         this.updateCountsToPort(unitUpdated);
+        this.loading.dismiss();
+        this.registerUnitAlert();
       },
       error => {
+        this.loading.dismiss();
         console.log('Error actualizando unidad cargada: ', error);
       }
     );
@@ -368,7 +387,8 @@ export class PortsActionPage implements OnInit {
 
 
   // Create a new lap sending object to backend.
-  createNewLap(driver: any, portId: string, isThird: boolean, relativeNumber: number) {
+  async createNewLap(driver: any, portId: string, isThird: boolean, relativeNumber: number) {
+    await this.presentLoading();
     const lapObject = {};
     lapObject['driver'] = driver._id;
     lapObject['port'] = portId;
@@ -389,10 +409,12 @@ export class PortsActionPage implements OnInit {
         console.log('Vuelta creada!');
         console.log(lap);
         this.currentLap = lap;
+        this.loading.dismiss();
       },
       error => {
         this.setFailLapCreate();
         console.log('Error creating a lap: ', error);
+        this.loading.dismiss();
       }
     );
   }
@@ -552,9 +574,12 @@ export class PortsActionPage implements OnInit {
 
 
   // Get the last lap to selected driver or create a new lap if he doesn't have.
-  getDriverInfoAboutHisLaps(driverId: string, portId: string) {
+  async getDriverInfoAboutHisLaps(driverId: string, portId: string) {
+    await this.presentLoading();
+
     this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
       result => {
+        this.loading.dismiss();
         if (result.total) {
           this.currentLap = result.data[0];
           this.lastLoadText = this.getDateDifference(result.data[0].lastLoad, Date.now());
@@ -567,6 +592,7 @@ export class PortsActionPage implements OnInit {
           this.currentLap = null;
           this.createNewLapAlert(); // First lap.
         }
+
       },
       error => {
         console.log('Error getting the driver laps: ', error);
@@ -611,6 +637,7 @@ export class PortsActionPage implements OnInit {
         this.generateDriversAndThirdsArray(currentPort);
       },
       error => {
+        this.loading.dismiss();
         console.log(`Error fetching port: ${error}.`);
       }
     );
@@ -624,8 +651,10 @@ export class PortsActionPage implements OnInit {
         this.unitsList = unitsList.data;
         this.buildUnitsDiccByVin(this.unitsList);
         this.buildPackingListHeaders();
+        this.loading.dismiss();
       },
       error => {
+        this.loading.dismiss();
         console.log(`Error fetching units by port: ${error}.`);
       }
     );
