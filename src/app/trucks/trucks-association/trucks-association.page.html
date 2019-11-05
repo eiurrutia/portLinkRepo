@@ -47,7 +47,7 @@
   </ion-item>
   <div *ngIf="!isEmpty(currentPort['consideredThirds'])">
   <ion-item>
-    <ion-label style="font-size: larger;"><b style="color: red;">T</b><b>erceros </b></ion-label>
+    <ion-label style="font-size: larger; text-align: center;"><b style="color: red;">T</b><b>erceros </b></ion-label>
   </ion-item>
   <ion-item *ngFor="let third of currentPort['consideredThirds']">
     <div *ngIf="third['nickName']">
