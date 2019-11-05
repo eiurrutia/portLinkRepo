@@ -45,6 +45,8 @@ export class DriversSelectionPage implements OnInit {
   driversLoading: any;
   thirdsLoading: any;
 
+  modifyMode = false;
+
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
@@ -59,9 +61,19 @@ export class DriversSelectionPage implements OnInit {
 
   async getBackInfo() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.setOpenedMode();
     // We get the current port object and then the drivers and thirds.
     await this.presentLoading();
     this.getPort(this.portId);
+  }
+
+  // Set Opened Mode: Creating or Modify
+  setOpenedMode() {
+    if (this.activatedRoute.snapshot.routeConfig.path.split('/').includes('modify')) {
+      this.modifyMode = true;
+    } else {
+      this.modifyMode = false;
+    }
   }
 
 
@@ -156,15 +168,19 @@ export class DriversSelectionPage implements OnInit {
         }
       }
     }
-    this.presentAlertConfirm();
+    if (this.modifyMode) {
+      this.presentAlertConfirmModify();
+    } else {
+      this.presentAlertConfirmNew();
+    }
     return true;
   }
 
-  async presentAlertConfirm() {
+  async presentAlertConfirmNew() {
     this.generateObjectToPatch();
     const alert = await this.alertController.create({
       header: 'Continuar',
-      message: 'Quieres crear realizar este puerto con ' + (this.activeDriversCount +
+      message: 'Quieres realizar este puerto con ' + (this.activeDriversCount +
           this.activeThirdsCount).toString() + ' conductores en total?' ,
       buttons: [
         {
@@ -180,6 +196,35 @@ export class DriversSelectionPage implements OnInit {
             this.addListOfDriversAndThirdsToPort();
             this.sendCount.emit(true);
             this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association`);
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlertConfirmModify() {
+    this.generateObjectToPatch();
+    const alert = await this.alertController.create({
+      header: 'Continuar',
+      message: 'Quieres modificar este puerto con ' + (this.activeDriversCount +
+          this.activeThirdsCount).toString() + ' conductores en total?' ,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.addListOfDriversAndThirdsToPort();
+            this.sendCount.emit(true);
+            this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association/modify`);
             console.log('Confirm Okay');
           }
         }
