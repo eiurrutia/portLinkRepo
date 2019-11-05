@@ -34,7 +34,7 @@
   </ion-grid>
 </ion-segment>
 
-<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged($event)"
+<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChanged()"
   style="margin-top: 46%; overflow-y: scroll!important; position: absolute;">
 
   <!-- Drivers Slide -->
@@ -88,7 +88,7 @@
 
 <ion-fab style="bottom: 1%; right: 2%;" vertical="bottom" horizontal="end" edge>
   <ion-fab-button size="big" (click)="checkAllWithName()" style="--background: seagreen;">
-    <ion-icon *ngIf="!currentPort?.consideredDrivers?.length > 0" name="add"></ion-icon>
+    <ion-icon *ngIf="!(currentPort?.consideredDrivers?.length > 0)" name="add"></ion-icon>
     <ion-icon *ngIf="currentPort?.consideredDrivers?.length > 0" name="checkmark"></ion-icon>
   </ion-fab-button>
 </ion-fab>
