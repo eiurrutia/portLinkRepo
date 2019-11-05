@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 import { PortsService } from './shared/ports.service';
@@ -27,6 +27,8 @@ export class PortsPage implements OnInit {
 
   message: any;
 
+  loading: any;
+
   @Output() sendCount: EventEmitter <boolean> = new EventEmitter<boolean>();
 
   public sendRecord() {
@@ -34,15 +36,25 @@ export class PortsPage implements OnInit {
   }
 
   constructor(public alertController: AlertController,
+              public loadingController: LoadingController,
               public router: Router,
               private portsService: PortsService,
               private lapsService: LapsService,
               private unitsService: UnitsService) { }
 
-  ngOnInit() {
-    this.getActivePorts();
-    this.getRecentPorts();
+  async ngOnInit() {
+    await this.presentLoading();
+    await this.getActivePorts();
+  }
 
+
+  async presentLoading() {
+    // Prepare a loading controller
+    this.loading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.loading.present();
   }
 
   selectOption(textValue: string) {
@@ -62,8 +74,10 @@ export class PortsPage implements OnInit {
       portsList => {
         this.activePortsList = portsList.data;
         console.log(this.activePortsList);
+        this.getRecentPorts();
       },
       error => {
+        this.loading.dismiss();
         console.log(`Error fetching active ports: ${error}`);
       }
     );
@@ -74,8 +88,11 @@ export class PortsPage implements OnInit {
       portsList => {
         this.recentPortsList = portsList.data;
         console.log(this.recentPortsList);
+        this.loading.dismiss();
+
       },
       error => {
+        this.loading.dismiss();
         console.log(`Error fetching recent ports: ${error}`);
       }
     );
