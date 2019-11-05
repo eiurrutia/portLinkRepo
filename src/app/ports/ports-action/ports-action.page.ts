@@ -755,12 +755,12 @@ export class PortsActionPage implements OnInit {
 
   // Navigate to association
   navigateAssociationUrl() {
-    this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association`);
+    this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association/modify`);
   }
 
   // Navigate to drivers selection.
   navigateDriversSelectionUrl() {
-    this.navController.navigateRoot(`user-menu/ports/new-port/${this.portId}/drivers/drivers-selection`);
+    this.navController.navigateRoot(`user-menu/ports/new-port/${this.portId}/drivers/drivers-selection/modify`);
   }
 
 
