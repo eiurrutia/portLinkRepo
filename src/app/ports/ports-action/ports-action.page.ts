@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
 import { PortsService } from '../shared/ports.service';
 import { LapsService } from '../../laps/shared/laps.service';
 import { DriversService } from '../../drivers/shared/drivers.service';
@@ -51,409 +53,6 @@ export class PortsActionPage implements OnInit {
                         'setting': false,
                         'share': false
                         };
-
-  packingListExample = [
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1324',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': 'CDGSJVXL1365',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        },
-                        {
-                          'vin': '222222222222222',
-                          'modelo': 'Yaris SD',
-                          'color': 'azul',
-                          'tamano': 'pequeño',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:04'
-                        },
-                        {
-                          'vin': '111111111111111',
-                          'modelo': '4Runner SD',
-                          'color': 'amarillo',
-                          'tamano': 'grande',
-                          'conductor': 'Miguel Vargas',
-                          'vuelta': 3,
-                          'Fecha': '12/05/2019',
-                          'Hora': '22:08'
-                        }
-                        ];
   packingListHeaders: any;
   packingListHeadersWithoutVin: any;
 
@@ -462,6 +61,7 @@ export class PortsActionPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
+              private socialSharing: SocialSharing,
               private portsService: PortsService,
               private lapsService: LapsService,
               private driversService: DriversService,
@@ -480,6 +80,15 @@ export class PortsActionPage implements OnInit {
     this.searchBarActive = true;
     this.vinToRegister = '';
     this.unitFound = {};
+  }
+
+
+  trySocialSharing() {
+    this.socialSharing.shareViaWhatsApp('Hola te comparto via whatsapp').then(
+      () => { console.log('compartido via whatsapp'); }
+    ).catch(e => {
+      console.log('error share via whatsapp: ', e);
+    });
   }
 
 
@@ -977,13 +586,13 @@ export class PortsActionPage implements OnInit {
 
   // Search with searchbar in packing list [BUILDING]
   searchInPacking() {
-    const vinArray = this.packingListExample.filter(
+    const vinArray = this.unitsList.filter(
       movement => movement.vin.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const modelArray = this.packingListExample.filter(
+    const modelArray = this.unitsList.filter(
       movement => movement.modelo.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const driverArray = this.packingListExample.filter(
+    const driverArray = this.unitsList.filter(
       movement => movement.conductor.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const sizeArray = this.packingListExample.filter(
+    const sizeArray = this.unitsList.filter(
       movement => movement.tamano.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
 
     console.log(vinArray);

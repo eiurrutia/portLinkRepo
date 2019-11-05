@@ -390,30 +390,19 @@
       <ion-content scrollY="true">
         <ion-grid>
           <ion-row>
-            <ion-col size="5" no-padding>
+            <ion-col size="12" no-padding>
               <ion-grid style="height: auto; font-size:0.8em; font-weight:700;" no-padding>
                 <ion-row class="header-row" nowrap style="padding: 0;">
-                  <ion-col size="12" class="preview-col header-row" style="padding: 0;" nowrap>
-                    vin
+                  <ion-col text-center size="12" class="preview-col header-row" style="padding: 0;" nowrap>
+                    VIN
                   </ion-col>
                 </ion-row>
-                <ion-row class="info-row" *ngFor="let model of unitsList" nowrap style="padding: 0;">
-                  <ion-col size="12" class="preview-col info-row" style="padding: 0;"  nowrap>
-                    {{ model['vin'] }}
+                <ion-row class="info-row" *ngFor="let model of unitsDiccByVin | keyvalue" nowrap style="padding: 0;">
+                  <ion-col text-center size="10" class="preview-col info-row" style="padding: 0; align-self: center;"  nowrap>
+                    {{ model.value['vin'] }}
                   </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-col>
-            <ion-col size="7" no-padding>
-              <ion-grid class="forecast_container" no-padding>
-                <ion-row class="header-row" nowrap style="padding: 0;">
-                  <ion-col size="6" class="preview-col header-row" *ngFor="let header of packingListHeaders" no-padding nowrap>
-                    {{ header }}
-                  </ion-col>
-                </ion-row>
-                <ion-row class="info-row" *ngFor="let model of unitsList" nowrap style="padding: 0;">
-                  <ion-col size="6" class="preview-col info-row" *ngFor="let header of packingListHeaders" no-padding nowrap>
-                    {{ model[header] }}
+                  <ion-col size="2" style="text-align: right;">
+                    <ion-icon name="arrow-forward"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -453,6 +442,17 @@
           </ion-col>
         </ion-row>
        </ion-grid>
+    </ion-item>
+  </ion-list>
+</div>
+
+
+<div *ngIf="buttonTabActiveDicc['share']" style="z-index: inherit;">
+  <ion-list class="main-list">
+    <ion-item>
+      <ion-button (click)="trySocialSharing()">
+        Try Share
+      </ion-button>
     </ion-item>
   </ion-list>
 </div>
