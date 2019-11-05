@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { IonSlides, AlertController, NavController } from '@ionic/angular';
+import { IonSlides, AlertController, NavController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { PortsService } from '../../ports/shared/ports.service';
@@ -41,9 +41,14 @@ export class DriversSelectionPage implements OnInit {
   portObjectToPatch = {};
   estimatedLapsByDriver = 0;
 
+  loading: any;
+  driversLoading: any;
+  thirdsLoading: any;
+
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
+              private loadingController: LoadingController,
               private portsService: PortsService,
               private driversService: DriversService,
               private thirdsService: ThirdsService) { }
@@ -55,7 +60,39 @@ export class DriversSelectionPage implements OnInit {
   async getBackInfo() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
     // We get the current port object and then the drivers and thirds.
+    await this.presentLoading();
     this.getPort(this.portId);
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentLoading() {
+    // Prepare a loading controller
+    this.loading = await this.loadingController.create({
+        message: 'Cargando Puerto...'
+    });
+    // Present the loading controller
+  await this.loading.present();
+  }
+
+  // Loading efect when the bakend is loading.
+  async presentDriversLoading() {
+    // Prepare a loading controller
+    this.driversLoading = await this.loadingController.create({
+        message: 'Cargando Conductores...'
+    });
+    // Present the loading controller
+  await this.driversLoading.present();
+  }
+
+  // Loading efect when the bakend is loading.
+  async presentThirdsLoading() {
+    // Prepare a loading controller
+    this.thirdsLoading = await this.loadingController.create({
+        message: 'Cargando Terceros...'
+    });
+    // Present the loading controller
+  await this.thirdsLoading.present();
   }
 
   segmentChanged(ev: any) {
@@ -67,7 +104,7 @@ export class DriversSelectionPage implements OnInit {
     } else {this.firstMove = true; }
   }
 
-  slideChanged(ev: any) {
+  slideChanged() {
     if (this.firstMove) {
       this.firstMove = false;
       this.changeSegment();
@@ -176,6 +213,7 @@ export class DriversSelectionPage implements OnInit {
         this.generateActivableDriversDicc(this.driversList);
       },
       error => {
+        this.driversLoading.dismiss();
         console.log(`Error fetching drivers: `, error);
       }
     );
@@ -187,6 +225,7 @@ export class DriversSelectionPage implements OnInit {
     if (this.currentPort['consideredDrivers'].length > 0) {
       this.setCurrentSelectedDrivers();
     }
+    this.driversLoading.dismiss();
   }
 
 
@@ -206,6 +245,7 @@ export class DriversSelectionPage implements OnInit {
         this.generateAccountantThirdsDicc(thirdsList);
       },
       error => {
+        this.thirdsLoading.dismiss();
         console.log(`Error fetching thirds: `, error);
       }
     );
@@ -220,6 +260,7 @@ export class DriversSelectionPage implements OnInit {
     if (this.currentPort['consideredThirds'].length > 0) {
       this.setCurrentSelectedThirds();
     }
+    this.thirdsLoading.dismiss();
   }
 
 
@@ -266,12 +307,16 @@ export class DriversSelectionPage implements OnInit {
 
   getPort(portId: string) {
     this.portsService.getPort(portId).subscribe(
-      port => {
+      async (port) => {
+        this.loading.dismiss();
         this.currentPort = port;
+        await this.presentDriversLoading();
         this.getDrivers();
+        await this.presentThirdsLoading();
         this.getThirds();
       },
       error => {
+        this.loading.dismiss();
         console.log(`Error fetching current port: `, error);
       }
     );
