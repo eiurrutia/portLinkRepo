@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, LoadingController } from '@ionic/angular';
 
 import { PortsService } from '../../ports/shared/ports.service';
 import { DriversService } from '../../drivers/shared/drivers.service';
@@ -32,10 +32,16 @@ export class TrucksAssociationPage implements OnInit {
 
   selectableTrucksList = [];
 
+  portLoading: any;
+  associationsLoading: any;
+  trucksLoading: any;
+  rampsLoading: any;
+
 
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
+              private loadingController: LoadingController,
               private portsService: PortsService,
               private driversService: DriversService,
               private thirdsService: ThirdsService,
@@ -51,8 +57,54 @@ export class TrucksAssociationPage implements OnInit {
   // Get Backend Info: Port, Trucks, Ramps, Drivers, Associations.
   async getBackInfo() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
+    await this.presentPortLoading();
     this.getPort(this.portId);
+    await this.presentAssociationsLoading();
     this.getAssociationsCache();
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentPortLoading() {
+    // Prepare a loading controller
+    this.portLoading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.portLoading.present();
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentAssociationsLoading() {
+    // Prepare a loading controller
+    this.associationsLoading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.associationsLoading.present();
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentTrucksLoading() {
+    // Prepare a loading controller
+    this.trucksLoading = await this.loadingController.create({
+        message: 'Cargando Camiones...'
+    });
+    // Present the loading controller
+  await this.trucksLoading.present();
+  }
+
+
+  // Loading efect when the bakend is loading.
+  async presentRampsLoading() {
+    // Prepare a loading controller
+    this.rampsLoading = await this.loadingController.create({
+        message: 'Cargando Ramplas...'
+    });
+    // Present the loading controller
+  await this.rampsLoading.present();
   }
 
 
@@ -103,9 +155,11 @@ export class TrucksAssociationPage implements OnInit {
         }
         console.log('this.currentPort');
         console.log(this.currentPort);
+        this.portLoading.dismiss();
 
       },
       error => {
+        this.portLoading.dismiss();
         console.log('Error fetching port: ', error);
       }
     );
@@ -120,8 +174,10 @@ export class TrucksAssociationPage implements OnInit {
           this.trucks[truck['plateNumber']] = truck;
         });
         this.buildSelectableTrucksList();
+        this.trucksLoading.dismiss();
       },
       error => {
+        this.trucksLoading.dismiss();
         console.log('Error fetching trucks: ', error);
       }
     );
@@ -135,8 +191,10 @@ export class TrucksAssociationPage implements OnInit {
         ramps.map(ramp => {
           this.ramps[ramp['plateNumber']] = ramp;
         });
+        this.rampsLoading.dismiss();
       },
       error => {
+        this.rampsLoading.dismiss();
         console.log('Error fetching ramps: ', error);
       }
     );
@@ -229,29 +287,36 @@ export class TrucksAssociationPage implements OnInit {
                       resolve(ramp);
                     },
                     error => {
+                      resolve();
                       console.log('Error fetching ramp to association: ', error);
                     }
                   );
                 },
                 error => {
+                  resolve();
                   console.log('Error fetching truck to association: ', error);
                 }
               );
             },
             error => {
+              resolve();
               console.log('Error fetching driver to association: ', error);
             }
           ); });
         }
-      )).then(() => {
+      )).then( async () => {
+        this.associationsLoading.dismiss();
         // We wait that associations info is complete and then we get the other info/
         // that check what trucks and ramps are available.
+        await this.presentTrucksLoading();
         this.getTrucks();
+        await this.presentRampsLoading();
         this.getRamps();
       });
 
       },
       error => {
+        this.associationsLoading.dismiss();
         console.log('Error fetching associations: ', error);
       }
     );
@@ -310,10 +375,16 @@ export class TrucksAssociationPage implements OnInit {
       header: 'Puerto Creado',
       subHeader: this.currentPort.shipName,
       message: 'El puerto se ha creado correctamente.',
-      buttons: ['OK']
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'ok',
+          cssClass: 'secondary'
+        }
+      ]
     });
+    alert.onDidDismiss().then(() => this.navController.navigateForward(`/user-menu/ports`));
     await alert.present();
-    this.navController.navigateForward(`/user-menu/ports`);
   }
 
 
