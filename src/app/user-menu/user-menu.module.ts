@@ -1,16 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule, PreloadingStrategy } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { UserMenuPage } from './user-menu.page';
-import { UserProfilePage } from '../user-profile/user-profile.page';
-import { PortsPage } from '../ports/ports.page';
-import { PortsNewPage } from '../ports/ports-new/ports-new.page';
-
-import { AppRoutingPreloaderService } from '../app-routing-preloader.service';
 
 
 const routes: Routes = [
@@ -25,6 +20,10 @@ const routes: Routes = [
       {
         path: 'ports',
         loadChildren: '../ports/ports.module#PortsPageModule'
+      },
+      {
+        path: 'data-management',
+        loadChildren: '../data-management/data-management.module#DataManagementPageModule'
       }
     ]
   }
