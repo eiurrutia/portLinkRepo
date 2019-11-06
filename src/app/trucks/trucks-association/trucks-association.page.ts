@@ -37,6 +37,8 @@ export class TrucksAssociationPage implements OnInit {
   trucksLoading: any;
   rampsLoading: any;
 
+  modifyMode = false;
+
 
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
@@ -61,6 +63,16 @@ export class TrucksAssociationPage implements OnInit {
     this.getPort(this.portId);
     await this.presentAssociationsLoading();
     this.getAssociationsCache();
+  }
+
+
+  // Set Opened Mode: Creating or Modify
+  setOpenedMode() {
+    if (this.activatedRoute.snapshot.routeConfig.path.split('/').includes('modify')) {
+      this.modifyMode = true;
+    } else {
+      this.modifyMode = false;
+    }
   }
 
 
@@ -352,7 +364,11 @@ export class TrucksAssociationPage implements OnInit {
     } else {
       console.log('Toda la info lista');
       this.sendInfoToBackAndFinishPortCreation();
-      this.createdPortAlert();
+      if (this.modifyMode) {
+        this.modifiedPortAlert();
+      } else {
+        this.createdPortAlert();
+      }
     }
   }
 
@@ -375,6 +391,25 @@ export class TrucksAssociationPage implements OnInit {
       header: 'Puerto Creado',
       subHeader: this.currentPort.shipName,
       message: 'El puerto se ha creado correctamente.',
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'ok',
+          cssClass: 'secondary'
+        }
+      ]
+    });
+    alert.onDidDismiss().then(() => this.navController.navigateForward(`/user-menu/ports`));
+    await alert.present();
+  }
+
+
+  // Alert to pending plate numbers to drivers.
+  async modifiedPortAlert() {
+    const alert = await this.alertController.create({
+      header: 'Puerto Modificado',
+      subHeader: this.currentPort.shipName,
+      message: 'Los equipos de puerto se han modificado correctamente.',
       buttons: [
         {
           text: 'Ok',
