@@ -62,6 +62,8 @@ export class UserMenuPage implements OnInit {
       this.getAndSetPortName(url);
     } else if (urlArray[urlArray.length - 1].includes('profile')) {
       this.menu_title = 'Perfil';
+    } else if (urlArray[urlArray.length - 1].includes('data-management')) {
+      this.menu_title = 'Getión de Datos';
     }
   }
 
