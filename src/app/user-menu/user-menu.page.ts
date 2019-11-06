@@ -24,6 +24,7 @@ export class UserMenuPage implements OnInit {
               }
 
 
+  // #### Menu component functions ####
   openFirst() {
     this.menu.enable(true, 'first');
     this.menu.open('first');
@@ -41,22 +42,39 @@ export class UserMenuPage implements OnInit {
   closeMenu() {
     this.menu.close();
   }
+  // #### Menu component functions ####
 
+
+  // To process url and set menu title.
   setTitle(url: string) {
-    if (url.includes('ports')) {
-      if (url.includes('new')) { this.menu_title = 'Nuevo Puerto';
-    } else if (url.includes('action')) { this.getAndSetPortName(url);
-      } else {this.menu_title = 'Puertos'; }
-    } else if (url.includes('drivers')) {
-      this.menu_title = 'Conductores';
-    } else if (url.includes('profile')) {
+    const urlArray = url.split('/');
+    // We check the last word in url.
+    if (urlArray[urlArray.length - 1].includes('ports')) {
+      this.menu_title = 'Puertos';
+    } else if (urlArray[urlArray.length - 2].includes('action')) {
+      this.getAndSetPortName(url);
+    } else if (urlArray[urlArray.length - 2].includes('new-port')) {
+      this.menu_title = 'Nuevo Puerto';
+    } else if (urlArray[urlArray.length - 1].includes('association') ||
+              urlArray[urlArray.length - 1].includes('selection')) {
+      this.menu_title = 'Nuevo Puerto';
+    } else if (urlArray[urlArray.length - 1].includes('modify')) {
+      this.getAndSetPortName(url);
+    } else if (urlArray[urlArray.length - 1].includes('profile')) {
       this.menu_title = 'Perfil';
     }
   }
 
+
+
+  // Get port from backend and set shipName as menu title.
   getAndSetPortName(url: string) {
-    // Get port id from url. Always is the element after the word 'action'.
-    const portId = url.split('/')[url.split('/').indexOf('action') +  1];
+    let portId = "";
+    if (url.split('/').includes('action')) {
+      portId = url.split('/')[url.split('/').indexOf('action') +  1];
+    } else { // We are in newPort children.
+      portId = url.split('/')[url.split('/').indexOf('new-port') +  1];
+    }
     this.portsService.getPort(portId).subscribe(
       port => {
         this.menu_title = port.shipName;
