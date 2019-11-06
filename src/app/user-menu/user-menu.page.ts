@@ -69,7 +69,7 @@ export class UserMenuPage implements OnInit {
 
   // Get port from backend and set shipName as menu title.
   getAndSetPortName(url: string) {
-    let portId = "";
+    let portId = '';
     if (url.split('/').includes('action')) {
       portId = url.split('/')[url.split('/').indexOf('action') +  1];
     } else { // We are in newPort children.
