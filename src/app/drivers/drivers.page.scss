@@ -27,6 +27,17 @@
   --color: black;
 }
 
+.main-card-back {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 30px;
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+  margin-left: 0;
+  margin-bottom: 0;
+  --color: black;
+}
+
 .title-card-content {
   font-weight: 700;
   font-size: xx-large;
@@ -36,7 +47,7 @@
 .card-options-content {
   padding-left: 0%;
   padding-right: 0%;
-  
+
 }
 
 .info-col {
