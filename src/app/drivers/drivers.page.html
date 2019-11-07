@@ -167,5 +167,99 @@
   </div>
 
 
+  <!-- NEW OPTION -->
+  <div *ngIf="settedOption == 'new'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="drivers" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Nuevo Conductor</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label style="font-size: large;">
+                        <span *ngIf="!diccNewDriverForm['name']" class="blank-camp">*</span>
+                        <b>Nombre: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Nombre Apellido Apellido"
+                                 [(ngModel)]="diccNewDriverForm['name']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label style="font-size: large;">
+                        <span *ngIf="!diccNewDriverForm['rut']" class="blank-camp">*</span>
+                        <b>Rut: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-input class="name-input" placeholder="11.111.111-1"
+                                 [(ngModel)]="diccNewDriverForm['rut']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="5" text-center no-padding>
+                      <ion-label style="font-size: large;">
+                        <span *ngIf="!diccNewDriverForm['unionized']" class="blank-camp">*</span>
+                        <b>Sindicalizado: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="4">
+                    </ion-col>
+                    <ion-col size="3" style="text-align: right;" no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="No"
+                                  class="name-input"
+                                  [(ngModel)]="diccNewDriverForm['unionized']"
+                                  no-padding>
+                        <ion-select-option value=true>Sí</ion-select-option>
+                        <ion-select-option value=False>No</ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 10%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: dimgrey;"
+                                  [disabled]="!diccNewDriverForm['name'] ||
+                                              !diccNewDriverForm['rut'] ||
+                                              !diccNewDriverForm['unionized']">
+                        <b>Crear Conductor</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
 
 </ion-grid>

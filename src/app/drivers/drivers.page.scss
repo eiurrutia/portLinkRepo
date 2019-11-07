@@ -48,6 +48,16 @@
   --color: black;
 }
 
+.main-card-new {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 30px;
+  margin: auto;
+  overflow-y: scroll !important;
+  width: -webkit-fill-available;
+  height: 100%;
+  --color: black;
+}
+
 .title-card-content {
   font-weight: 700;
   font-size: xx-large;
@@ -73,4 +83,17 @@
 ion-item {
     --background: rgba(0,0,0,0);
     --border-color: rgba(0,0,0,0);
+}
+
+.name-input {
+  font-size: large;
+  background: white;
+  border-radius: 10px;
+  max-width: -webkit-fill-available;
+  text-align: center;
+}
+
+.blank-camp {
+  font-size: large;
+  color: red;
 }
