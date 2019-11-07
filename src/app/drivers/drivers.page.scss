@@ -1,0 +1,45 @@
+.main-form {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 18%;
+  margin-bottom: 10%;
+	overflow-y: scroll!important;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  background: rgba(237, 237, 237, 0.8);
+}
+
+.main-card {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 30px;
+  width: 100%;
+  height: 70%;
+  margin-top: 20%;
+  --color: black;
+}
+
+.main-card-options {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 30px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  --color: black;
+}
+
+.title-card-content {
+  font-weight: 700;
+  font-size: xx-large;
+  text-align: center;
+}
+
+.card-options-content {
+  padding-left: 0%;
+  padding-right: 0%;
+  
+}
+
+.info-col {
+  padding-top: 5% !important;
+  padding-left: 5% !important;
+}
