@@ -64,6 +64,10 @@ export class UserMenuPage implements OnInit {
       this.menu_title = 'Perfil';
     } else if (urlArray[urlArray.length - 1].includes('data-management')) {
       this.menu_title = 'Getión de Datos';
+    } else if (urlArray[urlArray.length - 2].includes('data-management')) {
+      if (urlArray[urlArray.length - 1].includes('drivers')) {
+        this.menu_title = 'Conductores';
+      }
     }
   }
 
