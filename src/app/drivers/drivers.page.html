@@ -122,78 +122,44 @@
 
   <!-- LIST OPTION -->
   <div *ngIf="settedOption == 'list'">
-    <ion-row style="margin-top: 10%;">
-      <ion-col size="4">
-        <ion-card class="main-card-options" (click)="changeViewOption('new')">
-          <ion-card-content>
-            <ion-grid no-padding>
-              <ion-row text-center>
-                <ion-col text-center no-padding>
-                  <ion-icon style="font-size: -webkit-xxx-large;" name="add"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col text-center no-padding style="font-size: x-large;">
-                  <ion-label>Crear</ion-label>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="4">
-        <ion-card class="main-card-options" (click)="changeViewOption('edit')">
-          <ion-card-content class="card-options-content">
-            <ion-grid no-padding>
-              <ion-row text-center>
-                <ion-col text-center no-padding>
-                  <ion-icon style="font-size: -webkit-xxx-large;" name="create"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col text-center no-padding style="font-size: x-large;">
-                  <ion-label>Editar</ion-label>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="4">
-        <ion-card class="main-card-options" (click)="changeViewOption('delete')">
-          <ion-card-content class="card-options-content">
-            <ion-grid no-padding>
-              <ion-row text-center>
-                <ion-col text-center no-padding>
-                  <ion-icon style="font-size: -webkit-xxx-large;" name="trash"></ion-icon>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col text-center no-padding style="font-size: x-large;">
-                  <ion-label>Eliminar</ion-label>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row style="margin-top: 5%;">
+    <ion-row>
       <ion-col>
-        <ion-card class="main-card-options" (click)="changeViewOption('list')">
-          <ion-card-content class="card-options-content">
-            <ion-grid no-padding>
-              <ion-row text-center style="paddin-left: 5%; paddin-right: 5%;">
-                <ion-col size="8" text-center no-padding style="font-size: x-large;">
-                  <ion-label>Ver Listado de Conductores</ion-label>
-                </ion-col>
-                <ion-col size="4" text-center no-padding style="align-self: center;">
-                  <ion-icon style="font-size: -webkit-xxx-large;" name="people"></ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+        <ion-card class="main-card-list">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="drivers" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Conductor</b></ion-label>
+                    </ion-col>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Rut</b></ion-label>
+                    </ion-col>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Sind.?</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <div style="overflow-y: scroll !important;">
+              <ion-item *ngFor="let driver of drivers">
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <p text-wrap >{{ driver['name'] }}</p>
+                    </ion-col>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <ion-label>{{ driver['rut'] }}</ion-label>
+                    </ion-col>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <ion-label>{{ driver['unionized'] ? 'Sí':'No' }}</ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              </div>
+            </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>

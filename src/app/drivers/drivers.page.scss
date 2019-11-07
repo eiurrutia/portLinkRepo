@@ -38,6 +38,16 @@
   --color: black;
 }
 
+.main-card-list {
+  background: rgba(237, 237, 237, 0.8);
+  border-radius: 30px;
+  margin: auto;
+  overflow-y: scroll !important;
+  width: -webkit-fill-available;
+  height: 65%;
+  --color: black;
+}
+
 .title-card-content {
   font-weight: 700;
   font-size: xx-large;
@@ -50,7 +60,17 @@
 
 }
 
+.card-list-content {
+  padding-left: 0%;
+  padding-right: 0%;
+}
+
 .info-col {
   padding-top: 5% !important;
   padding-left: 5% !important;
+}
+
+ion-item {
+    --background: rgba(0,0,0,0);
+    --border-color: rgba(0,0,0,0);
 }
