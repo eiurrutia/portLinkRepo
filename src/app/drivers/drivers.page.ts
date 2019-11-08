@@ -14,6 +14,8 @@ export class DriversPage implements OnInit {
   settedOption = 'main';
   drivers: any;
 
+  diccNewDriverForm = {};
+
   constructor(private driversService: DriversService) { }
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class DriversPage implements OnInit {
     const lastName2 = driver2.name.split(' ')[1];
     const secondLastName1 = driver1.name.split(' ')[2];
     const secondLastName2 = driver2.name.split(' ')[2];
-    
+
     if (lastName1 > lastName2) {
       return 1;
     } else if (lastName1 < lastName2) {
@@ -60,6 +62,28 @@ export class DriversPage implements OnInit {
         return -1;
       }
     }
+  }
+
+
+  // Validate Names and Lastnames
+  validateNamesAndLastNames(toValidate: string): boolean {
+    console.log(this.diccNewDriverForm[toValidate].split(' '));
+    if (this.diccNewDriverForm[toValidate].split(' ').length > 1) { return false;
+    } else { return true; }
+  }
+
+
+  // Convert Names and Lastnames in correct format.
+  convertNames(name: string): string {
+    return name.toLocaleLowerCase().replace(name[0], name[0].toUpperCase());
+  }
+
+
+  // Convert all names and Last namespace
+  convertNamesAndLastnames() {
+    this.diccNewDriverForm['name'] = this.convertNames(this.diccNewDriverForm['name']);
+    this.diccNewDriverForm['fatherLastName'] = this.convertNames(this.diccNewDriverForm['fatherLastName']);
+    this.diccNewDriverForm['motherLastName'] = this.convertNames(this.diccNewDriverForm['motherLastName']);  
   }
 
 
