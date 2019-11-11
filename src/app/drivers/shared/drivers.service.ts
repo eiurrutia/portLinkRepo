@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -35,7 +35,7 @@ export class DriversService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return Observable.throwError(error.status  || 'Server Error');
+    return Observable.throwError(error || 'Server Error');
   }
 
 }
