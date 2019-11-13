@@ -447,4 +447,73 @@
 
 
 
+  <!-- EDIT OPTION -->
+  <div *ngIf="settedOption == 'delete'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="drivers" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Eliminar Conductor</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Conductor: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="Conductor"
+                                  [(ngModel)]="driverToDelete"
+                                  class="name-input"
+                                  no-padding>
+                        <ion-select-option *ngFor="let driver of drivers" [value]=driver> {{ driver['name'] }} </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: red;"
+                                  [disabled]="!driverToDelete"
+                                  (click)="deleteDriverAlert()">
+                        <b>Eliminar Conductor</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button (click)='driverToDelete = null;' style="--background: dimgrey;">
+                        <b>Cancelar</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
 </ion-grid>

@@ -19,6 +19,7 @@ export class DriversPage implements OnInit {
   diccModifyDriverForm = {};
   driverToModify: any;
   selectDriverToModifyDisable = false;
+  driverToDelete: any;
 
   loading: any;
 
@@ -46,7 +47,6 @@ export class DriversPage implements OnInit {
   // To set value to view control variable.
   changeViewOption(option: string) {
     this.settedOption = option;
-    console.log(this.settedOption);
   }
 
 
@@ -169,7 +169,6 @@ export class DriversPage implements OnInit {
     }
 
     // Is valid!
-    console.log('is valid!');
     return {'result': true, 'content': rut };
   }
 
@@ -191,7 +190,7 @@ export class DriversPage implements OnInit {
   async createNewDriverAlert() {
     const alert = await this.alertController.create({
       header: 'Nuevo Conductor',
-      subHeader: `Deseas crear el siguiente conductor:`,
+      subHeader: `Deseas crear el siguiente conductor?`,
       message: `·Nombre: ${this.diccNewDriverForm['name']}
                            ${this.diccNewDriverForm['fatherLastName']}
                            ${this.diccNewDriverForm['motherLastName']} <br>
@@ -265,10 +264,13 @@ export class DriversPage implements OnInit {
     driverObject['rut'] = this.diccNewDriverForm['rut'];
     driverObject['unionized'] = this.diccNewDriverForm['unionized'] === 'No' ? false : true;
     this.driversService.createDriver(driverObject).subscribe(
-      () => {
+      async () => {
         console.log('Conductor creado exitosamente');
         this.clearForm();
         this.succesfulRegistrationAlert();
+        // And we update the list of drivers.
+        await this.presentLoading();
+        this.getDivers();
       },
       (error: any) => {
         console.log('Error al crear el conductor: ', error);
@@ -423,12 +425,15 @@ export class DriversPage implements OnInit {
     updateDriverObject['rut'] = this.diccModifyDriverForm['rut'];
     updateDriverObject['unionized'] = this.diccModifyDriverForm['unionized'] === 'No' ? false : true;
     this.driversService.updateDriver(driverId, updateDriverObject).subscribe(
-      driverUpdated => {
+      async (driverUpdated) => {
         this.clearModifyForm();
         this.selectDriverToModifyDisable = false;
         this.driverToModify = null;
         this.succesfulRegistrationAlert();
         console.log('Conductor actualizado: ', driverUpdated);
+        // And we update the list of drivers.
+        await this.presentLoading();
+        this.getDivers();
       },
       error => {
         this.clearModifyForm();
@@ -462,6 +467,68 @@ export class DriversPage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Error Registrando Conductor',
       subHeader: 'Ha ocurrido un error en el registro. Inténtelo nuevamente.',
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {}
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  // Delete driver alert.
+  async deleteDriverAlert() {
+    const alert = await this.alertController.create({
+      header: 'Eliminar Conductor',
+      subHeader: `Deseas eliminar del listado al siguiente conductor:`,
+      message: `·Nombre: ${this.driverToDelete['name']}<br>
+                ·Rut: ${this.driverToDelete['rut']}<br>
+                `,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.driverToDelete = null;
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.deleteDriver(this.driverToDelete['_id']);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  // Delete driver in backend
+  deleteDriver(driverId: string) {
+    this.driversService.deleteDriver(driverId).subscribe(
+      async () => {
+        this.succesfulDeleteAlert();
+        this.driverToDelete = null;
+        console.log('Conductor eliminado correctamente.');
+        // And we update the list of drivers.
+        await this.presentLoading();
+        this.getDivers();
+      },
+      error => {
+        console.log('Error eliminando conductor: ', error);
+      }
+    );
+  }
+
+
+  // Succesful registration alert.
+  async succesfulDeleteAlert() {
+    const alert = await this.alertController.create({
+      header: 'Conductor Eliminado',
+      subHeader: 'Conductor eliminado exitosamente!',
       buttons: [
         {
           text: 'Ok',
