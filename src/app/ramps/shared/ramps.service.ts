@@ -39,6 +39,16 @@ export class RampsService {
     return this.http.post<any>(url, ramp, this.httpOptions).catch(this.errorHandler);
   }
 
+  updateRamp(rampId: string, rampObj: any): Observable<any> {
+    const url = `${this.backUrl}/ramps/${rampId}`;
+    return this.http.patch<any>(url, rampObj, this.httpOptions).catch(this.errorHandler);
+  }
+
+  deleteRamp(rampId: string): Observable<any> {
+    const url = `${this.backUrl}/ramps/${rampId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return Observable.throwError(error.status  || 'Server Error');
   }
