@@ -1,9 +1,440 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>trucks</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-grid no-margin>
+  <!-- MAIN DRIVERS TITLE -->
+  <div *ngIf="settedOption == 'main'">
+    <ion-row>
+      <ion-card class="main-card">
+        <ion-card-content class="title-card-content">
+          <ion-label><b style="color: red; ">C</b>amiones </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </div>
 
-<ion-content>
+  <!-- BACK ARROW -->
+  <div *ngIf="settedOption != 'main'">
+    <ion-row style="margin-top: 20%;">
+      <ion-col size="3">
+        <ion-card class="main-card-back" (click)="changeViewOption('main')">
+          <ion-card-content class="title-card-content" no-padding>
+            <ion-icon style="font-size:x-large;" name="arrow-back"></ion-icon>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="9">
+      </ion-col>
+    </ion-row>
+  </div>
 
-</ion-content>
+  <!-- MAIN OPTION -->
+  <div *ngIf="settedOption == 'main'">
+    <ion-row style="margin-top: 10%;">
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('new')">
+          <ion-card-content>
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="add"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Crear</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('edit')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="create"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Editar</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('delete')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="trash"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Eliminar</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row style="margin-top: 5%;">
+      <ion-col>
+        <ion-card class="main-card-options" (click)="changeViewOption('list')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center style="paddin-left: 5%; paddin-right: 5%;">
+                <ion-col size="8" text-center no-padding style="font-size: x-large;">
+                  <ion-label>Ver Listado de Camiones</ion-label>
+                </ion-col>
+                <ion-col size="4" text-center no-padding style="align-self: center;">
+                  <svg style="width: 60%; height: 60%;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+                  <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
+                  <g><path d="M953.6,164l-51.7-6.4c-0.9,0-1.8,0.3-2.6,0.5l-56.8-17c-1.4-12.6-2.3-19.9-2.3-19.9c-16.1-99.1-44.7-113.4-85.9-111H248.4c-61,0-68.6,22.7-85.9,111c0,0-0.9,7-2.4,19.1l-59.4,17.8c-0.9-0.2-1.7-0.5-2.6-0.5L46.4,164c-6.6,1.3-11.8,5.3-11.8,11.8v124.9c0,6.5,5.2,10.8,11.8,11.8l51.7,4.5c0.7,0,1.4-0.3,2.1-0.4l40.9,20.2c-2.3,34.3-3.8,67.6-3.7,95.3c0.3,61,0.3,135.8,0.2,240.2c0,0.5-13.5,0.9-19.1,1.4c-1.5,0.1-2.4,2.1-2.4,3c-0.1,84.5-0.2,204.6-0.2,204.6c0,25.1,8.6,39.2,22.8,47.1v46.1c0,8.5,6.9,15.4,15.4,15.4h97.7c8.5,0,15.4-6.9,15.4-15.4v-36h465.4v36c0,8.5,6.9,15.4,15.4,15.4h97.7c8.5,0,15.4-6.9,15.4-15.4V930c15.9-7.6,25.5-21.9,25.5-48.7c0,0,0-119.9,0-204.1c0-1.1-0.8-3.4-2.2-3.5c-5.5-0.5-19.3-1-19.3-1.4V435.6c0-27.7-1.8-63-4.4-99.8l39-19.3c0.7,0.1,1.3,0.4,2.1,0.4l51.7-4.5c6.6-1,11.8-5.3,11.8-11.8V175.8C965.4,169.3,960.2,165.3,953.6,164z M142.5,317.4l-32.6-16.1V174.2l47.9-14.3C153.5,197.5,147,257.7,142.5,317.4z M238.3,887.2h-77.6c-5.9,0-10.7-4.8-10.7-10.7V752.3c0-5.9,4.8-10.7,10.7-10.7h48.9c5.9,0,9.4,5.2,10.7,10.7c0,0,26.7,116.2,28,122.2C250.1,883.3,244.2,887.2,238.3,887.2z M240.7,418.6c-11.2-1.2-77.6-8.3-81.7-49.8c-3.6-35.6,10.7-204.4,10.7-204.4c0-5.9,4.8-10.7,10.6-10.7h636.3c5.9,0,10.7,4.8,10.7,10.7c0,0,16.6,171.8,14.2,204.4c-2.4,32.6-71.7,49.8-85.3,49.8C742.5,418.6,251.9,419.8,240.7,418.6z M701.5,622c-0.7,0.8-3.1,1.5-8,1.5c-173.5,0-203.1,0.5-372,0.5c-5.4,0-8-0.6-8-1.5c0,0-20.6-18.3-16.1-18.3h415.3C717.1,604.2,701.5,622,701.5,622z M701.5,658.8c-0.7,0.8-3.1,1.5-8,1.5c-173.5,0-203.1,0.5-372,0.5c-5.4,0-8-0.6-8-1.5c0,0-20.6-18.3-16.1-18.3h415.3C717.1,641,701.5,658.8,701.5,658.8z M701.5,585.2c-0.7,0.8-3.1,1.5-8,1.5c-173.5,0-203.1,0.5-372,0.5c-5.4,0-8-0.6-8-1.5c0,0-20.6-18.3-16.1-18.3h415.3C717.1,567.4,701.5,585.2,701.5,585.2z M701.5,548.5c-0.7,0.8-3.1,1.5-8,1.5c-173.5,0-203.1,0.5-372,0.5c-5.4,0-8-0.6-8-1.5c0,0-20.6-18.3-16.1-18.3h415.3C717.1,530.7,701.5,548.5,701.5,548.5z M712.9,864.6c0,4.2-3.1,7.4-8.1,7.5c-172.3,5.5-239.9,6.3-412.4,0c-5.5-0.2-8.1-3.4-8.1-7.5l-6.1-29.9c0-4.2,1.7-7.6,8.1-7.6c76.1,0,350-3.2,427.4-3.2c6,0,8.1,3.4,8.1,7.6L712.9,864.6z M734.7,779.9c0,4.6-3.4,8.1-8.9,8.3c-189.9,6-264.4,6.9-454.5,0c-6.1-0.2-8.9-3.7-8.9-8.3l-6.8-33c0-4.6,1.9-8.3,8.9-8.3c83.8,0,385.7-3.6,471-3.6c6.6,0,8.9,3.7,8.9,8.3L734.7,779.9z M844.7,872.7c0,5.9-4.8,10.7-10.7,10.7h-77.6c-5.9,0-11.8-3.9-10.1-12.6c1.2-6,28-122.2,28-122.2c1.3-5.5,4.8-10.7,10.7-10.7H834c5.9,0,10.7,4.8,10.7,10.7V872.7z M890.1,301.3l-30.7,15.2c-4.5-58.5-10.7-118.1-14.8-155.8l45.4,13.6V301.3z"/></g>
+                  </svg>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <!-- LIST OPTION -->
+  <div *ngIf="settedOption == 'list'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-list">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="trucks" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Patente</b></ion-label>
+                    </ion-col>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Marca</b></ion-label>
+                    </ion-col>
+                    <ion-col size="4" text-center no-padding>
+                      <ion-label><b>Modelo</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <div style="overflow-y: scroll !important;">
+              <ion-item *ngFor="let truck of trucks">
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <p text-wrap >{{ truck['plateNumber'] }}</p>
+                    </ion-col>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <ion-label>{{ truck['brand'] }}</ion-label>
+                    </ion-col>
+                    <ion-col size="4" style="align-self: center;" text-center no-padding>
+                      <ion-label>{{ truck['model'] }}</ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              </div>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <!-- NEW OPTION -->
+  <div *ngIf="settedOption == 'new'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="trucks" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Nuevo Camión</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="3" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <span *ngIf="!diccNewTruckForm['plateNumber']" class="blank-camp">*</span>
+                        <b>Patente: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Patente"
+                                 [(ngModel)]="diccNewTruckForm['plateNumber']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <span *ngIf="!diccNewTruckForm['brand']" class="blank-camp">*</span>
+                        <b>Marca: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Marca"
+                                 [(ngModel)]="diccNewTruckForm['brand']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <span *ngIf="!diccNewTruckForm['model']" class="blank-camp">*</span>
+                        <b>Modelo: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Modelo"
+                                 [(ngModel)]="diccNewTruckForm['model']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: dimgrey;"
+                                  [disabled]="!diccNewTruckForm['plateNumber'] ||
+                                              !diccNewTruckForm['brand'] ||
+                                              !diccNewTruckForm['model']"
+                                  (click)="validateAllInfo()">
+                        <b>Crear Camión</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+  <!-- EDIT OPTION -->
+  <div *ngIf="settedOption == 'edit'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="trucks" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Modificar Camión</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Camión: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="Camión"
+                                  [(ngModel)]="truckToModify"
+                                  [disabled]="selectTruckToModifyDisable"
+                                  (ngModelChange)="modifyTruckAlert($event)"
+                                  class="name-input"
+                                  no-padding>
+                        <ion-select-option *ngFor="let truck of trucks" [value]=truck> {{ truck['plateNumber'] }} - {{ truck['brand'] }} </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <div *ngIf="truckToModify">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="3" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Patente: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Patente"
+                                 [(ngModel)]="diccModifyTruckForm['plateNumber']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Marca: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Marca"
+                                 [(ngModel)]="diccModifyTruckForm['brand']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Modelo: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Modelo"
+                                 [(ngModel)]="diccModifyTruckForm['model']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: dimgrey;"
+                                  [disabled]="!diccModifyTruckForm['plateNumber'] ||
+                                              !diccModifyTruckForm['brand'] ||
+                                              !diccModifyTruckForm['model']"
+                                  (click)="validateAllInfoToModify()">
+                        <b>Modificar Camión</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button (click)='truckToModify = null; selectTruckToModifyDisable = false' style="--background: dimgrey;">
+                        <b>Cancelar</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              </div>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+  <!-- DELETE OPTION -->
+  <div *ngIf="settedOption == 'delete'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="trucks" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Eliminar Camión</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Camión: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="Camión"
+                                  [(ngModel)]="truckToDelete"
+                                  class="name-input"
+                                  no-padding>
+                        <ion-select-option *ngFor="let truck of trucks" [value]=truck> {{ truck['plateNumber'] }} - {{ truck['brand'] }} </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: red;"
+                                  [disabled]="!truckToDelete"
+                                  (click)="deleteTruckAlert()">
+                        <b>Eliminar Camión</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button (click)='truckToDelete = null;' style="--background: dimgrey;">
+                        <b>Cancelar</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+</ion-grid>
