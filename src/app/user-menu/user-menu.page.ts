@@ -67,6 +67,12 @@ export class UserMenuPage implements OnInit {
     } else if (urlArray[urlArray.length - 2].includes('data-management')) {
       if (urlArray[urlArray.length - 1].includes('drivers')) {
         this.menu_title = 'Conductores';
+      } else if (urlArray[urlArray.length - 1].includes('trucks')) {
+        this.menu_title = 'Camiones';
+      } else if (urlArray[urlArray.length - 1].includes('ramps')) {
+        this.menu_title = 'Ramplas';
+      } else if (urlArray[urlArray.length - 1].includes('thirds')) {
+        this.menu_title = 'Terceros';
       }
     }
   }
