@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -32,6 +32,16 @@ export class ThirdsService {
   createThirds(third: any): Observable<any> {
     const url = `${this.backUrl}/third-parties/`;
     return this.http.post<any>(url, third, this.httpOptions).catch(this.errorHandler);
+  }
+
+  updateThird(thirdId: string, thirdObj: any): Observable<any> {
+    const url = `${this.backUrl}/ramps/${thirdId}`;
+    return this.http.patch<any>(url, thirdObj, this.httpOptions).catch(this.errorHandler);
+  }
+
+  deleteThird(thirdId: string): Observable<any> {
+    const url = `${this.backUrl}/ramps/${thirdId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
   errorHandler(error: HttpErrorResponse) {
