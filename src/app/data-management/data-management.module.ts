@@ -11,6 +11,22 @@ const routes: Routes = [
   {
     path: '',
     component: DataManagementPage
+  },
+  {
+    path: 'drivers',
+    loadChildren: '../drivers/drivers.module#DriversPageModule'
+  },
+  {
+    path: 'thirds',
+    loadChildren: '../thirds/thirds.module#ThirdsPageModule'
+  },
+  {
+    path: 'trucks',
+    loadChildren: '../trucks/trucks.module#TrucksPageModule'
+  },
+  {
+    path: 'ramps',
+    loadChildren: '../ramps/ramps.module#RampsPageModule'
   }
 ];
 
