@@ -39,6 +39,11 @@ export class DriversService {
     return this.http.patch<any>(url, driverObj, this.httpOptions).catch(this.errorHandler);
   }
 
+  deleteDriver(driverId: string): Observable<any> {
+    const url = `${this.backUrl}/drivers/${driverId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return Observable.throwError(error || 'Server Error');
   }
