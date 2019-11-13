@@ -39,6 +39,16 @@ export class TrucksService {
     return this.http.post<any>(url, truck, this.httpOptions).catch(this.errorHandler);
   }
 
+  updateTruck(truckId: string, truckObj: any): Observable<any> {
+    const url = `${this.backUrl}/trucks/${truckId}`;
+    return this.http.patch<any>(url, truckObj, this.httpOptions).catch(this.errorHandler);
+  }
+
+  deleteTruck(truckId: string): Observable<any> {
+    const url = `${this.backUrl}/trucks/${truckId}`;
+    return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return Observable.throwError(error.status  || 'Server Error');
   }
