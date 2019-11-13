@@ -34,6 +34,11 @@ export class DriversService {
     return this.http.post<any>(url, driver, this.httpOptions).catch(this.errorHandler);
   }
 
+  updateDriver(driverId: string, driverObj: any): Observable<any> {
+    const url = `${this.backUrl}/drivers/${driverId}`;
+    return this.http.patch<any>(url, driverObj, this.httpOptions).catch(this.errorHandler);
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return Observable.throwError(error || 'Server Error');
   }
