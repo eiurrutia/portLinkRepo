@@ -22,11 +22,7 @@ const routes: Routes = [
     component: DriversSelectionPage
   },
   {
-    path: 'trucks-association',
-    loadChildren: '../trucks/trucks.module#TrucksPageModule'
-  },
-  {
-    path: 'trucks-association/modify',
+    path: 'trucks',
     loadChildren: '../trucks/trucks.module#TrucksPageModule'
   }
 ];

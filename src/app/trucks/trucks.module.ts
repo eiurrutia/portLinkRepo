@@ -11,6 +11,14 @@ import { TrucksAssociationPage } from './trucks-association/trucks-association.p
 const routes: Routes = [
   {
     path: '',
+    component: TrucksPage
+  },
+  {
+    path: 'trucks-association',
+    component: TrucksAssociationPage
+  },
+  {
+    path: 'trucks-association/modify',
     component: TrucksAssociationPage
   }
 ];
