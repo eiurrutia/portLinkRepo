@@ -29,18 +29,18 @@ export class ThirdsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
-  createThirds(third: any): Observable<any> {
+  createThird(third: any): Observable<any> {
     const url = `${this.backUrl}/third-parties/`;
     return this.http.post<any>(url, third, this.httpOptions).catch(this.errorHandler);
   }
 
   updateThird(thirdId: string, thirdObj: any): Observable<any> {
-    const url = `${this.backUrl}/ramps/${thirdId}`;
+    const url = `${this.backUrl}/third-parties/${thirdId}`;
     return this.http.patch<any>(url, thirdObj, this.httpOptions).catch(this.errorHandler);
   }
 
   deleteThird(thirdId: string): Observable<any> {
-    const url = `${this.backUrl}/ramps/${thirdId}`;
+    const url = `${this.backUrl}/third-parties/${thirdId}`;
     return this.http.delete<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
