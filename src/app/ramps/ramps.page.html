@@ -1,9 +1,398 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>ramps</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-grid no-margin>
+  <!-- MAIN DRIVERS TITLE -->
+  <div *ngIf="settedOption == 'main'">
+    <ion-row>
+      <ion-card class="main-card">
+        <ion-card-content class="title-card-content">
+          <ion-label><b style="color: red; ">R</b>amplas </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </div>
 
-<ion-content>
+  <!-- BACK ARROW -->
+  <div *ngIf="settedOption != 'main'">
+    <ion-row style="margin-top: 20%;">
+      <ion-col size="3">
+        <ion-card class="main-card-back" (click)="changeViewOption('main')">
+          <ion-card-content class="title-card-content" no-padding>
+            <ion-icon style="font-size:x-large;" name="arrow-back"></ion-icon>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="9">
+      </ion-col>
+    </ion-row>
+  </div>
 
-</ion-content>
+  <!-- MAIN OPTION -->
+  <div *ngIf="settedOption == 'main'">
+    <ion-row style="margin-top: 10%;">
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('new')">
+          <ion-card-content>
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="add"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Crear</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('edit')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="create"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Editar</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="4">
+        <ion-card class="main-card-options" (click)="changeViewOption('delete')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center>
+                <ion-col text-center no-padding>
+                  <ion-icon style="font-size: -webkit-xxx-large;" name="trash"></ion-icon>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col text-center no-padding style="font-size: x-large;">
+                  <ion-label>Eliminar</ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row style="margin-top: 5%;">
+      <ion-col>
+        <ion-card class="main-card-options" (click)="changeViewOption('list')">
+          <ion-card-content class="card-options-content">
+            <ion-grid no-padding>
+              <ion-row text-center style="paddin-left: 5%; paddin-right: 5%;">
+                <ion-col size="7" text-center no-padding style="font-size: x-large;">
+                  <ion-label>Ver Listado de Ramplas</ion-label>
+                </ion-col>
+                <ion-col size="5" text-center no-padding style="align-self: center;">
+                  <svg style="height: 80%; width: 60%;" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 90" x="0px" y="0px"><title>plane ladder, ramp, stairs, trap, gangplank</title><path d="M84,21.75H59.64l-40,25H17A8.26,8.26,0,0,0,8.75,55V71.25h7.09a9.24,9.24,0,0,0,18.32,0H65.84a9.24,9.24,0,0,0,18.32,0h7.09V60.75H90A2.75,2.75,0,0,1,87.25,58a28.9,28.9,0,0,0-1.83-10.12L81.8,38.25H84a8.25,8.25,0,0,0,0-16.5Zm-59,55A6.75,6.75,0,1,1,31.75,70,6.76,6.76,0,0,1,25,76.75Zm50,0A6.75,6.75,0,1,1,81.75,70,6.76,6.76,0,0,1,75,76.75Zm9-41H59.64L30.34,54.06l1.32,2.13,28.7-17.94H79.13l1.69,4.5H72A4.26,4.26,0,0,0,67.75,47v5A4.26,4.26,0,0,0,72,56.25h5v-2.5H72A1.76,1.76,0,0,1,70.25,52V47A1.76,1.76,0,0,1,72,45.25h9.76l1.31,3.51A26,26,0,0,1,84.75,58a5.27,5.27,0,0,0,4,5.1v5.65H84.16a9.24,9.24,0,0,0-18.32,0H34.16a9.26,9.26,0,0,0-2.86-5.5h32V42h-2.5V60.75h-.23L49.88,50.12l-1.76,1.76L57,60.75H25a9.26,9.26,0,0,0-9.16,8H11.25V55A5.76,5.76,0,0,1,17,49.25h3.36l40-25H84a5.75,5.75,0,0,1,0,11.5Z"/></svg>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <!-- LIST OPTION -->
+  <div *ngIf="settedOption == 'list'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-list">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="ramps" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-label><b>Patente</b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-label><b>Modelo</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <div style="overflow-y: scroll !important;">
+              <ion-item *ngFor="let ramp of ramps">
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="align-self: center;" text-center no-padding>
+                      <p text-wrap >{{ ramp['plateNumber'] }}</p>
+                    </ion-col>
+                    <ion-col size="6" style="align-self: center;" text-center no-padding>
+                      <ion-label>{{ ramp['model'] }}</ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              </div>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <!-- NEW OPTION -->
+  <div *ngIf="settedOption == 'new'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="ramps" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Nueva Rampla</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="3" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <span *ngIf="!diccNewRampForm['plateNumber']" class="blank-camp">*</span>
+                        <b>Patente: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Patente"
+                                 [(ngModel)]="diccNewRampForm['plateNumber']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <span *ngIf="!diccNewRampForm['model']" class="blank-camp">*</span>
+                        <b>Modelo: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Modelo"
+                                 [(ngModel)]="diccNewRampForm['model']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: dimgrey;"
+                                  [disabled]="!diccNewRampForm['plateNumber'] ||
+                                              !diccNewRampForm['model']"
+                                  (click)="validateAllInfo()">
+                        <b>Crear Rampla</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+  <!-- EDIT OPTION -->
+  <div *ngIf="settedOption == 'edit'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="ramps" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Modificar Rampla</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Rampla: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="Rampla"
+                                  [(ngModel)]="rampToModify"
+                                  [disabled]="selectRampToModifyDisable"
+                                  (ngModelChange)="modifyRampAlert($event)"
+                                  class="name-input"
+                                  no-padding>
+                        <ion-select-option *ngFor="let ramp of ramps" [value]=ramp> {{ ramp['plateNumber'] }} - {{ ramp['model'] }} </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <div *ngIf="rampToModify">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="3" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Patente: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Patente"
+                                 [(ngModel)]="diccModifyRampForm['plateNumber']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="6" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Modelo: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="6" text-center no-padding>
+                      <ion-input class="name-input" placeholder="Modelo"
+                                 [(ngModel)]="diccModifyRampForm['model']"
+                                 no-padding></ion-input>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: dimgrey;"
+                                  [disabled]="!diccModifyRampForm['plateNumber'] ||
+                                              !diccModifyRampForm['model']"
+                                  (click)="validateAllInfoToModify()">
+                        <b>Modificar Rampla</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button (click)='rampToModify = null; selectRampToModifyDisable = false' style="--background: dimgrey;">
+                        <b>Cancelar</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              </div>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+  <!-- DELETE OPTION -->
+  <div *ngIf="settedOption == 'delete'">
+    <ion-row>
+      <ion-col>
+        <ion-card class="main-card-new">
+          <ion-card-content class="card-list-content">
+            <ion-list *ngIf="ramps" style="background: transparent">
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col>
+                      <ion-label style="font-size: x-large;"><b>Eliminar Rampla</b></ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid no-padding>
+                  <ion-row text-center>
+                    <ion-col size="4" style="text-align: left;" no-padding>
+                      <ion-label style="font-size: medium;">
+                        <b>Rampla: </b></ion-label>
+                    </ion-col>
+                    <ion-col size="8" text-center no-padding>
+                      <ion-select [interfaceOptions]="customActionSheetOptions"
+                                  interface="action-sheet"
+                                  placeholder="Rampla"
+                                  [(ngModel)]="rampToDelete"
+                                  class="name-input"
+                                  no-padding>
+                        <ion-select-option *ngFor="let ramp of ramps" [value]=ramp> {{ ramp['plateNumber'] }} - {{ ramp['model'] }} </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button style="--background: red;"
+                                  [disabled]="!rampToDelete"
+                                  (click)="deleteRampAlert()">
+                        <b>Eliminar Rampla</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-item>
+                <ion-grid style="margin-top: 5%;" no-padding>
+                  <ion-row text-center>
+                    <ion-col text-center no-padding>
+                      <ion-button (click)='rampToDelete = null;' style="--background: dimgrey;">
+                        <b>Cancelar</b>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+</ion-grid>
