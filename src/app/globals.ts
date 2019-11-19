@@ -11,12 +11,8 @@ export class Globals {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
   // we are saving the one below for future uses
-  url = 'http://localhost:3030';
-  // https://staging-api.muevebox.com // sttaging
-  // 'https://developer-api.muevebox.com';        developer with https
-  // 'http://192.168.1.174:8000'
-  // https://api.muevebox.com/    this one is for production mode
-  // http://muevebox-staging.us-west-2.elasticbeanstalk.com  this one is for staging
+  // url = 'http://localhost:3030';
+  url = 'https://api-berrios-master.herokuapp.com';
 
   scrollUp() {
     const scrollToTop = window.setInterval(() => {
