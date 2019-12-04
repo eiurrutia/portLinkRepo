@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController, LoadingController } from '@ionic/angular';
-
+import { AlertController, NavController, LoadingController, Platform } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { File } from '@ionic-native/file/ngx';
+import * as Papa from 'papaparse';
 
 import { PortsService } from '../shared/ports.service';
 import { LapsService } from '../../laps/shared/laps.service';
 import { DriversService } from '../../drivers/shared/drivers.service';
 import { ThirdsService } from '../../thirds/shared/thirds.service';
 import { UnitsService } from '../../units/shared/units.service';
+import { CommissionsService } from '../../commissions/shared/commissions.service';
 
 import * as moment from 'moment-timezone';
 
@@ -23,8 +25,14 @@ export class PortsActionPage implements OnInit {
   portId = null;
   currentPort: any;
   unitsList: any;
-  unitsDiccByVin: any;
+  unitsDiccByVin = {};
+  unitsDiccById = {};
   vinToRegister: any;
+  driversDicc = {};
+  thirdsDicc = {};
+  commissionsDicc = {};
+  toReport = {};
+  toReportModels = {};
 
   correctVin = 1; // Variable to define state of vin input. 0 --> invalid vin. 1 --> writing. 2 --> valid vin.
   unitFound = {}; // Empty dicc when there is no unit selected.
@@ -60,22 +68,272 @@ export class PortsActionPage implements OnInit {
 
   loading: any;
 
+  headerRow: any;
+  csvData: any;
+
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private navController: NavController,
               private loadingController: LoadingController,
+              private platform: Platform,
+              private file: File,
               private socialSharing: SocialSharing,
               private portsService: PortsService,
               private lapsService: LapsService,
               private driversService: DriversService,
               private thirdsService: ThirdsService,
-              private unitsService: UnitsService) { }
+              private unitsService: UnitsService,
+              private commissionsService: CommissionsService) { }
 
   async ngOnInit() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
     await this.presentLoading();
     this.getPort(this.portId);
     this.driversFiltered = this.activeDriversAndThirdsList;
+    this.getDrivers();
+    this.getThirds();
+    this.getUnitsByPort(this.portId);
+    this.getComissions();
+  }
+
+
+  // Get drivers and build dicc.
+  getDrivers() {
+    this.driversService.getDrivers().subscribe(
+      drivers => {
+        drivers.map( driver => {
+          this.driversDicc[driver['_id']] = driver;
+        });
+        console.log(this.driversDicc);
+      },
+      error => {
+        console.log('Error fetching drivers: ', error);
+      }
+    );
+  }
+
+
+  // Get thirds and build dicc.
+  getThirds() {
+    this.thirdsService.getThirds().subscribe(
+      thirds => {
+        thirds.map( third => {
+          this.thirdsDicc[third['_id']] = third;
+        });
+        console.log(this.thirdsDicc);
+      },
+      error => {
+        console.log('Error fetching thirds: ', error);
+      }
+    );
+  }
+
+
+  // Get units info and build dicc.
+  getUnitsByPort(portId: string) {
+    this.unitsService.getUnitsByPort(portId).subscribe(
+      units => {
+        units.data.map( unit => { this.unitsDiccById[unit['_id']] = unit; });
+      },
+      error => {
+        console.log('Error fetching units by port: ', error);
+      }
+    );
+  }
+
+
+  // Get commissions from backend.
+  getComissions() {
+    this.commissionsService.getComissions().subscribe(
+      result => {
+        result.data.map(commission => {
+          this.commissionsDicc[commission['kind']] = commission;
+         }
+        );
+      },
+      error => {
+        console.log('Error fetching commissions: ', error);
+      }
+    );
+  }
+
+
+  // Write csv to report.
+  downloadCSV() {
+    let driversLapsCount = 0;
+    let driversUnitsCount = 0;
+    let thirdsLapsCount = 0;
+    let thirdsUnitsCount = 0;
+    const resumeDataArray = [];
+    // We add the shipName and date.
+    resumeDataArray.push(['', '', '', this.currentPort.shipName, '', this.getCleanDate(this.currentPort.arrivalDate, 'DD/MM/YY')]);
+
+    // Break Line
+    resumeDataArray.push(['', '', '']);
+
+    // Headers to resume Table
+    resumeDataArray.push([
+      'Conductor', 'Unidades Trasladadas', 'Total Vueltas', 'Vueltas Día Normal',
+      'Vueltas Sábados', 'Vueltas Domingos y Festivos', 'Comisión Total',
+      'Total Días', 'Viático Total'
+    ]);
+
+    // Info about laps. We iterate over the drivers and thirds.
+    // Drivers
+    for (const driver of Object.keys(this.toReport['drivers'])) {
+      driversLapsCount += this.toReport['drivers'][driver]['totalLaps'];
+      driversUnitsCount += this.toReport['drivers'][driver]['movedUnits'];
+      resumeDataArray.push([
+        this.driversDicc[driver]['name'], this.toReport['drivers'][driver]['movedUnits'], this.toReport['drivers'][driver]['totalLaps'],
+        this.toReport['drivers'][driver]['normalDayLaps'], this.toReport['drivers'][driver]['saturdayLaps'],
+        this.toReport['drivers'][driver]['holidayLaps'], 'Comisión Total',
+        this.toReport['drivers'][driver]['totalDays'], 'Viático Total'
+      ]);
+    }
+
+    // Thirds
+    for (const driver of Object.keys(this.toReport['thirds'])) {
+      thirdsLapsCount += this.toReport['thirds'][driver]['totalLaps'];
+      thirdsUnitsCount += this.toReport['thirds'][driver]['movedUnits'];
+      resumeDataArray.push([
+        '*' + driver, this.toReport['thirds'][driver]['movedUnits'], this.toReport['thirds'][driver]['totalLaps'],
+        this.toReport['thirds'][driver]['normalDayLaps'], this.toReport['thirds'][driver]['saturdayLaps'],
+        this.toReport['thirds'][driver]['holidayLaps'], 'Comisión Total',
+        this.toReport['thirds'][driver]['totalDays'], 'Viático Total'
+      ]);
+    }
+
+    // Break Line
+    resumeDataArray.push(['', '', '']);
+    resumeDataArray.push(['', '', '']);
+
+    // Total by drivers and thirds
+    resumeDataArray.push([ 'Total Conductores:', driversUnitsCount, driversLapsCount]);
+    resumeDataArray.push([ 'Total Terceros:', thirdsUnitsCount, thirdsLapsCount]);
+
+    // Break Line
+    resumeDataArray.push(['', '', '']);
+
+    // Total
+    resumeDataArray.push([ 'Total:', driversUnitsCount + thirdsUnitsCount, driversLapsCount + thirdsLapsCount]);
+
+    // Break Line
+    resumeDataArray.push(['', '', '']);
+
+    // Title to Resume
+    resumeDataArray.push([
+      '', '', '', 'RESUMEN POR MODELOS']);
+
+    // Break Line
+    resumeDataArray.push(['', '', '']);
+
+    // Models titles
+    resumeDataArray.push(['', 'Modelo', '', 'Tamaño', '', 'Cantidad']);
+
+    // Differents models
+    for (const model of Object.keys(this.toReportModels)) {
+      resumeDataArray.push(['', model, '', 'Mediano', '', this.toReportModels[model]]);
+    }
+
+    const csv = Papa.unparse(resumeDataArray);
+
+    if (this.platform.is('cordova')) {
+      this.file.writeFile(this.file.externalRootDirectory + '/Download/', 'Resumen ' + this.currentPort.shipName + '.csv',
+        csv, { replace: true }).then(async (res) => {
+          // this.socialSharing.share(null, null, res.nativeUrl, null);
+          this.socialSharing.shareViaEmail(
+            'Se adjunta el reporte del barco ' + this.currentPort.shipName + 'con 30% de avance.',
+            'Resumen ' + this.currentPort.shipName,
+            ['eiurrutia@uc.cl'], null, null,
+            res.nativeURL.replace('%20', ' ')).then(
+              () => { console.log('compartido via email'); }
+            ).catch(e => {
+              console.log('error share via email: ', e);
+            });
+        });
+    } else {
+      // To download in browser.
+      const blob = new Blob([csv]);
+      const a = window.document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'Archivo Resumen ' + this.currentPort.shipName + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  }
+
+  // Get info to report.
+  getInfoToReportInCSV() {
+    this.toReport['drivers'] = {};
+    this.toReport['thirds'] = {};
+    this.toReportModels = {};
+    this.lapsService.getLapsByPort(this.currentPort._id).subscribe(
+      result => {
+        Promise.all(result.data.map( async (lap) => {
+          return new Promise ( resolve => {
+            let kind = '';
+            let id = '';
+            if (!lap.isThird) { kind = 'drivers'; id = lap.driver;
+            } else { kind = 'thirds'; id = lap.nickName; }
+
+            if (!this.toReport[kind][id]) {
+              console.log('se creo para el driver: ', lap.driver);
+              this.toReport[kind][id] = {};
+              this.toReport[kind][id]['movedUnits'] = 0;
+              this.toReport[kind][id]['totalLaps'] = 0;
+              this.toReport[kind][id]['holidayLaps'] = 0;
+              this.toReport[kind][id]['saturdayLaps'] = 0;
+              this.toReport[kind][id]['normalDayLaps'] = 0;
+              this.toReport[kind][id]['lapsCountByDay'] = {};
+              this.toReport[kind][id]['totalDays'] = 0;
+            }
+            this.toReport[kind][id]['movedUnits'] += lap['load'].length;
+            this.toReport[kind][id]['totalLaps'] += 1;
+
+            // Detect day of the week to commission.
+            const day = this.getCleanDate(lap.lastLoad, 'ddd');
+            if (day === 'Sun') {
+              this.toReport[kind][id]['holidayLaps'] += 1;
+            } else if (day === 'Sat') {
+              this.toReport[kind][id]['saturdayLaps'] += 1;
+            } else {
+              this.toReport[kind][id]['normalDayLaps'] += 1;
+            }
+
+
+            // Detect differents days to viatics.
+            const date = this.getCleanDate(lap.lastLoad, 'DD/MM/YY');
+            console.log('buscara el date para el deriver: ', lap.driver);
+            console.log('Date: ', date);
+            console.log(this.toReport);
+            if (!(date in Object.keys(this.toReport[kind][id]['lapsCountByDay']))) {
+              this.toReport[kind][id]['lapsCountByDay'][date] = 1;
+              this.toReport[kind][id]['totalDays'] += 1;
+            } else {
+              this.toReport[kind][id]['lapsCountByDay'][date] += 1;
+            }
+
+            // Check units moved in this lap
+            lap.load.map( unit => {
+              const model = this.unitsDiccById[unit['unit']]['model'];
+              if (!this.toReportModels[model]) { this.toReportModels[model] = 1;
+              } else { this.toReportModels[model] += 1; }
+            });
+
+            resolve();
+          });
+        }
+      )).then( () => {
+        console.log('este es el dicc to report ºgenerado');
+        console.log(this.toReport);
+      });
+      },
+      error => {
+        console.log('Error fetching laps: ', error);
+      }
+    );
+
   }
 
 
@@ -98,8 +356,55 @@ export class PortsActionPage implements OnInit {
   }
 
 
-  trySocialSharing() {
-    this.socialSharing.shareViaWhatsApp('Hola te comparto via whatsapp').then(
+  driverTurnSocialSharing() {
+    const dateString = this.getCleanDate(new Date(Date.now()), 'DD/MM/YY - HH:mm');
+    let stringToShare = '';
+    stringToShare += `*Respuesta automatizada:*\n\n`;
+    stringToShare += `[ SALIDA DE PUERTO ]\n`;
+    stringToShare += `*${this.selectedDriver}*\n`;
+    stringToShare += `*·Hora de salida:* ${dateString}\n`;
+    stringToShare += `·Vuelta Nº ${this.currentLap.relativeNumber}\n`;
+    stringToShare += `·Última carga: ${this.lastLoadText}\n`;
+    stringToShare += `·Unidades trasladas: ${this.currentLap.load.length}\n`;
+    stringToShare += `·Camión: ${this.currentLap.truck}\n`;
+    stringToShare += `·Rampla: ${this.currentLap.ramp}\n\n`;
+    stringToShare += `---${this.currentPort['shipName']}---`;
+    this.socialSharing.shareViaWhatsApp(stringToShare).then(
+      () => { console.log('compartido via whatsapp'); }
+    ).catch(e => {
+      console.log('error share via whatsapp: ', e);
+    });
+  }
+
+  portResumeSocialSharing() {
+    const dateString = this.getCleanDate(new Date(Date.now()), 'DD/MM/YY - HH:mm');
+    let stringToShare = '';
+    stringToShare += `*Respuesta automatizada:*\n`;
+    stringToShare += `[ RESUMEN PUERTO ]\n`;
+    stringToShare += `·Total Unidades: *${this.currentPort.unitsInPacking.totalQuantity}*\n`;
+    stringToShare += `·Unidades retiradas: *${this.currentPort.collectedUnits.totalQuantity}*\n`;
+    stringToShare += `·Unidades por retirar: *${this.currentPort.unitsInPacking.totalQuantity -
+      this.currentPort.collectedUnits.totalQuantity}*\n\n`;
+    stringToShare += `---Desglose Tamaños---\n`;
+    const unitsPackingDicc = this.currentPort.unitsInPacking;
+    const collectedUnits = this.currentPort.collectedUnits;
+    if (unitsPackingDicc.smallQuantity) { stringToShare +=
+      `·Pequeñas: *${collectedUnits.smallQuantity}* (${unitsPackingDicc.smallQuantity})\n`; }
+    if (unitsPackingDicc.mediumQuantity) { stringToShare +=
+      `·Medianas: *${collectedUnits.mediumQuantity}* (${unitsPackingDicc.mediumQuantity})\n`; }
+    if (unitsPackingDicc.bigQuantity) { stringToShare +=
+      `·Grandes: *${collectedUnits.bigQuantity}* (${unitsPackingDicc.bigQuantity})\n`; }
+    if (unitsPackingDicc.extraQuantity) { stringToShare +=
+      `·Extra Grandes: *${collectedUnits.extraQuantity}* (${unitsPackingDicc.extraQuantity})\n`; }
+    stringToShare += `\n`;
+    stringToShare += `---Desglose Modelos---\n`;
+    const modelCountDicc = this.currentPort.modelsCountDicc;
+    for (const model of Object.keys(modelCountDicc.collected)) {
+      stringToShare += `·${model}: *${modelCountDicc.collected[model]}* (${modelCountDicc.totalToCollect[model]})\n`;
+    }
+    stringToShare += `\n`;
+    stringToShare += `*·Hora Reporte:* ${dateString}\n`;
+    this.socialSharing.shareViaWhatsApp(stringToShare).then(
       () => { console.log('compartido via whatsapp'); }
     ).catch(e => {
       console.log('error share via whatsapp: ', e);
