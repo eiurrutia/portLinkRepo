@@ -44,8 +44,12 @@ export class LapsService {
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
-  getLapsByDriverAndPortOrderByRelativeNumber(driverId: string, portId: string): Observable<any> {
-    const url = `${this.backUrl}/laps?driver=${driverId}&port=${portId}&$sort[relativeNumber]=-1/`;
+  getLapsByDriverAndPortOrderByRelativeNumber(driverId: string, portId: string, nickName= null): Observable<any> {
+    let url;
+    // We check if has a nickName, because 2 thirds could have 2 drivers with the same id but differents nickNames.
+    if (!nickName) {url = `${this.backUrl}/laps?driver=${driverId}&port=${portId}&$sort[relativeNumber]=-1/`;
+    } else {url = `${this.backUrl}/laps?driver=${driverId}&port=${portId}&nickName=${portId}&$sort[relativeNumber]=-1/`; }
+
     return this.http.get<any>(url, this.httpOptions).catch(this.errorHandler);
   }
 
