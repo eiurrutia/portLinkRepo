@@ -64,9 +64,14 @@ export class PortsActionPage implements OnInit {
   packingListHeaders: any;
   packingListHeadersWithoutVin: any;
 
+  showConfigCommissions = false;
+  editConfigCommissions = false;
+  commissionsChanged = false;
+
   wordSearchedInPacking: string;
 
   loading: any;
+  lapLoading: any;
 
   headerRow: any;
   csvData: any;
@@ -94,6 +99,17 @@ export class PortsActionPage implements OnInit {
     this.getThirds();
     this.getUnitsByPort(this.portId);
     this.getComissions();
+  }
+
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit();
+      if (this.selectedDriverObject.third) {
+        this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId, this.selectedDriverObject.nick);
+      } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
+      event.target.complete();
+    }, 100);
   }
 
 
@@ -159,7 +175,7 @@ export class PortsActionPage implements OnInit {
 
 
   // Write csv to report.
-  downloadCSV() {
+  downloadResumeCSV() {
     let driversLapsCount = 0;
     let driversUnitsCount = 0;
     let thirdsLapsCount = 0;
@@ -236,6 +252,8 @@ export class PortsActionPage implements OnInit {
     }
 
     const csv = Papa.unparse(resumeDataArray);
+    console.log('resumeDataArray');
+    console.log(resumeDataArray);
 
     if (this.platform.is('cordova')) {
       this.file.writeFile(this.file.externalRootDirectory + '/Download/', 'Resumen ' + this.currentPort.shipName + '.csv',
@@ -263,8 +281,94 @@ export class PortsActionPage implements OnInit {
     }
   }
 
+
+  // Get units movement report in csv.
+  downloadMovementsDetailCSV() {
+    const movementsDataArray = [];
+    // movementsDataArray.push(['SEP=;']);
+
+    // We add the shipName and Date
+    movementsDataArray.push(['', '', '', this.currentPort.shipName, '', this.getCleanDate(this.currentPort.arrivalDate, 'DD/MM/YY')]);
+
+    // Break Line
+    movementsDataArray.push(['', '', '']);
+
+    // Titles
+    movementsDataArray.push(['VIN', 'Modelo', 'Color', 'Tamano', 'Conductor', 'Camión', 'Rampla', 'Fecha', 'Hora', 'Vuelta']);
+
+    // Info for each unit
+    this.unitsService.getUnitsByPort(this.currentPort._id).subscribe(
+      units => {
+        Promise.all(units.data.sort( this.compareVIN ).map( async (unit) => {
+          return new Promise( resolve => {
+            if (unit['lapAssociated']) {
+              this.lapsService.getLap(unit['lapAssociated']).subscribe(
+                lap => {
+                  let driver = '';
+                  if (!lap.isThird) { driver = this.driversDicc[lap['driver']]['name'];
+                  } else { driver = lap['nickName']; }
+                  movementsDataArray.push([unit['vin'], unit['model'], unit['color'], unit['size'],
+                                          driver, lap['truck'], lap['ramp'] ? lap['ramp'] : '-',
+                                          this.getCleanDate(unit['loadedDate'], 'DD/MM/YY'), this.getCleanDate(unit['loadedDate'], 'HH:mm'),
+                                          lap['relativeNumber']]);
+                  resolve();
+                },
+                error => {
+                  console.log('Error fetching lap associated for unit: ', error);
+                  resolve();
+                }
+              );
+            } else {
+              movementsDataArray.push([unit['vin'], unit['model'], unit['color'], unit['size'] ]);
+              resolve();
+            }
+          });
+        })).then( () => {
+          this.shareReportViaEmail(movementsDataArray,
+            'Se adjunta el reporte de movimientos del barco ' + this.currentPort.shipName + 'con 30% de avance.',
+            'Movimientos ' + this.currentPort.shipName,
+            ['eiurrutia@uc.cl'],
+            'Movimientos ' + this.currentPort.shipName + '.csv');
+        });
+      },
+      error => {
+        console.log('Error fetching units by port: ', error);
+      }
+    );
+  }
+
+
+  // Sharing download(dektop) or mail(device)
+  shareReportViaEmail(array: any, message: string, subject: string, directions: string[], fileName: string) {
+    console.log(array);
+    console.log('array');
+    const csv = Papa.unparse(array, {'delimiter': ';'});
+    if (this.platform.is('cordova')) {
+      this.file.writeFile(this.file.externalRootDirectory + '/Download/', fileName,
+        csv, { replace: true }).then(async (res) => {
+          // this.socialSharing.share(null, null, res.nativeUrl, null);
+          this.socialSharing.shareViaEmail(
+            message, subject, directions, null, null, res.nativeURL.replace('%20', ' '))
+            .then(
+              () => { console.log('compartido via email'); }
+            ).catch(e => {
+              console.log('error share via email: ', e);
+            });
+        });
+    } else {
+      // To download in browser.
+      const blob = new Blob([csv]);
+      const a = window.document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  }
+
   // Get info to report.
-  getInfoToReportInCSV() {
+  getInfoToReportResumeInCSV() {
     this.toReport['drivers'] = {};
     this.toReport['thirds'] = {};
     this.toReportModels = {};
@@ -347,12 +451,25 @@ export class PortsActionPage implements OnInit {
   await this.loading.present();
   }
 
+  // Loading efect when the bakend is loading a lap.
+  async presentLapLoading() {
+    // Prepare a loading controller
+    this.lapLoading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.lapLoading.present();
+  }
+
 
   // Set search drvier var active and delete search vin bar to start with field empty.
   setSearhBarActive() {
     this.searchBarActive = true;
     this.vinToRegister = '';
     this.unitFound = {};
+    this.correctSlectedDriver = false;
+    this.selectedDriver = null;
+    this.selectedDriverObject = null;
   }
 
 
@@ -642,6 +759,7 @@ export class PortsActionPage implements OnInit {
     this.unitsService.getLoadedUnitsByPort(this.portId).subscribe(
       result => {
         const portObject = {};
+        portObject['doneLaps'] = this.currentPort['doneLaps'];
         portObject['collectedUnits'] = Object.assign({}, this.currentPort['collectedUnits']);
         portObject['modelsCountDicc'] = Object.assign({}, this.currentPort['modelsCountDicc']);
         portObject['collectedUnits']['totalQuantity'] = result.total;
@@ -714,6 +832,7 @@ export class PortsActionPage implements OnInit {
         console.log('Vuelta creada!');
         console.log(lap);
         this.currentLap = lap;
+        this.currentPort['doneLaps'] += 1;
         this.loading.dismiss();
       },
       error => {
@@ -840,7 +959,9 @@ export class PortsActionPage implements OnInit {
       if (!this.lastSelectedDriverObject) {
         this.lastSelectedDriver = this.selectedDriver;
         this.lastSelectedDriverObject = this.selectedDriverObject;
-        this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId);
+        if (this.selectedDriverObject.third) {
+          this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId, this.selectedDriverObject.nick);
+        } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
       } else if (this.lastSelectedDriver !== this.selectedDriver) {
         this.changeDriver();
       }
@@ -869,7 +990,10 @@ export class PortsActionPage implements OnInit {
             this.lastSelectedDriverObject = this.selectedDriverObject;
             console.log('this.selectedDriverObject');
             console.log(this.selectedDriverObject);
-            this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId);
+            if (this.selectedDriverObject['third']) {
+              this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id,
+                this.portId, this.selectedDriverObject['nick']);
+            } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
           }
         }
       ]
@@ -879,12 +1003,11 @@ export class PortsActionPage implements OnInit {
 
 
   // Get the last lap to selected driver or create a new lap if he doesn't have.
-  async getDriverInfoAboutHisLaps(driverId: string, portId: string) {
-    await this.presentLoading();
+  async getDriverInfoAboutHisLaps(driverId: string, portId: string, nickName = null) {
+    await this.presentLapLoading();
 
-    this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId).subscribe(
+    this.lapsService.getLapsByDriverAndPortOrderByRelativeNumber(driverId, portId, nickName).subscribe(
       result => {
-        this.loading.dismiss();
         if (result.total) {
           this.currentLap = result.data[0];
           this.lastLoadText = this.getDateDifference(result.data[0].lastLoad, Date.now());
@@ -897,10 +1020,12 @@ export class PortsActionPage implements OnInit {
           this.currentLap = null;
           this.createNewLapAlert(); // First lap.
         }
+        this.lapLoading.dismiss();
 
       },
       error => {
         console.log('Error getting the driver laps: ', error);
+        this.lapLoading.dismiss();
       }
     );
   }
@@ -938,6 +1063,7 @@ export class PortsActionPage implements OnInit {
     this.portsService.getPort(portId).subscribe(
       currentPort => {
         this.currentPort = currentPort;
+        console.log('se acutalizó current port: ', this.currentPort);
         this.getCurrentPortUnits(currentPort._id);
         this.generateDriversAndThirdsArray(currentPort);
       },
@@ -1015,6 +1141,7 @@ export class PortsActionPage implements OnInit {
 
   // Generate thirds and drivers array to keep the objects and show lists.
   async generateDriversAndThirdsArray(currentPort: any) {
+    this.activeDriversAndThirdsList = [];
     // We build drivers array
     await Promise.all(currentPort.consideredDrivers.map( async (driver) => {
       return new Promise ( resolve => this.driversService.getDriver(driver.driverId).subscribe(
@@ -1092,6 +1219,82 @@ export class PortsActionPage implements OnInit {
       }
     }
     return 0;
+  }
+
+
+  // Compare function to order units lists
+  compareVIN(unit1, unit2) {
+    if (unit1.vin.substring(unit1.vin.length - 6) < unit2.vin.substring(unit1.vin.length - 6)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+
+  // Modify port commisions alert.
+  async changePortComissionsAlert() {
+    const alert = await this.alertController.create({
+      header: 'Modificar Comisiones',
+      subHeader: 'Deseas modificar las comisiones para este puerto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Aceptar',
+          handler: () => { this.updatePortCommissions(); }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  // Success commisions alert.
+  async successComissionsAlert() {
+    const alert = await this.alertController.create({
+      header: 'Modificación Exitosa',
+      subHeader: 'Se han modificados las comisiones del puerto.',
+      buttons: [
+         {
+          text: 'Ok',
+          handler: () => {}
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  // Update port commissions
+  updatePortCommissions() {
+    const portObject = {};
+    portObject['portCommissions'] = {};
+    portObject['portCommissions']['nonUnionized'] = {};
+    portObject['portCommissions']['nonUnionized']['holiday'] = this.currentPort['portCommissions']['nonUnionized']['holiday'];
+    portObject['portCommissions']['nonUnionized']['normalDays'] = this.currentPort['portCommissions']['nonUnionized']['normalDays'];
+    portObject['portCommissions']['nonUnionized']['saturday'] = this.currentPort['portCommissions']['nonUnionized']['saturday'];
+    portObject['portCommissions']['nonUnionized']['viatic'] = this.currentPort['portCommissions']['nonUnionized']['viatic'];
+    portObject['portCommissions']['unionized'] = {};
+    portObject['portCommissions']['unionized']['holiday'] = this.currentPort['portCommissions']['unionized']['holiday'];
+    portObject['portCommissions']['unionized']['normalDays'] = this.currentPort['portCommissions']['unionized']['normalDays'];
+    portObject['portCommissions']['unionized']['saturday'] = this.currentPort['portCommissions']['unionized']['saturday'];
+    portObject['portCommissions']['unionized']['viatic'] = this.currentPort['portCommissions']['unionized']['viatic'];
+
+    this.portsService.updatePort(this.portId, portObject).subscribe(
+      () => {
+        console.log('Comisiones actualizadas.');
+        this.successComissionsAlert();
+        this.editConfigCommissions = false;
+        this.commissionsChanged = false;
+      },
+      error => {
+        console.log('Error fetching port: ', error);
+      }
+    );
+
   }
 
 

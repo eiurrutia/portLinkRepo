@@ -1,3 +1,7 @@
+<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+
 <!-- Barcode View -->
 <div *ngIf="buttonTabActiveDicc['barcode']" style="z-index: inherit; overflow-y: scroll!important; height: 90%;">
   <ion-list class="main-list">
@@ -119,7 +123,7 @@
             Conductor:
           </ion-col>
           <ion-col size="8" style="text-align: right">
-            {{ unitFound?.lapAssociated?.driver?.name }}
+            {{ unitFound?.lapAssociated?.isThird ? unitFound?.lapAssociated?.nickName : unitFound?.lapAssociated?.driver?.name }}
           </ion-col>
         </ion-row>
         <ion-row *ngIf=unitFound.lapAssociated>
@@ -374,7 +378,7 @@
 
 
 <!-- Packing View -->
-<div *ngIf="buttonTabActiveDicc['packing']" style="z-index: inherit;">
+<div *ngIf="buttonTabActiveDicc['packing']" style="z-index: inherit; overflow-y: scroll!important; height: 90%;">
   <ion-list class="main-list resume-list">
     <ion-item style="padding-bottom: 4%;">
       <ion-searchbar animated style="padding-bottom: 2%;"
@@ -414,7 +418,9 @@
   </ion-list>
 </div>
 
-<div *ngIf="buttonTabActiveDicc['setting']" style="z-index: inherit;">
+
+<!-- Config View -->
+<div *ngIf="buttonTabActiveDicc['setting']" style="z-index: inherit; overflow-y: scroll!important; height: 90%;">
   <ion-list class="main-list">
     <ion-item text-center>
       <ion-label><b>Configuración Puerto</b></ion-label>
@@ -443,6 +449,182 @@
         </ion-row>
        </ion-grid>
     </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10">
+            Modificar comisiones conductores
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon (click)="showConfigCommissions = !showConfigCommissions"
+                      *ngIf="!showConfigCommissions"
+                      name="arrow-down"></ion-icon>
+            <ion-icon (click)="showConfigCommissions = !showConfigCommissions"
+                      *ngIf="showConfigCommissions"
+                      name="arrow-up"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="showConfigCommissions">
+          <ion-col size="9">
+          </ion-col>
+          <ion-col (click)="this.editConfigCommissions = !this.editConfigCommissions" size="2">
+            Editar
+          </ion-col>
+          <ion-col size="1" style="text-align: right;">
+            <ion-icon (click)="this.editConfigCommissions = !this.editConfigCommissions"
+                      name="create"></ion-icon>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <div *ngIf="showConfigCommissions">
+    <ion-item>
+      <ion-grid>
+        <ion-row style="margin-bottom: 5%;"text-center>
+          <ion-label><b>Sindicalizados</b></ion-label>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Normal:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['unionized']['normalDays']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Sábado:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['unionized']['saturday']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Domingo:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['unionized']['holiday']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Viático:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['unionized']['viatic']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row text-center>
+          <ion-label><b>No Sindicalizados</b></ion-label>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Normal:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['nonUnionized']['normalDays']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Sábado:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['nonUnionized']['saturday']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Día Domingo:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['nonUnionized']['holiday']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            Viático:
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-input [disabled]="!editConfigCommissions"
+            type="number"
+            (ionChange)="commissionsChanged = true"
+            [(ngModel)]="currentPort['portCommissions']['nonUnionized']['viatic']"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item *ngIf="commissionsChanged">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" (click)=changePortComissionsAlert()>
+              Guardar Cambios
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    </div>
   </ion-list>
 </div>
 
@@ -450,8 +632,28 @@
 <div *ngIf="buttonTabActiveDicc['share']" style="z-index: inherit;">
   <ion-list class="main-list">
     <ion-item>
-      <ion-button (click)="trySocialSharing()">
+      <ion-button (click)="driverTurnSocialSharing()">
         Try Share
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="portResumeSocialSharing()">
+        Try Share 2
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="downloadResumeCSV()">
+        Download CSV
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="getInfoToReportResumeInCSV()">
+        Get Info
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="downloadMovementsDetailCSV()">
+        Download movements CSV
       </ion-button>
     </ion-item>
   </ion-list>
