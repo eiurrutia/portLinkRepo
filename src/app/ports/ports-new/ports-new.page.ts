@@ -5,7 +5,6 @@ import * as XLSX from 'ts-xlsx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { File } from '@ionic-native/file/ngx';
 
 import { NewPortModalPage } from '../../modals/new-port-modal/new-port-modal.page';
 
@@ -265,7 +264,7 @@ export class PortsNewPage implements OnInit {
     this.differentsModelsSizes[model] = selectedValue;
   }
 
-  numberDigitsChange(selectedValue: any) {
+  numberDigitsChange() {
     if (this.digitsToConsider === 0) {this.vinExample = this.packingDicc[0][this.diccToDefineHeadersInverse['vin']];
     } else {this.vinExample =
       this.packingDicc[0][this.diccToDefineHeadersInverse['vin']].substring(
