@@ -48,6 +48,14 @@ export class PortsPage implements OnInit {
   }
 
 
+  doRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit();
+      event.target.complete();
+    }, 100);
+  }
+
+
   async presentLoading() {
     // Prepare a loading controller
     this.loading = await this.loadingController.create({
