@@ -105,9 +105,11 @@ export class PortsActionPage implements OnInit {
   doRefresh(event) {
     setTimeout(() => {
       this.ngOnInit();
-      if (this.selectedDriverObject.third) {
-        this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId, this.selectedDriverObject.nick);
-      } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
+      if (this.selectedDriverObject) {
+        if (this.selectedDriverObject.third) {
+          this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId, this.selectedDriverObject.nick);
+        } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
+      }
       event.target.complete();
     }, 100);
   }
