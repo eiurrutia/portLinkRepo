@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, LoadingController } from '@ionic/angular';
 
 import { PortsService } from '../../ports/shared/ports.service';
 import { UnitsService } from '../../units/shared/units.service';
+import { CommissionsService } from '../../commissions/shared/commissions.service';
 
 
 
@@ -34,15 +35,20 @@ export class NewPortModalPage implements OnInit {
 
   message: any;
   portObject = {};
+  commissions = {};
+  loading: any;
 
   constructor(private modalController: ModalController,
               private navController: NavController,
+              private loadingController: LoadingController,
               private portsService: PortsService,
-              private unitsService: UnitsService) { }
+              private unitsService: UnitsService,
+              private commissionsService: CommissionsService) { }
 
   ngOnInit() {
     this.generatePreviewObjects();
     this.countPerSize();
+    this.getComissions();
     this.estimatedLoad = Number(this.estimatedLoadString);
     this.estimatedLaps = parseFloat((this.totalCount / this.estimatedLoad).toFixed(1));
   }
@@ -60,6 +66,16 @@ export class NewPortModalPage implements OnInit {
     this.headers = ['vin', 'modelo', 'color', 'tamaño'];
   }
 
+  // Loading efect when the bakend is loading.
+  async presentLoading() {
+    // Prepare a loading controller
+    this.loading = await this.loadingController.create({
+        message: 'Cargando...'
+    });
+    // Present the loading controller
+  await this.loading.present();
+  }
+
   // Close modal.
   async closeModal() {
     const modal = await this.modalController.getTop();
@@ -72,6 +88,24 @@ export class NewPortModalPage implements OnInit {
     this.generatePortObjectToBackend();
     modal.dismiss();
     // this.navController.navigateRoot('user-menu/ports/drivers/drivers-selection');
+  }
+
+
+  // Get commissions
+  getComissions() {
+    this.presentLoading();
+    this.commissionsService.getComissions().subscribe(
+      commissions => {
+        commissions.data.map( commission => {
+          this.commissions[commission.kind] = commission;
+        });
+        this.loading.dismiss();
+      },
+      error => {
+        console.log('Error getting commission: ', error);
+        this.loading.dismiss();
+      }
+    );
   }
 
 
@@ -182,6 +216,19 @@ export class NewPortModalPage implements OnInit {
     this.portObject['portRates']['medium'] = this.importer['rates']['medium'];
     this.portObject['portRates']['big'] = this.importer['rates']['big'];
     this.portObject['portRates']['extra'] = this.importer['rates']['extra'];
+
+    // Drivers Commissions
+    this.portObject['portCommissions'] = {};
+    this.portObject['portCommissions']['unionized'] = {};
+    this.portObject['portCommissions']['unionized']['normalDays'] = this.commissions['unionized']['normalCommission'];
+    this.portObject['portCommissions']['unionized']['saturday'] = this.commissions['unionized']['saturdayCommission'];
+    this.portObject['portCommissions']['unionized']['holiday'] = this.commissions['unionized']['holidayCommission'];
+    this.portObject['portCommissions']['unionized']['viatic'] = this.commissions['unionized']['viatic'];
+    this.portObject['portCommissions']['nonUnionized'] = {};
+    this.portObject['portCommissions']['nonUnionized']['normalDays'] = this.commissions['nonUnionized']['normalCommission'];
+    this.portObject['portCommissions']['nonUnionized']['saturday'] = this.commissions['nonUnionized']['saturdayCommission'];
+    this.portObject['portCommissions']['nonUnionized']['holiday'] = this.commissions['nonUnionized']['holidayCommission'];
+    this.portObject['portCommissions']['nonUnionized']['viatic'] = this.commissions['nonUnionized']['viatic'];
 
     // And we create the port in backend.
     this.createPort(this.portObject);
