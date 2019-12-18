@@ -27,6 +27,10 @@ const routes: Routes = [
   {
     path: 'ramps',
     loadChildren: '../ramps/ramps.module#RampsPageModule'
+  },
+  {
+    path: 'importers',
+    loadChildren: '../importers/importers.module#ImportersPageModule'
   }
 ];
 
