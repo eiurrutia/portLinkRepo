@@ -73,6 +73,8 @@ export class UserMenuPage implements OnInit {
         this.menu_title = 'Ramplas';
       } else if (urlArray[urlArray.length - 1].includes('thirds')) {
         this.menu_title = 'Terceros';
+      } else if (urlArray[urlArray.length - 1].includes('importers')) {
+        this.menu_title = 'Importadores';
       }
     }
   }
