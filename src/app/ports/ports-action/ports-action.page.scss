@@ -23,6 +23,13 @@
   z-index: inherit;
 }
 
+.share-list {
+  overflow-y: scroll!important;
+  background: transparent !important;
+  margin-top: 20%;
+  z-index: inherit;
+}
+
 .searchbar-green {
   --icon-color: green;
   color: green;
@@ -59,6 +66,18 @@
   padding-top: 0;
   padding-bottom: 0;
   z-index: inherit;
+}
+
+.confirm-lap {
+  overflow-y: scroll!important;
+  margin-top: 5%;
+  margin-left: 6%;
+  padding-right: 3%;
+  padding-top: 0;
+  padding-bottom: 0;
+  z-index: inherit;
+  font-size: smaller;
+  border-radius: 10%
 }
 
 .general-count {
@@ -149,4 +168,10 @@
     }
   }
 
+}
+
+.estimated-load-select {
+  margin-right: 4%;
+  float: right;
+  max-width: max-content;
 }

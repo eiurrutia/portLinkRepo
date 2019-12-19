@@ -30,7 +30,10 @@
                           'search-vin-item-invalid': correctVin == 0}">
       <ion-grid>
         <ion-row>
-          <ion-col size="4" style="text-align: right;">
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon name="logo-whatsapp"(click)=shareViaWhatsappAlert()></ion-icon>
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
             <ion-icon name="logo-model-s"></ion-icon>
           </ion-col>
           <ion-col size="4" style="text-align: center;">
@@ -380,7 +383,7 @@
 <!-- Packing View -->
 <div *ngIf="buttonTabActiveDicc['packing']" style="z-index: inherit; overflow-y: scroll!important; height: 90%;">
   <ion-list class="main-list resume-list">
-    <ion-item style="padding-bottom: 4%;">
+    <ion-item style="padding-bottom: 1%;">
       <ion-searchbar animated style="padding-bottom: 2%;"
                 show-cancel-button=true
                 searchIcon="search"
@@ -401,9 +404,9 @@
                     VIN
                   </ion-col>
                 </ion-row>
-                <ion-row class="info-row" *ngFor="let model of unitsDiccByVin | keyvalue" nowrap style="padding: 0;">
+                <ion-row class="info-row" *ngFor="let unit of unitsFiltered" nowrap style="padding: 0;">
                   <ion-col text-center size="10" class="preview-col info-row" style="padding: 0; align-self: center;"  nowrap>
-                    {{ model.value['vin'] }}
+                    {{ unit['vin'] }}
                   </ion-col>
                   <ion-col size="2" style="text-align: right;">
                     <ion-icon name="arrow-forward"></ion-icon>
@@ -625,36 +628,80 @@
       </ion-grid>
     </ion-item>
     </div>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10">
+            Modificar carga estimada
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon (click)="editEstimatedLoad = !editEstimatedLoad"
+                      *ngIf="!editEstimatedLoad"
+                      name="arrow-down"></ion-icon>
+            <ion-icon (click)="editEstimatedLoad = !editEstimatedLoad"
+                      *ngIf="editEstimatedLoad"
+                      name="arrow-up"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=editEstimatedLoad>
+          <ion-col size="3">
+            Carga:
+          </ion-col>
+          <ion-col size="9">
+            <ion-select class="estimated-load-select" [(ngModel)]="currentPort['estimatedLoad']"
+              placeholder="Carga Estimada" (ngModelChange)="selectModifyEstimatedLoad($event)"
+              okText="Confirmar" cancelText="Cancelar">
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+              <ion-select-option value="4">4</ion-select-option>
+              <ion-select-option value="5">5</ion-select-option>
+              <ion-select-option value="6">6</ion-select-option>
+              <ion-select-option value="7">7</ion-select-option>
+              <ion-select-option value="8">8</ion-select-option>
+              <ion-select-option value="9">9</ion-select-option>
+              <ion-select-option value="10">10</ion-select-option>
+              <ion-select-option value="11">11</ion-select-option>
+              <ion-select-option value="12">12</ion-select-option>
+              <ion-select-option value="13">13</ion-select-option>
+              <ion-select-option value="14">14</ion-select-option>
+              <ion-select-option value="15">15</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+       </ion-grid>
+    </ion-item>
   </ion-list>
 </div>
 
 
 <div *ngIf="buttonTabActiveDicc['share']" style="z-index: inherit;">
-  <ion-list class="main-list">
+  <ion-list class="share-list">
     <ion-item>
-      <ion-button (click)="driverTurnSocialSharing()">
-        Try Share
-      </ion-button>
+      <b>Compartir Vía Mail</b>
     </ion-item>
-    <ion-item>
-      <ion-button (click)="portResumeSocialSharing()">
-        Try Share 2
-      </ion-button>
+    <ion-item (click)="getInfoToReportResumeInCSV()">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10">
+            Compartir Resumen Puerto
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+        </ion-row>
+       </ion-grid>
     </ion-item>
-    <ion-item>
-      <ion-button (click)="downloadResumeCSV()">
-        Download CSV
-      </ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-button (click)="getInfoToReportResumeInCSV()">
-        Get Info
-      </ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-button (click)="downloadMovementsDetailCSV()">
-        Download movements CSV
-      </ion-button>
+    <ion-item (click)="downloadMovementsDetailCSV()">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10">
+            Compartir Detalle de Movimientos
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+        </ion-row>
+       </ion-grid>
     </ion-item>
   </ion-list>
 </div>

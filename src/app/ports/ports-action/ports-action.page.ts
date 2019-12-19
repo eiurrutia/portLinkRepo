@@ -49,6 +49,7 @@ export class PortsActionPage implements OnInit {
   searchBarActive = false;
 
   currentLap: any;
+  genericLap = 0;
 
   activeDriversAndThirdsList = [];
   namesArray = [];
@@ -67,6 +68,7 @@ export class PortsActionPage implements OnInit {
   showConfigCommissions = false;
   editConfigCommissions = false;
   commissionsChanged = false;
+  editEstimatedLoad = false;
 
   wordSearchedInPacking: string;
 
@@ -75,6 +77,7 @@ export class PortsActionPage implements OnInit {
 
   headerRow: any;
   csvData: any;
+  unitsFiltered: any;
 
   constructor(private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
@@ -94,7 +97,6 @@ export class PortsActionPage implements OnInit {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
     await this.presentLoading();
     this.getPort(this.portId);
-    this.driversFiltered = this.activeDriversAndThirdsList;
     this.getDrivers();
     this.getThirds();
     this.getUnitsByPort(this.portId);
@@ -111,6 +113,14 @@ export class PortsActionPage implements OnInit {
         } else { this.getDriverInfoAboutHisLaps(this.selectedDriverObject._id, this.portId); }
       }
       event.target.complete();
+      this.portsService.updatePort(this.currentPort['_id'], this.currentPort).subscribe(
+        updatedPort => {
+          console.log('PortUpdated: ', updatedPort);
+        },
+        error => {
+          console.log('Error updating port: ', error);
+        }
+      );
     }, 100);
   }
 
@@ -152,6 +162,7 @@ export class PortsActionPage implements OnInit {
     this.unitsService.getUnitsByPort(portId).subscribe(
       units => {
         units.data.map( unit => { this.unitsDiccById[unit['_id']] = unit; });
+        this.unitsFiltered = units.data;
       },
       error => {
         console.log('Error fetching units by port: ', error);
@@ -254,15 +265,15 @@ export class PortsActionPage implements OnInit {
     }
 
     const csv = Papa.unparse(resumeDataArray);
-    console.log('resumeDataArray');
-    console.log(resumeDataArray);
 
     if (this.platform.is('cordova')) {
       this.file.writeFile(this.file.externalRootDirectory + '/Download/', 'Resumen ' + this.currentPort.shipName + '.csv',
         csv, { replace: true }).then(async (res) => {
           // this.socialSharing.share(null, null, res.nativeUrl, null);
           this.socialSharing.shareViaEmail(
-            'Se adjunta el reporte del barco ' + this.currentPort.shipName + 'con 30% de avance.',
+            'Se adjunta el reporte del barco ' + this.currentPort.shipName + ' con ' +
+            Math.round((this.currentPort.collectedUnits.totalQuantity /
+              this.currentPort.unitsInPacking.totalQuantity) * 100) + '% de avance.',
             'Resumen ' + this.currentPort.shipName,
             ['eiurrutia@uc.cl'], null, null,
             res.nativeURL.replace('%20', ' ')).then(
@@ -433,6 +444,7 @@ export class PortsActionPage implements OnInit {
       )).then( () => {
         console.log('este es el dicc to report ºgenerado');
         console.log(this.toReport);
+        this.downloadResumeCSV();
       });
       },
       error => {
@@ -475,13 +487,40 @@ export class PortsActionPage implements OnInit {
   }
 
 
+  // Alert to share via whatsapp.
+  async shareViaWhatsappAlert() {
+    const alert = await this.alertController.create({
+      header: 'Enviar Whatsapp',
+      message: `Qué información deseas compartir vía whatsapp?`,
+      buttons: [
+        {
+          text: 'Vuelta de ' + this.selectedDriver,
+          handler: () => { this.driverTurnSocialSharing(); }
+        }, {
+          text: 'Comienzo Vuelta Genérica',
+          handler: () => { this.genericTurnSocialSharing('COMIENZA'); }
+        }, {
+          text: 'Finalización Vuelta Genérica',
+          handler: () => { this.genericTurnSocialSharing('FINALIZA'); }
+        }, {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+      ]
+    });
+    await alert.present();
+  }
+
+
   driverTurnSocialSharing() {
     const dateString = this.getCleanDate(new Date(Date.now()), 'DD/MM/YY - HH:mm');
     let stringToShare = '';
-    stringToShare += `*Respuesta automatizada:*\n\n`;
-    stringToShare += `[ SALIDA DE PUERTO ]\n`;
+    stringToShare += `*Mensaje automatizado:*\n\n`;
+    stringToShare += `[ SALIDA DE PUERTO ]\n\n`;
     stringToShare += `*${this.selectedDriver}*\n`;
-    stringToShare += `*·Hora de salida:* ${dateString}\n`;
+    stringToShare += `*${dateString}*\n`;
     stringToShare += `·Vuelta Nº ${this.currentLap.relativeNumber}\n`;
     stringToShare += `·Última carga: ${this.lastLoadText}\n`;
     stringToShare += `·Unidades trasladas: ${this.currentLap.load.length}\n`;
@@ -495,10 +534,30 @@ export class PortsActionPage implements OnInit {
     });
   }
 
+
+  genericTurnSocialSharing(state: string) {
+    const dateString = this.getCleanDate(new Date(Date.now()), 'DD/MM/YY');
+    const hourString = this.getCleanDate(new Date(Date.now()), 'HH:mm');
+    let stringToShare = '';
+    stringToShare += `*Mensaje automatizado:*\n\n`;
+    stringToShare += `[ SE ${state} VUELTA Nº ${this.currentPort.genericLap} ]\n`;
+    stringToShare += `*·Fecha:* ${dateString}\n`;
+    stringToShare += `*·Hora:* ${hourString}\n`;
+    stringToShare += `·Unidades trasladas: ${this.currentPort.collectedUnits.totalQuantity}\n`;
+    stringToShare += `·Unidades faltantes: ${this.currentPort.unitsInPacking.totalQuantity -
+                                             this.currentPort.collectedUnits.totalQuantity}\n`;
+    stringToShare += `---${this.currentPort['shipName']}---`;
+    this.socialSharing.shareViaWhatsApp(stringToShare).then(
+      () => { console.log('compartido via whatsapp'); }
+    ).catch(e => {
+      console.log('error share via whatsapp: ', e);
+    });
+  }
+
   portResumeSocialSharing() {
     const dateString = this.getCleanDate(new Date(Date.now()), 'DD/MM/YY - HH:mm');
     let stringToShare = '';
-    stringToShare += `*Respuesta automatizada:*\n`;
+    stringToShare += `*Mensaje automatizado:*\n`;
     stringToShare += `[ RESUMEN PUERTO ]\n`;
     stringToShare += `·Total Unidades: *${this.currentPort.unitsInPacking.totalQuantity}*\n`;
     stringToShare += `·Unidades retiradas: *${this.currentPort.collectedUnits.totalQuantity}*\n`;
@@ -533,35 +592,39 @@ export class PortsActionPage implements OnInit {
 
   // First we check in the local array if exist that vin. Then we get from the backend.
   searchUnit() {
-    if (this.vinToRegister.length > this.currentPort.digitsToConsider) {
-      // Firs we check if the last digits are equals.
-      if (this.unitsDiccByVin[this.vinToRegister.substring(this.vinToRegister.length - this.currentPort.digitsToConsider)]) {
-        // Then we check if part of short-vin is inside of model complete-vin.
-        if (this.unitsDiccByVin[
-          this.vinToRegister.substring(
-            this.vinToRegister.length - this.currentPort.digitsToConsider)]
-          .vin.includes(this.vinToRegister)) {
-            console.log('se encontró la unidad 1');
-            this.correctVin = 2;
-            this.getUnitById(this.unitsDiccByVin[this.vinToRegister.substring(
-              this.vinToRegister.length - this.currentPort.digitsToConsider)]._id);
-          } else {
-            console.log('unidad no encontrada que conincida con todos caractéres que se incluyen.');
-            this.unitFound = {};
-            this.correctVin = 0;
-          }
-      } else { console.log('unidad no encontrada 1');
-               this.unitFound = {};
-               this.correctVin = 0;
-      }
+    if (this.vinToRegister.toLowerCase() === 'terminar') {
+      this.navController.navigateRoot(`user-menu/ports/action/${this.portId}/reports`);
     } else {
-      if (this.unitsDiccByVin[this.vinToRegister]) {
-        this.correctVin = 2;
-        console.log('se encontró la unidad 2');
-        this.getUnitById(this.unitsDiccByVin[this.vinToRegister]._id);
-      } else { console.log('unidad no encontrada 2');
-               this.unitFound = {};
-               this.correctVin = 0;
+      if (this.vinToRegister.length > this.currentPort.digitsToConsider) {
+        // Firs we check if the last digits are equals.
+        if (this.unitsDiccByVin[this.vinToRegister.substring(this.vinToRegister.length - this.currentPort.digitsToConsider)]) {
+          // Then we check if part of short-vin is inside of model complete-vin.
+          if (this.unitsDiccByVin[
+            this.vinToRegister.substring(
+              this.vinToRegister.length - this.currentPort.digitsToConsider)]
+            .vin.includes(this.vinToRegister)) {
+              console.log('se encontró la unidad 1');
+              this.correctVin = 2;
+              this.getUnitById(this.unitsDiccByVin[this.vinToRegister.substring(
+                this.vinToRegister.length - this.currentPort.digitsToConsider)]._id);
+            } else {
+              console.log('unidad no encontrada que conincida con todos caractéres que se incluyen.');
+              this.unitFound = {};
+              this.correctVin = 0;
+            }
+        } else { console.log('unidad no encontrada 1');
+                 this.unitFound = {};
+                 this.correctVin = 0;
+        }
+      } else {
+        if (this.unitsDiccByVin[this.vinToRegister]) {
+          this.correctVin = 2;
+          console.log('se encontró la unidad 2');
+          this.getUnitById(this.unitsDiccByVin[this.vinToRegister]._id);
+        } else { console.log('unidad no encontrada 2');
+                 this.unitFound = {};
+                 this.correctVin = 0;
+        }
       }
     }
   }
@@ -575,14 +638,48 @@ export class PortsActionPage implements OnInit {
     // We found a vin a we want to register.
     // But enter keyup only works if vin isn't already registered.
     // We make sure with unitFound['model'] that could get unit from backend.
-  } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
-      console.log('Unidad registrada!');
-      this.registerUnit(this.unitFound);
-      this.recentRegistered = true;
+    } else if (this.unitFound['model'] && !this.unitFound['lapAssociated']) {
+      if ( this.currentLap.load.length >= this.currentPort.estimatedLoad) {
+        this.estimatedLoadPassedAlert();
+      } else {
+        this.registerUnit(this.unitFound);
+        console.log('Unidad registrada!');
+        this.recentRegistered = true;
+      }
     } else {
       // Do nothing in other case (we have a registered unit but we want user press the button manually).
       console.log('se intenta re registrar una undiad. aprieta el botón.');
     }
+  }
+
+
+  // Alert to estimated load passed.
+  async estimatedLoadPassedAlert() {
+    const alert = await this.alertController.create({
+      header: 'Superar Carga Estimada',
+      message: `Deseas registrar la unidad en esta misma vuelta? Esta vuelta
+              ya cuenta con ${this.currentLap.load.length}, sería ${this.currentLap.load.length -
+              this.currentPort.estimatedLoad} unidad(es) más que la carga estimada.`,
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.registerUnit(this.unitFound);
+            console.log('Unidad registrada!');
+            this.recentRegistered = true;
+          }
+        },
+        {
+          text: 'Cancelar y Crear Nueva Vuelta',
+          handler: () => { this.createNewLapAlert(this.currentLap.relativeNumber + 1); }
+        },
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        }
+      ]
+    });
+    await alert.present();
   }
 
 
@@ -762,6 +859,8 @@ export class PortsActionPage implements OnInit {
       result => {
         const portObject = {};
         portObject['doneLaps'] = this.currentPort['doneLaps'];
+        portObject['estimatedLoad'] = this.currentPort['estimatedLoad'];
+        portObject['genericLap'] = this.currentPort['genericLap'];
         portObject['collectedUnits'] = Object.assign({}, this.currentPort['collectedUnits']);
         portObject['modelsCountDicc'] = Object.assign({}, this.currentPort['modelsCountDicc']);
         portObject['collectedUnits']['totalQuantity'] = result.total;
@@ -814,6 +913,7 @@ export class PortsActionPage implements OnInit {
   // Create a new lap sending object to backend.
   async createNewLap(driver: any, portId: string, isThird: boolean, relativeNumber: number) {
     await this.presentLoading();
+    if (relativeNumber > this.genericLap) { this.genericLap = relativeNumber; }
     const lapObject = {};
     lapObject['driver'] = driver._id;
     lapObject['port'] = portId;
@@ -835,6 +935,7 @@ export class PortsActionPage implements OnInit {
         console.log(lap);
         this.currentLap = lap;
         this.currentPort['doneLaps'] += 1;
+        this.currentPort['genericLap'] = this.genericLap;
         this.loading.dismiss();
       },
       error => {
@@ -1044,19 +1145,10 @@ export class PortsActionPage implements OnInit {
 
   // Search with searchbar in packing list [BUILDING]
   searchInPacking() {
-    const vinArray = this.unitsList.filter(
+    console.log('units list');
+    console.log(this.unitsList);
+    this.unitsFiltered = this.unitsList.filter(
       movement => movement.vin.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const modelArray = this.unitsList.filter(
-      movement => movement.modelo.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const driverArray = this.unitsList.filter(
-      movement => movement.conductor.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-    const sizeArray = this.unitsList.filter(
-      movement => movement.tamano.toLocaleLowerCase().includes(this.wordSearchedInPacking.toLocaleLowerCase()));
-
-    console.log(vinArray);
-    console.log(modelArray);
-    console.log(driverArray);
-    console.log(sizeArray);
   }
 
 
@@ -1068,6 +1160,7 @@ export class PortsActionPage implements OnInit {
         console.log('se acutalizó current port: ', this.currentPort);
         this.getCurrentPortUnits(currentPort._id);
         this.generateDriversAndThirdsArray(currentPort);
+        this.genericLap = this.currentPort.genericLap;
       },
       error => {
         this.loading.dismiss();
@@ -1081,7 +1174,7 @@ export class PortsActionPage implements OnInit {
   getCurrentPortUnits(portId: string): void {
     this.unitsService.getUnitsByPort(portId).subscribe(
       unitsList => {
-        this.unitsList = unitsList.data;
+        this.unitsList = unitsList.data.sort( this.compareVIN );
         this.buildUnitsDiccByVin(this.unitsList);
         this.buildPackingListHeaders();
         this.loading.dismiss();
@@ -1184,6 +1277,7 @@ export class PortsActionPage implements OnInit {
     }));
     // And then, we sort the list by drivers and thords and bay nickName.
     await this.activeDriversAndThirdsList.sort( this.compareIsThirdAndThenName );
+    this.driversFiltered = this.activeDriversAndThirdsList;
   }
 
 
@@ -1299,6 +1393,41 @@ export class PortsActionPage implements OnInit {
 
   }
 
+
+  selectModifyEstimatedLoad(event: any) {
+    this.changeEstimatedLoadAlert(event);
+  }
+
+  // Alert to change estimated Load.
+  async changeEstimatedLoadAlert(estimatedLoad: any) {
+    const alert = await this.alertController.create({
+      header: 'Cambiar Carga Estimada',
+      message: `Deseas cambiar la carga estimada a ${estimatedLoad} unidades?`,
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.currentPort['estimatedLoad'] = estimatedLoad;
+            this.portsService.updatePort(this.portId, this.currentPort).subscribe(
+              () => {
+                console.log('Carga estimada cambiada correctamente');
+              },
+              error => {
+                console.log('Error actualizando puerto con carga estimada: ', error);
+              }
+            );
+          }
+        },
+        {
+          text: 'Cancelar',
+          handler: () => {
+            this.editEstimatedLoad = false;
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 
 }
