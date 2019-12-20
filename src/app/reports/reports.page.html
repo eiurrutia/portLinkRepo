@@ -1,9 +1,51 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>reports</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content>
+<ion-grid style="margin-top: 8%;">
+  <ion-row>
+    <ion-list class="main-list">
+      <ion-item class="main-table">
+        <ion-content scrollX="true" scrollY="false">
+          <ion-grid class="forecast_container">
+            <ion-row nowrap>
+                <ion-col class="preview-col" *ngFor="let header of headers" no-padding nowrap>
+                  <ion-row class="header-row" nowrap>
+                    {{ header }}
+                  </ion-row>
+                  <ion-row class="info-row" *ngFor="let model of previewObjects" nowrap>
+                    {{ model[header] }}
+                  </ion-row>
+                  <ion-row>
+                    <ion-select class="custom-select" [interfaceOptions]="customPopoverOptions" interface="popover"
+                    value="" placeholder="Modelo" [(ngModel)]="diccToDefineHeaders[header]"
+                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSelect($event, header)">
+                      <ion-select-option value="vin">VIN</ion-select-option>
+                      <ion-select-option value="modelo">Modelo</ion-select-option>
+                      <ion-select-option value="color">Color</ion-select-option>
+                      <ion-select-option value="nave">Nave</ion-select-option>
+                      <ion-select-option value="">-</ion-select-option>
+                    </ion-select>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf=!allHeadersPresent>
+                <ion-label  style="width: 85%; color: red;"><span class="model-without-size">*</span>Falta determinar columnas</ion-label>
+              </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ion-item>
+      <ion-item>
+        Perra Maraca
+      </ion-item>
+      <ion-item>
+        Perra Maraca
+      </ion-item>
+      <ion-item>
+        Perra Maraca
+      </ion-item>
+      <ion-item>
+        Perra Maraca
+      </ion-item>
+      <ion-item>
+        Perra Maraca
+      </ion-item>
+    </ion-list>
+  </ion-row>
+</ion-grid>

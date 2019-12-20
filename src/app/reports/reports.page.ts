@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.page.html',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportsPage implements OnInit {
 
+  toReport: any;
+  toReportModels: any;
+
   constructor() { }
 
   ngOnInit() {
   }
+
+
+
 
 }
