@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ToastController, ModalController, AlertController } from '@ionic/angular';
+import { ToastController, ModalController, AlertController, Platform } from '@ionic/angular';
 import * as XLSX from 'ts-xlsx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
@@ -49,12 +49,19 @@ export class PortsNewPage implements OnInit {
   repeatedElement = false; // If exist repeated elements.
   pendingInfo: string;
 
+  WPunitsQuantity: any;
+  WPselectedImporter: any;
+  WPestimatedLoad: any;
+
+  mobile = true;
+
   differentsModelsCount = {};
   differentsModelsSizes = {};
 
   constructor(private fileChooser: FileChooser,
               private filePath: FilePath,
               private fileOpener: FileOpener,
+              private platform: Platform,
               private toastController: ToastController,
               private modalController: ModalController,
               private alertController: AlertController,
@@ -175,6 +182,8 @@ export class PortsNewPage implements OnInit {
 
   ngOnInit() {
     this.getImporters();
+    if (this.platform.is('cordova')) { this.mobile = true;
+    } else { this.mobile = false; }
     this.packingToggle = true;
     this.displayPreviewTable = false;
     this.stringFile = 'No hay archivo seleccionado';
@@ -249,12 +258,14 @@ export class PortsNewPage implements OnInit {
 
       // Iterate above the packing
       for (const element of this.packingDicc) {
-        if (Object.keys(this.differentsModelsCount).includes(element[modelKey])) {
-          this.differentsModelsCount[element[modelKey]] += 1;
+        const modelCleaned = element[modelKey].replace(',', '').replace('.', '').replace(';', '');
+        console.log(modelCleaned);
+        if (Object.keys(this.differentsModelsCount).includes(modelCleaned)) {
+          this.differentsModelsCount[modelCleaned] += 1;
         } else {
-          this.differentsModelsCount[element[modelKey]] = 1;
+          this.differentsModelsCount[modelCleaned] = 1;
           // AutoDetectSize then
-          this.differentsModelsSizes[element[modelKey]] = '';
+          this.differentsModelsSizes[modelCleaned] = '';
         }
       }
     }
@@ -310,10 +321,12 @@ export class PortsNewPage implements OnInit {
     for (const key of Object.keys(this.packingDiccId)) {
       this.finalPackingDicc[key] = {};
       this.finalPackingDicc[key]['vin'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['vin']];
-      this.finalPackingDicc[key]['modelo'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']];
+      this.finalPackingDicc[key]['modelo'] = this.packingDiccId[key][
+        this.diccToDefineHeadersInverse['modelo']].replace(',', '').replace('.', '').replace(';', '');
       this.finalPackingDicc[key]['color'] = this.packingDiccId[key][this.diccToDefineHeadersInverse['color']];
       this.finalPackingDicc[key]['tamaño'] =
-        this.differentsModelsSizes[this.packingDiccId[key][this.diccToDefineHeadersInverse['modelo']]];
+        this.differentsModelsSizes[this.packingDiccId[key][
+          this.diccToDefineHeadersInverse['modelo']].replace(',', '').replace('.', '').replace(';', '')];
     }
   }
 

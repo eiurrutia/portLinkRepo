@@ -163,6 +163,7 @@ export class PortsPage implements OnInit {
   }
 
   deletePort(port: any) {
+    this.presentLoading();
     // First we delete the units associated to this port.
     this.unitsService.getUnitsByPort(port._id).subscribe(
       unitsList => {
@@ -202,9 +203,11 @@ export class PortsPage implements OnInit {
             console.log('Port deleted successfully: ', deletedPort._id);
             // And then we update the active ports list.
             this.getActivePorts();
+            this.loading.dismiss();
           },
           error => {
             console.log('Error deleting port: ', error);
+            this.loading.dismiss();
           }
         );
       },

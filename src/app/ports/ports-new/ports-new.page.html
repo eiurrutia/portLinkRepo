@@ -3,10 +3,11 @@
     <ion-label>Packing</ion-label>
     <ion-toggle [(ngModel)]="packingToggle" name="thereIsPacking"></ion-toggle>
   </ion-item>
-  <ion-item>
+  <div *ngIf=packingToggle>
+  <ion-item *ngIf=mobile>
     <ion-button (click)="toOpen2()" style="margin-right: 5%;"><ion-icon name="attach"></ion-icon></ion-button>{{ stringFile }}
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf=!mobile>
     <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
   </ion-item>
   <ion-list *ngIf=displayPreviewTable scrollY="true">
@@ -172,8 +173,90 @@
       </ion-grid>
     </ion-item>
   </ion-list>
-  <button ion-button type="submit" block>Add Todo</button>
-  <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
-  <button type="button" class="btn btn-info" (click)="Upload()" >Upload</button>
-  <button type="button" class="btn btn-info" (click)="toOpen2()" >CARGAR NUEVOO</button>
+  <button *ngIf=!mobile ion-button type="submit" block>Add Todo</button>
+  <input *ngIf=!mobile type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx" #filechooser multiple>
+  <button *ngIf=!mobile type="button" class="btn btn-info" (click)="Upload()" >Upload</button>
+  <button *ngIf=!mobile type="button" class="btn btn-info" (click)="toOpen2()" >CARGAR NUEVOO</button>
+  </div>
+  <div *ngIf=!packingToggle>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label>Nombre Barco</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="padding-left: 30%;">
+           <ion-input type="text" [(ngModel)]="shipName" name="vin-number"></ion-input>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label>Cantidad de Autos</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="padding-left: 30%;">
+           <ion-input type="number" value="0" [(ngModel)]="WPunitsQuantity" ></ion-input>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label>Importador</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="padding-left: 30%;">
+          <ion-select [interfaceOptions]="customPopoverOptions" interface="popover"
+          value="" placeholder="Importador" [(ngModel)]="WPselectedImporter"
+          [ngModelOptions]="{standalone: true}" style="max-width: 100%; text-align: center;">
+            <ion-select-option *ngFor="let importer of importersList" [value]="importer">{{ importer.name }}</ion-select-option>
+          </ion-select>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid no-padding>
+        <ion-row no-padding>
+          <ion-col size="8" no-padding class="align-text-middle">
+            <ion-label>Unidades por carga: </ion-label>
+          </ion-col>
+          <ion-col size="4" no-padding>
+            <!-- <ion-input type="number" value="8" [(ngModel)]="estimatedLoad"></ion-input> -->
+            <ion-select class="estimated-load-select" [(ngModel)]="WPestimatedLoad"
+              okText="Confirmar" cancelText="Cancelar">
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+              <ion-select-option value="4">4</ion-select-option>
+              <ion-select-option value="5">5</ion-select-option>
+              <ion-select-option value="6">6</ion-select-option>
+              <ion-select-option value="7">7</ion-select-option>
+              <ion-select-option selected="true" value="8">8</ion-select-option>
+              <ion-select-option value="9">9</ion-select-option>
+              <ion-select-option value="10">10</ion-select-option>
+              <ion-select-option value="11">11</ion-select-option>
+              <ion-select-option value="12">12</ion-select-option>
+              <ion-select-option value="13">13</ion-select-option>
+              <ion-select-option value="14">14</ion-select-option>
+              <ion-select-option value="15">15</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row style="float: center;">
+          <ion-button shape="round" expand="full" color="success" size="large"
+            fill="outline">Confirmar Puerto</ion-button>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+
+  </div>
 </ion-list>
