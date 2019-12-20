@@ -27,6 +27,7 @@ import { TrucksService } from './trucks/shared/trucks.service';
 import { RampsService } from './ramps/shared/ramps.service';
 import { DriverTruckRampAssociationsService } from './drivers/shared/driver-truck-ramp-associations.service';
 import { CommissionsService } from './commissions/shared/commissions.service';
+import { ReportsService } from './reports/shared/reports.service';
 import { Globals } from './globals';
 
 import { UserProfilePageModule } from './user-profile/user-profile.module';
@@ -63,6 +64,7 @@ import { UserProfilePageModule } from './user-profile/user-profile.module';
     RampsService,
     DriverTruckRampAssociationsService,
     CommissionsService,
+    ReportsService,
     Globals
   ],
 
