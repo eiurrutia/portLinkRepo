@@ -224,7 +224,7 @@ export class DriversSelectionPage implements OnInit {
           handler: () => {
             this.addListOfDriversAndThirdsToPort();
             this.sendCount.emit(true);
-            this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks-association/modify`);
+            this.navController.navigateForward(`/user-menu/ports/new-port/${this.portId}/drivers/trucks/trucks-association/modify`);
             console.log('Confirm Okay');
           }
         }
