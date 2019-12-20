@@ -11,6 +11,7 @@ import { DriversService } from '../../drivers/shared/drivers.service';
 import { ThirdsService } from '../../thirds/shared/thirds.service';
 import { UnitsService } from '../../units/shared/units.service';
 import { CommissionsService } from '../../commissions/shared/commissions.service';
+import { ReportsService } from '../../reports/shared/reports.service';
 
 import * as moment from 'moment-timezone';
 
@@ -91,7 +92,8 @@ export class PortsActionPage implements OnInit {
               private driversService: DriversService,
               private thirdsService: ThirdsService,
               private unitsService: UnitsService,
-              private commissionsService: CommissionsService) { }
+              private commissionsService: CommissionsService,
+              private reportsService: ReportsService) { }
 
   async ngOnInit() {
     this.portId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -384,6 +386,7 @@ export class PortsActionPage implements OnInit {
   getInfoToReportResumeInCSV() {
     this.toReport['drivers'] = {};
     this.toReport['thirds'] = {};
+    this.toReport['port'] = this.portId;
     this.toReportModels = {};
     this.lapsService.getLapsByPort(this.currentPort._id).subscribe(
       result => {
@@ -403,6 +406,7 @@ export class PortsActionPage implements OnInit {
               this.toReport[kind][id]['saturdayLaps'] = 0;
               this.toReport[kind][id]['normalDayLaps'] = 0;
               this.toReport[kind][id]['lapsCountByDay'] = {};
+              this.toReport[kind][id]['unitsCountByDay'] = {};
               this.toReport[kind][id]['totalDays'] = 0;
             }
             this.toReport[kind][id]['movedUnits'] += lap['load'].length;
@@ -421,14 +425,13 @@ export class PortsActionPage implements OnInit {
 
             // Detect differents days to viatics.
             const date = this.getCleanDate(lap.lastLoad, 'DD/MM/YY');
-            console.log('buscara el date para el deriver: ', lap.driver);
-            console.log('Date: ', date);
-            console.log(this.toReport);
             if (!(date in Object.keys(this.toReport[kind][id]['lapsCountByDay']))) {
               this.toReport[kind][id]['lapsCountByDay'][date] = 1;
+              this.toReport[kind][id]['unitsCountByDay'][date] = lap['load'].length;
               this.toReport[kind][id]['totalDays'] += 1;
             } else {
               this.toReport[kind][id]['lapsCountByDay'][date] += 1;
+              this.toReport[kind][id]['unitsCountByDay'][date] += lap['load'].length;
             }
 
             // Check units moved in this lap
@@ -442,9 +445,11 @@ export class PortsActionPage implements OnInit {
           });
         }
       )).then( () => {
-        console.log('este es el dicc to report ºgenerado');
+        console.log('Report generado');
         console.log(this.toReport);
         this.downloadResumeCSV();
+        if (!this.currentPort['report']) { this.createReport();
+        } else { this.updateReport(this.currentPort['report']); }
       });
       },
       error => {
@@ -454,6 +459,31 @@ export class PortsActionPage implements OnInit {
 
   }
 
+
+  createReport() {
+    this.reportsService.createReport(this.toReport).subscribe(
+      () => {
+        console.log('Report created');
+      },
+      error => {
+        console.log('Error creating report: ', error);
+      }
+    );
+
+  }
+
+
+  updateReport(reportId: string) {
+    this.reportsService.updateReport(reportId, this.toReport).subscribe(
+      report => {
+        console.log('Report updated: ', report);
+      },
+      error => {
+        console.log('Error reporting: ', error);
+      }
+    );
+
+  }
 
   // Loading efect when the bakend is loading.
   async presentLoading() {
@@ -593,7 +623,7 @@ export class PortsActionPage implements OnInit {
   // First we check in the local array if exist that vin. Then we get from the backend.
   searchUnit() {
     if (this.vinToRegister.toLowerCase() === 'terminar') {
-      this.navController.navigateRoot(`user-menu/ports/action/${this.portId}/reports`);
+      this.finishPortControlAlert();
     } else {
       if (this.vinToRegister.length > this.currentPort.digitsToConsider) {
         // Firs we check if the last digits are equals.
@@ -1423,6 +1453,29 @@ export class PortsActionPage implements OnInit {
           handler: () => {
             this.editEstimatedLoad = false;
           }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  // Alert to finish load passed.
+  async finishPortControlAlert() {
+    const alert = await this.alertController.create({
+      header: 'Terminar Control',
+      message: `Deseas terminar con el control de este puerto?`,
+      buttons: [
+        {
+          text: 'Terminar',
+          handler: () => {
+            this.getInfoToReportResumeInCSV();
+            this.navController.navigateRoot(`user-menu/ports/action/${this.portId}/reports`);
+          }
+        },
+        {
+          text: 'Cancelar',
+          handler: () => {}
         }
       ]
     });
