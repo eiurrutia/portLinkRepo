@@ -29,7 +29,12 @@ const routes: Routes = [
   {
      path: 'new-port/:id/drivers',
      loadChildren: '../drivers/drivers.module#DriversPageModule'
+  },
+  {
+     path: 'action/:id/reports',
+     loadChildren: '../reports/reports.module#ReportsPageModule'
   }
+
 ];
 
 @NgModule({
