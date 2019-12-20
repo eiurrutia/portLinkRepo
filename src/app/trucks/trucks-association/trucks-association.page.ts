@@ -53,6 +53,7 @@ export class TrucksAssociationPage implements OnInit {
 
   ngOnInit() {
     this.getBackInfo();
+    console.log(this.currentPort);
   }
 
 
