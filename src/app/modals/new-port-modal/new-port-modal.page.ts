@@ -231,6 +231,8 @@ export class NewPortModalPage implements OnInit {
     this.portObject['portCommissions']['nonUnionized']['viatic'] = this.commissions['nonUnionized']['viatic'];
 
     // And we create the port in backend.
+    console.log('this.portObject');
+    console.log(this.portObject);
     this.createPort(this.portObject);
   }
 
