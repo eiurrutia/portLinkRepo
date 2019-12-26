@@ -209,16 +209,50 @@ export class PortsActionPage implements OnInit {
       'Total Días', 'Viático Total'
     ]);
 
+    console.log('comisiones ');
+    console.log(this.commissionsDicc);
+
     // Info about laps. We iterate over the drivers and thirds.
     // Drivers
     for (const driver of Object.keys(this.toReport['drivers'])) {
       driversLapsCount += this.toReport['drivers'][driver]['totalLaps'];
       driversUnitsCount += this.toReport['drivers'][driver]['movedUnits'];
+
+      let totalCommission = 0;
+      let totalViatic = 0;
+      if (this.driversDicc[driver]['unionized']) {
+        totalCommission +=
+          this.currentPort['portCommissions']['unionized']['normalDays'] *
+            this.toReport['drivers'][driver]['normalDayLaps'];
+        totalCommission +=
+          this.currentPort['portCommissions']['unionized']['saturday'] *
+            this.toReport['drivers'][driver]['saturdayLaps'];
+        totalCommission +=
+          this.currentPort['portCommissions']['unionized']['holiday'] *
+            this.toReport['drivers'][driver]['holidayLaps'];
+        totalViatic +=
+          this.currentPort['portCommissions']['unionized']['viatic'] *
+            this.toReport['drivers'][driver]['totalDays'];
+      } else {
+        totalCommission +=
+          this.currentPort['portCommissions']['nonUnionized']['normalDays'] *
+            this.toReport['drivers'][driver]['normalDayLaps'];
+        totalCommission +=
+          this.currentPort['portCommissions']['nonUnionized']['saturday'] *
+            this.toReport['drivers'][driver]['saturdayLaps'];
+        totalCommission +=
+          this.currentPort['portCommissions']['nonUnionized']['holiday'] *
+            this.toReport['drivers'][driver]['holidayLaps'];
+        totalViatic +=
+          this.currentPort['portCommissions']['nonUnionized']['viatic'] *
+            this.toReport['drivers'][driver]['totalDays'];
+      }
+
       resumeDataArray.push([
         this.driversDicc[driver]['name'], this.toReport['drivers'][driver]['movedUnits'], this.toReport['drivers'][driver]['totalLaps'],
         this.toReport['drivers'][driver]['normalDayLaps'], this.toReport['drivers'][driver]['saturdayLaps'],
-        this.toReport['drivers'][driver]['holidayLaps'], 'Comisión Total',
-        this.toReport['drivers'][driver]['totalDays'], 'Viático Total'
+        this.toReport['drivers'][driver]['holidayLaps'], totalCommission,
+        this.toReport['drivers'][driver]['totalDays'], totalViatic
       ]);
     }
 
@@ -229,8 +263,8 @@ export class PortsActionPage implements OnInit {
       resumeDataArray.push([
         '*' + driver, this.toReport['thirds'][driver]['movedUnits'], this.toReport['thirds'][driver]['totalLaps'],
         this.toReport['thirds'][driver]['normalDayLaps'], this.toReport['thirds'][driver]['saturdayLaps'],
-        this.toReport['thirds'][driver]['holidayLaps'], 'Comisión Total',
-        this.toReport['thirds'][driver]['totalDays'], 'Viático Total'
+        this.toReport['thirds'][driver]['holidayLaps'], 0,
+        this.toReport['thirds'][driver]['totalDays'], 0
       ]);
     }
 
@@ -462,8 +496,17 @@ export class PortsActionPage implements OnInit {
 
   createReport() {
     this.reportsService.createReport(this.toReport).subscribe(
-      () => {
+      report => {
         console.log('Report created');
+        this.portsService.updatePort(this.portId, {'report': report._id}).subscribe(
+          port => {
+            console.log('Reporte asociado a puerto: ', port);
+            this.currentPort = port;
+          },
+          error => {
+            console.log('Error asosciando reporte creado a puerto: ', error);
+          }
+        );
       },
       error => {
         console.log('Error creating report: ', error);
