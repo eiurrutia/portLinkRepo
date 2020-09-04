@@ -43,7 +43,7 @@
     "dynamoose": "^1.8.0",
     "es6-promise-plugin": "4.2.2",
     "moment-timezone": "^0.5.26",
-    "papaparse": "^5.1.0",
+    "papaparse": "^5.2.0",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.5.3",
     "ts-xlsx": "0.0.11",
