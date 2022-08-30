@@ -42,7 +42,7 @@
     "core-js": "^2.5.4",
     "dynamoose": "^1.8.0",
     "es6-promise-plugin": "4.2.2",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.35",
     "papaparse": "^5.1.0",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.5.3",
